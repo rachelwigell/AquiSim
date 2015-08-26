@@ -5,5 +5,5 @@
   
   void draw(){
     background(255);
-    text("Hello World", 300, 200);
+    text(message, 300, 200);
   }
