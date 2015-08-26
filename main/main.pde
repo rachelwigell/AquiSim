@@ -1,3 +1,5 @@
+processing_message = "Hello from Processing!"
+
   void setup(){
     size(800, 600, P2D);
     fill(0);
