@@ -1,3 +1,6 @@
-var message = "Hello from Javascript!"
 
-$('#messages').text(message);
+
+$('#test_button').click(function() {
+	var message = "Hello from Javascript!" 
+	$('#messages').text(message);
+});
