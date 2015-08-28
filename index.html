@@ -1,15 +1,23 @@
 <meta charset="UTF-8">
-<link rel="stylesheet" href="libraries/foundation-essentials-5.5.2/css/foundation.css">
-<link rel="stylesheet" href="libraries/foundation-essentials-5.5.2/css/normalize.css">
-<script src="libraries/processing.js"></script>
-<div>
-	<canvas data-processing-sources="processing/main.pde"></canvas>
-</div>
-<div>
-	<button type="button" id="test_button">Test</button>
-</div>
-<div id="messages">
-	Hello from HTML!
-</div>
-<script src="libraries/jquery-1.11.3.min.js"></script>
-<script src="js/buttonhandler.js"></script>
+<head>
+	<link rel="stylesheet" href="libraries/foundation-essentials-5.5.2/css/foundation.css">
+	<link rel="stylesheet" href="libraries/foundation-essentials-5.5.2/css/normalize.css">
+	<script src="libraries/processing.js"></script>
+</head>
+<body>
+	<div>
+		<canvas data-processing-sources="
+		main/Vector3DClass.pde
+		main/TankClass.pde
+		main/main.pde
+		"></canvas>
+	</div>
+	<div>
+		<button type="button" id="test_button">Test</button>
+	</div>
+	<div id="messages">
+		Hello from HTML!
+	</div>
+	<script src="libraries/jquery-1.11.3.min.js"></script>
+	<script src="js/buttonhandler.js"></script>
+</body>
