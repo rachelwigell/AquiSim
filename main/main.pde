@@ -1,8 +1,7 @@
 Tank tank;
 public final static int fieldX = window.screen.availWidth-200;
 public final static int fieldY = window.screen.availHeight-200;
-public final static int fieldZ = (800-fieldX*.2-fieldY*.2);
-public final static float zoomPercentage = .85;
+public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
   void setup(){
     size(fieldX, fieldY, P3D);
@@ -28,18 +27,18 @@ public final static float zoomPercentage = .85;
     box(2*fieldX, fieldY, 1);
     translate(0, (-.8*fieldY), 1);
     fill(color(255));
-    box((zoomPercentage*.8*fieldX), (zoomPercentage*fieldY), 1); //back
-    translate((zoomPercentage*.4*fieldX), 0, (zoomPercentage*.25*fieldZ));
-    box(1, (zoomPercentage*fieldY), (zoomPercentage*.5*fieldZ)); //right
-    translate((-zoomPercentage*.8*fieldX), 0, 0);
-    box(1, (zoomPercentage*fieldY), (zoomPercentage*.5*fieldZ)); //left
-    translate((zoomPercentage*.4*fieldX), (zoomPercentage*.5*fieldY), 1);
+    box((.8*fieldX), (fieldY), 1); //back
+    translate((.4*fieldX), 0, (.25*fieldZ));
+    box(1, (fieldY), (.5*fieldZ)); //right
+    translate((-.8*fieldX), 0, 0);
+    box(1, (fieldY), (.5*fieldZ)); //left
+    translate((.4*fieldX), (.5*fieldY), 1);
     fill(color(200));
-    box((zoomPercentage*.8*fieldX), 1, (zoomPercentage*.5*fieldZ)); //bottom
+    box((.8*fieldX), 1, (.5*fieldZ)); //bottom
     fill(color(0, 0, 255, 20));
-    translate(0, (-zoomPercentage*.5*fieldY) + (zoomPercentage*fieldY*.5*(1-tank.waterLevel)), 0);
+    translate(0, (-.5*fieldY) + (fieldY*.5*(1-tank.waterLevel)), 0);
     hint(DISABLE_DEPTH_TEST);
-    box((zoomPercentage*.8*fieldX), (zoomPercentage*fieldY*tank.waterLevel), (zoomPercentage*.5*fieldZ)); //water
+    box((.8*fieldX), (fieldY*tank.waterLevel), (.5*fieldZ)); //water
     popMatrix();
   }
   
