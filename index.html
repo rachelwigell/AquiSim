@@ -1,36 +1,55 @@
 <meta charset="UTF-8">
 <head>
-	<link rel="stylesheet" href="libraries/foundation-essentials-5.5.2/css/foundation.css">
-	<link rel="stylesheet" href="libraries/foundation-essentials-5.5.2/css/normalize.css">
+	<link rel="stylesheet" href="libraries/foundation-5.5.2/css/foundation.css">
+	<link rel="stylesheet" href="libraries/foundation-5.5.2/css/normalize.css">
 	<script src="libraries/processing.js"></script>
+	<script src="libraries/jquery-1.11.3.min.js"></script>
 </head>
 <body>
 	<center>
 		<h2>Welcome to AquiSim!</h2>
-		<h4>Here's a fresh tank. Scroll down to play with it!</h4>
+		<h4>The only aquarium game that simulates the complex system dynamics occurring inside every fish tank</h4>
 		<canvas data-processing-sources="
 		main/Vector3DClass.pde
 		main/TankClass.pde
 		main/main.pde
-		"></canvas>
-	</center><br>
-	<div class="row"><h4><center>Tank Status</center></h4></div>
+		"></canvas><br>
+	<div class="row"><h4><center>Tank Health</center></h4></div>
 	<div class="row">
-		<div class="small-3 columns" id="tank_stats"></div>
+		<div class="small-4 columns" id="tank_stats">
+			<b>Tank Stats</b><br>
+		</div>
+		<div class="small-4 columns" id="water_change">
+			<b>Water Change</b><br>
+			<p align = "left">Changing the water can help bring chemistry back to neutral values, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.</p>
+			Change what percent of the water?
+			<div class="range-slider" id="water_change_percentage" align="left" data-slider>
+				  <span class="range-slider-handle" role="slider" tabindex="0"></span>
+				  <span class="range-slider-active-segment"></span>
+				  <input type="hidden">
+			</div>
+			<button type="button" id="perform_water_change">Perform Water Change</button>
+		</div>
+</div>
+</div>
 	</div>
-	<div class="row"><h4><center>Fish Status</center></h4></div>
-	<div class="row"><h4><center>Add Fish</center></h4></div>
-	<div class="row"><h4><center>Add Plants</center></h4></div>
-	<div class="row"><h4><center>Save or Load Tank</center></h4></div>
-	<div class="row"><h4><center>Help</center></h4></div>
+	<div class="row"><h4>Fish Health</h4></div>
+	<div class="row"><h4>Add Fish</h4></div>
+	<div class="row"><h4>Add Plants</h4></div>
+	<div class="row"><h4>Save or Load Tank</h4></div>
+	<div class="row"><h4>Help</h4></div>
 	<div class="row">
 		<div class="small-6 columns">
 			<button type="button" id="test_button">Test</button>
 		</div>
 		<div class="small-6 columns" id="messages">
-			Hello from HTML!
+			Debugging messages will be printed here.
 		</div>
 	</div>
-	<script src="libraries/jquery-1.11.3.min.js"></script>
+</center>
+	<script src="libraries/foundation-5.5.2/js/foundation.min.js"></script>
+	<script>
+    	$(document).foundation();
+  	</script>
 	<script src="js/buttonhandler.js"></script>
 </body>

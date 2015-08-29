@@ -40,7 +40,7 @@ tank_stats =  {
     translate((.5*fieldX), (.8*fieldY), -fieldZ);
     translate(0, (.5*fieldY), -1);
     fill(color(200, 180, 100));
-    box(2*fieldX, fieldY, 1);
+    box(2*fieldX, fieldY, 1); //table
     translate(0, (-.8*fieldY), 1);
     fill(color(255));
     box((.8*fieldX), (fieldY), 1); //back
