@@ -5,18 +5,22 @@
 	<script src="libraries/processing.js"></script>
 </head>
 <body>
-	<div>
+	<center>
+		<h2>Welcome to AquiSim!</h2>
+		<h4>Here's a fresh tank. Scroll down to play with it!</h4>
 		<canvas data-processing-sources="
 		main/Vector3DClass.pde
 		main/TankClass.pde
 		main/main.pde
 		"></canvas>
-	</div>
-	<div>
-		<button type="button" id="test_button">Test</button>
-	</div>
-	<div id="messages">
-		Hello from HTML!
+	</center><br>
+	<div class="row">
+		<div class="small-6 columns">
+			<button type="button" id="test_button">Test</button>
+		</div>
+		<div class="small-6 columns" id="messages">
+			Hello from HTML!
+		</div>
 	</div>
 	<script src="libraries/jquery-1.11.3.min.js"></script>
 	<script src="js/buttonhandler.js"></script>
