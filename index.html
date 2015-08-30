@@ -10,6 +10,8 @@
 		<h2>Welcome to AquiSim!</h2>
 		<h4>The only aquarium game that simulates the complex system dynamics occurring inside every fish tank</h4>
 		<canvas data-processing-sources="
+		main/FishClass.pde
+		main/GuppyClass.pde
 		main/Vector3DClass.pde
 		main/TankClass.pde
 		main/main.pde
@@ -24,17 +26,18 @@
 			<b>Water Change</b><br>
 			<p align = "left">Changing the water can help bring chemistry back to neutral values, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.</p>
 			Change what percent of the water?
-			<div class="range-slider" id="water_change_percentage" align="left" data-slider>
-				  <span class="range-slider-handle" role="slider" tabindex="0"></span>
-				  <span class="range-slider-active-segment"></span>
-				  <input type="hidden">
+			<div class="small-6 columns">
+				<div class="range-slider" id="water_change_percentage" align="left" data-slider>
+					  <span class="range-slider-handle" role="slider" tabindex="0"></span>
+					  <span class="range-slider-active-segment"></span>
+					  <input type="hidden">
+				</div>
 			</div>
-			<button type="button" id="perform_water_change">Perform Water Change</button>
+			<div class="small-6 columns">
+				<button type="button" id="perform_water_change">Change Water</button>
+			</div>
 		</div>
-</div>
-</div>
 	</div>
-	<div class="row"><h4>Fish Health</h4></div>
 	<div class="row">
 		<div class="small-6 columns">
 			<b>Select a Fish</b>
@@ -42,11 +45,25 @@
 		</div>
 		<div class="small-6 columns">
 			<b>Selected Fish Stats</b>
-			<p align="left" id="fish_stats_display">
-				No fish selected.
-			</p>
+			<p align="left" id="fish_stats_display"></p>
 	</div>
 	<div class="row"><h4>Add Fish or Plants</h4></div>
+	<div class="row">
+		<div class="small-6 columns">
+			<b>Species Available</b>
+			<select id="species_list" type="select"></select>
+		</div>
+		<div class="small-6 columns">
+			<b>Selected Species Stats</b>
+			<p align="left" id="species_stats_display"></p>
+			<div class="small-6 columns">
+        		<input type="text" placeholder="Swimmy" id="nickname_entry" hidden=true />
+        	</div>
+        	<div class="small-6 columns">
+      			<button type="button" id="add_fish" hidden=true></button>
+      		</div>
+		</div>
+	</div>
 	<div class="row"><h4>Save or Load Tank</h4></div>
 	<div class="row"><h4>Help</h4></div>
 	<div class="row">

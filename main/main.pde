@@ -3,17 +3,23 @@ public final static int fieldX = window.screen.availWidth-200;
 public final static int fieldY = window.screen.availHeight-200;
 public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
+public ArrayList speciesList = new ArrayList();
+
 //debug_string = "Default debug string";
 
 tank_stats =  {};
 
 fish_stats = {};
 
+species_stats = {};
+
   void setup(){
     size(fieldX, fieldY, P3D);
     tank = new Tank();
     camera();
     fill(color(0));
+    populateSpeciesList();
+    populateSpeciesStats();
   }
   
   void draw(){
@@ -48,6 +54,29 @@ fish_stats = {};
     hint(DISABLE_DEPTH_TEST);
     box((.8*fieldX), (fieldY*tank.waterLevel), (.5*fieldZ)); //water
     popMatrix();
+  }
+  
+  public void populateSpeciesList(){
+    speciesList.add(new Guppy("Swimmy"));
+  }
+  
+  public void populateSpeciesStats(){
+    for(int i = 0; i < speciesList.size(); i++){
+      Fish f = (Fish) speciesList.get(i);
+      species_stats[f.species] = {
+        "Species": f.species,
+        "Ease of care": f.ease + "/5",
+        "Maximum ammonia level tolerated": f.ammonia + ' ppm',
+        "Maximum nitrite level tolerated": f.nitrite + ' ppm',
+        "Maximum nitrate level tolerated": f.nitrate + ' ppm',
+        "Minimum pH level tolerated": f.minPH,
+        "Maximum pH level tolerated": f.maxPH,
+        "Minimum temperature tolerated": f.minTemp + ' degrees Celsius',
+        "Maximum temperature tolerated": f.maxTemp + ' degrees Celsius',
+        "Minimum hardness tolerated": f.minHard + ' dH',
+        "Maximum hardness tolerated": f.maxHard + ' dh',
+      };
+    }
   }
   
   public Vector3D backgroundColor(){
@@ -91,7 +120,6 @@ fish_stats = {};
         "Maximum temperature tolerated": f.maxTemp + ' degrees Celsius',
         "Minimum hardness tolerated": f.minHard + ' dH',
         "Maximum hardness tolerated": f.maxHard + ' dh',
-        "happiness": f.happiness,
         "fullness": f.fullness,
         "health": f.health
       };
