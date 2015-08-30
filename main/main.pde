@@ -78,6 +78,22 @@ fish_stats = {};
   public void updateFishStats(){
     for(int i = 0; i < tank.fish.size(); i++){
       Fish f = (Fish) (tank.fish.get(i));
-      fish_stats[f.name] = {};
+      fish_stats[f.name] = {
+        "Name": f.name,
+        "Species": f.species,
+        "Status": f.status.stringify(),
+        "Maximum ammonia level tolerated": f.ammonia + ' ppm',
+        "Maximum nitrite level tolerated": f.nitrite + ' ppm',
+        "Maximum nitrate level tolerated": f.nitrate + ' ppm',
+        "Minimum pH level tolerated": f.minPH,
+        "Maximum pH level tolerated": f.maxPH,
+        "Minimum temperature tolerated": f.minTemp + ' degrees Celsius',
+        "Maximum temperature tolerated": f.maxTemp + ' degrees Celsius',
+        "Minimum hardness tolerated": f.minHard + ' dH',
+        "Maximum hardness tolerated": f.maxHard + ' dh',
+        "happiness": f.happiness,
+        "fullness": f.fullness,
+        "health": f.health
+      };
     }
   }

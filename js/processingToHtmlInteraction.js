@@ -18,16 +18,25 @@ function update_tank_stats(){
 
 function update_fish_dropdown(){
 	$('#fish_list').empty();
+	$('#fish_list').append(new Option('Select a fish', 'select'));
 	for(var fish in fish_stats){
 		$('#fish_list').append(new Option(fish, fish));
-	}
-	if($('#fish_list').length < 2){
-		$('#fish_list').append(new Option("You don't have any fish!", 'no_fish'));
 	}
 }
 
 function update_fish_stats(){
 	$('#fish_stats_display').empty();
+	var selected_fish = $('#fish_list').find(':selected').val();
+	if(selected_fish == 'select'){
+		$('#fish_stats_display').text('No fish selected.');
+	}
+	else{
+		fish_info = fish_stats[selected_fish];
+		for(var name in fish_info){
+			stat = fish_info[name];
+			$('#fish_stats_display').append(name + ': ' + stat +'<br>');	
+		}
+	}	
 }
 
 $('#fish_list').change(function(){
