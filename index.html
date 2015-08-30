@@ -16,10 +16,11 @@
 		"></canvas><br>
 	<div class="row"><h4><center>Tank Health</center></h4></div>
 	<div class="row">
-		<div class="small-4 columns" id="tank_stats">
-			<b>Tank Stats</b><br>
+		<div class="small-6 columns">
+			<b>Tank Stats</b>
+			<p align="left" id = "tank_stats_display"></p>
 		</div>
-		<div class="small-4 columns" id="water_change">
+		<div class="small-6 columns" id="water_change">
 			<b>Water Change</b><br>
 			<p align = "left">Changing the water can help bring chemistry back to neutral values, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.</p>
 			Change what percent of the water?
@@ -34,22 +35,25 @@
 </div>
 	</div>
 	<div class="row"><h4>Fish Health</h4></div>
-	<div class="row"><h4>Add Fish</h4></div>
-	<div class="row"><h4>Add Plants</h4></div>
+	<div class="row">
+		<div class="small-6 columns">
+			<b>Select a Fish</b>
+			<select id="fish_list" type="select"></select>
+		</div>
+		<div class="small-6 columns">
+			<b>Selected Fish Stats</b>
+			<p align="left" id="fish_stats_display"></p>
+	</div>
+	<div class="row"><h4>Add Fish or Plants</h4></div>
 	<div class="row"><h4>Save or Load Tank</h4></div>
 	<div class="row"><h4>Help</h4></div>
 	<div class="row">
-		<div class="small-6 columns">
-			<button type="button" id="test_button">Test</button>
-		</div>
-		<div class="small-6 columns" id="messages">
-			Debugging messages will be printed here.
-		</div>
+		<p id="debug">Debugging messages will be printed here.</p>
 	</div>
 </center>
 	<script src="libraries/foundation-5.5.2/js/foundation.min.js"></script>
 	<script>
     	$(document).foundation();
   	</script>
-	<script src="js/buttonhandler.js"></script>
+	<script src="js/processingToHtmlInteraction.js"></script>
 </body>

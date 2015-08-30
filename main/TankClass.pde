@@ -28,7 +28,7 @@ public class Tank{
   
   public Tank(){
     this.cmFish = 0;
-    //this.plants = new ArrayList();
+    this.plants = new ArrayList();
     this.pH=8;
     this.temp = 24;
     this.hardness = 6;

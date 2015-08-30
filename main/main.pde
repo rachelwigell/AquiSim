@@ -3,20 +3,11 @@ public final static int fieldX = window.screen.availWidth-200;
 public final static int fieldY = window.screen.availHeight-200;
 public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
-tank_stats =  {
-  pH: 8,
-  temperature: 24,
-  hardness: 6,
-  ammonia: 0,
-  nitrite: 0,
-  nitrate: 0,
-  o2: 11,
-  co2: 11,
-  nitrosomonas: .01,
-  nitrobacter: .01,
-  food: 0,
-  waste: 0
-};
+//debug_string = "Default debug string";
+
+tank_stats =  {};
+
+fish_stats = {};
 
   void setup(){
     size(fieldX, fieldY, P3D);
@@ -32,6 +23,7 @@ tank_stats =  {
     spotLight(spotColor, spotColor, spotColor, fieldX/2, 0, 1500, 0, 0, -1, PI/4, 0);
     drawTank();
     updateTankStats();
+    updateFishStats();
   }
   
   public void drawTank(){
@@ -81,4 +73,11 @@ tank_stats =  {
     tank_stats.nitrobacter = tank.nitrobacter + ' bacteria';
     tank_stats.food = (tank.food).size() + ' noms';
     tank_stats.waste = tank.waste + ' poops';
+  }
+  
+  public void updateFishStats(){
+    for(int i = 0; i < tank.fish.size(); i++){
+      Fish f = (Fish) (tank.fish.get(i));
+      fish_stats[f.name] = {};
+    }
   }
