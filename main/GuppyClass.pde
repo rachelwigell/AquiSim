@@ -3,10 +3,10 @@ public class Guppy extends Fish{
     this.species = "Guppy";
     this.name = name;
     this.ease = 5;
-    this.health = this.ease*10000;
-    this.maxHealth = this.ease*10000;
+    this.health = this.ease*24*60*5;
+    this.maxHealth = this.ease*24*60*5;
     this.status = "Happy.";
-    this.maxHappyFull = this.ease*24*60*5;
+    this.maxFullness = this.ease*24*60*5;
     this.fullness = this.maxHappyFull;
     this.size = 5;
     this.minPH = 7;

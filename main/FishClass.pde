@@ -3,7 +3,7 @@ public abstract class Fish {
   public String name;
   public String status;
   public long fullness;
-  public long maxHappyFull;
+  public long maxFullness;
   public long maxHealth;
   public long health;
   public int ease;

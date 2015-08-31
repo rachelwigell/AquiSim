@@ -1,6 +1,6 @@
 Tank tank;
-public final static int fieldX = window.screen.availWidth-200;
-public final static int fieldY = window.screen.availHeight-200;
+public final static int fieldX = window.screen.availWidth-100;
+public final static int fieldY = window.screen.availHeight-100;
 public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
 public ArrayList speciesList = new ArrayList();
@@ -20,6 +20,7 @@ species_stats = {};
     fill(color(0));
     populateSpeciesList();
     populateSpeciesStats();
+    tank.progress();
   }
   
   void draw(){
@@ -30,6 +31,7 @@ species_stats = {};
     drawTank();
     updateTankStats();
     updateFishStats();
+    tank.progress();
   }
   
   public void drawTank(){
@@ -41,18 +43,18 @@ species_stats = {};
     box(2*fieldX, fieldY, 1); //table
     translate(0, (-.8*fieldY), 1);
     fill(color(255));
-    box((.8*fieldX), (fieldY), 1); //back
-    translate((.4*fieldX), 0, (.25*fieldZ));
+    box((.95*fieldX), (fieldY), 1); //back
+    translate((.475*fieldX), 0, (.25*fieldZ));
     box(1, (fieldY), (.5*fieldZ)); //right
-    translate((-.8*fieldX), 0, 0);
+    translate((-.95*fieldX), 0, 0);
     box(1, (fieldY), (.5*fieldZ)); //left
-    translate((.4*fieldX), (.5*fieldY), 1);
+    translate((.475*fieldX), (.5*fieldY), 1);
     fill(color(200));
-    box((.8*fieldX), 1, (.5*fieldZ)); //bottom
+    box((.95*fieldX), 1, (.5*fieldZ)); //bottom
     fill(color(0, 0, 255, 20));
     translate(0, (-.5*fieldY) + (fieldY*.5*(1-tank.waterLevel)), 0);
     hint(DISABLE_DEPTH_TEST);
-    box((.8*fieldX), (fieldY*tank.waterLevel), (.5*fieldZ)); //water
+    box((.95*fieldX), (fieldY*tank.waterLevel), (.5*fieldZ)); //water
     popMatrix();
   }
   
@@ -79,6 +81,10 @@ species_stats = {};
     }
   }
   
+  public String roundFloat(float toRound){
+    return str(toRound).substring(0, 4);
+  }
+  
   public Vector3D backgroundColor(){
     int time = tank.time;
     return new Vector3D( ((160.0/1020.0)*(720-abs(720-time) + 300)),  ((180.0/1020.0)*(720-abs(720-time) + 300)),  ((200.0/1020.0)*(720-abs(720-time) + 300)));
@@ -90,16 +96,16 @@ species_stats = {};
   }
   
   public void updateTankStats(){
-    tank_stats.pH = tank.pH;
-    tank_stats.temperature = tank.temp + ' degrees Celsius';
-    tank_stats.hardness = tank.hardness + ' dH';
-    tank_stats.ammonia = tank.ammonia + ' ppm';
-    tank_stats.nitrite = tank.nitrite + ' ppm';
-    tank_stats.nitrate = tank.nitrate + ' ppm';
-    tank_stats.o2 = tank.o2 + ' ppm';
-    tank_stats.co2 = tank.co2 + ' ppm';
-    tank_stats.nitrosomonas = tank.nitrosomonas + ' bacteria';
-    tank_stats.nitrobacter = tank.nitrobacter + ' bacteria';
+    tank_stats.pH = roundFloat(tank.pH);
+    tank_stats.temperature = roundFloat(tank.temp) + ' degrees Celsius';
+    tank_stats.hardness = roundFloat(tank.hardness) + ' dH';
+    tank_stats.ammonia = roundFloat(tank.ammonia) + ' ppm';
+    tank_stats.nitrite = roundFloat(tank.nitrite) + ' ppm';
+    tank_stats.nitrate = roundFloat(tank.nitrate) + ' ppm';
+    tank_stats.o2 = roundFloat(tank.o2) + ' ppm';
+    tank_stats.co2 = roundFloat(tank.co2) + ' ppm';
+    tank_stats.nitrosomonas = roundFloat(tank.nitrosomonas) + ' bacteria';
+    tank_stats.nitrobacter = roundFloat(tank.nitrobacter) + ' bacteria';
     tank_stats.food = (tank.food).size() + ' noms';
     tank_stats.waste = tank.waste + ' poops';
   }
