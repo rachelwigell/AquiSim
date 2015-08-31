@@ -82,3 +82,28 @@ $('#fish_list').change(function(){
 $('#species_list').change(function(){
 	update_species_stats();
 })
+
+$('#help_topics').change(function(){
+	var selected_topic = $('#help_topics').find(':selected').val();
+	if(selected_topic == 'fish'){
+		$('#help_text').text("Fish can be kept healthy by keeping the properties of the aquarium such as pH and temperature within the safe range, which varies for each species of fish, and by ensuring that they do not get hungry. See the other items in this menu to learn how to influence the chemistry of your tank's water!");
+	}
+	else if(selected_topic == 'pH'){
+		$('#help_text').text("pH refers to the acidity of the tank water. Each fish has a range of pH's in which it can survive. pH will usually tend to rise naturally over time, but is lowered by the presence of waste and food in the water.");
+	}
+	else if(selected_topic == 'temperature'){
+		$('#help_text').text("Water temperature is initially 24 degrees Celsius but will tend toward room temperature, which varies based on time of day. Each species of fish has a range of temperatures in which it can survive.");
+	}
+	else if(selected_topic == 'hardness'){
+		$('#help_text').text("Water hardness is a measure of how many minerals are dissolved in the water. Each fish has a range of hardnesses that it prefers. Hardness cannot directly be controlled in this game, but will fluctuate natrually.");
+	}
+	else if(selected_topic == 'cycle'){
+		$('#help_text').text("Waste and excess food break down into ammonia, which is toxic to fish. Bacteria will grow to convert ammonia into a less deadly substance, nitrite. A different sort of bacteria will convert nitrite into mostly harmless nitrates. Some kinds of fish tolerate these compounds better than others. Cut down on all of these compounds by keeping your tank clean or by performing water changes.");
+	}
+	else if(selected_topic == 'bacteria'){
+		$('#help_text').text("Nitrosomonas bacteria convert ammonia to nitrite. Nitrobacter bacteria convert nitrite to nitrate. The bacteria are harmless, and in fact their work is beneficial to your tank chemistry. Their populations rise when they have a lot of their corresponding chemicals to 'eat!'");
+	}
+	else if(selected_topic == 'gases'){
+		$('#help_text').text("Dissolved O2 and CO2 are influenced by the ratio of fish to plants. The fish are not directly affected by these levels, but their values do impact other aspects of tank chemistry. Increase the O2:CO2 ratio by keeping fewer fish or more plants!");
+	}
+})
