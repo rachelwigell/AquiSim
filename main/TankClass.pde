@@ -68,32 +68,32 @@ public class Tank{
   }
   
   public float changePH(){
-    float pH = .001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia + .16*this.hardness)/(pow(10, abs(this.pH-7.0))*this.volume);
+    float pH = .001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia + .1*this.hardness)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
     return pH;
   }
 
   public float changeTemp(){
     this.roomTemp = 22 + 3*sin(pi/720.0*this.time-pi/2.0); //22 +/- 3
-    float temp = .001*this.surfaceArea*(roomTemp - this.temp)/this.volume; //no heater feature yet
+    float temp = .00005*this.surfaceArea*(roomTemp - this.temp)/this.volume; //no heater feature yet
     return temp;  
   }
 
   public float changeHard(){
-    float hardness = -.1*this.co2*this.hardness/this.volume + .003*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
+    float hardness = -.0008*this.co2*this.hardness/this.volume + .00001*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
     return hardness;
   }
 
   public float changeO2(){
     float photosynthesis = (.5 + .5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2; //check this
     float respiration = (this.cmFish+this.plants.size())*this.o2; // and this
-    float o2 = .2*(photosynthesis-respiration+this.surfaceArea)/this.volume+(this.o2+this.co2)*((100-this.temp)-(this.o2+this.co2))/this.volume;
+    float o2 = .2*(photosynthesis-respiration+.2*this.surfaceArea)/this.volume+(this.o2+this.co2)*((100-this.temp)-(this.o2+this.co2))/this.volume;
     return o2;
   }
 
   public float changeCO2(){
     float photosynthesis = (.5+.5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
     float respiration = (this.cmFish+this.plants.size())*this.o2;
-    float co2 = .15*(respiration-photosynthesis+this.surfaceArea)/this.volume+(this.co2+this.o2)*((100-this.temp)-(this.co2+this.o2))/this.volume;
+    float co2 = .15*(respiration-photosynthesis+.2*this.surfaceArea)/this.volume+(this.co2+this.o2)*((100-this.temp)-(this.co2+this.o2))/this.volume;
     return co2;
   }
 
@@ -150,18 +150,16 @@ public class Tank{
 
     //tank operations
     float cmFish = this.changeFish();
-    float pH = this.pH + timeScale * this.changePH();
-    if(pH <=0) pH = .01;
-    else if(pH >=14) pH = 13.99;
+    float pH = new Vector3D(.01, this.pH + timeScale * this.changePH(), 13.99).centermost();
     float temp = this.temp + timeScale * this.changeTemp();
     float hardness = max(this.hardness + timeScale * this.changeHard(), .01);
     float o2 = max(this.o2 + timeScale * this.changeO2(), .01);
     float co2 = max(this.co2 + timeScale * this.changeCO2(), .01);
-    float ammonia = min(max(this.ammonia + timeScale * this.changeAmmonia(), 0), 1000000);
-    float nitrite = min(max(this.nitrite + timeScale * this.changeNitrite(), 0), 1000000);
-    float nitrate = min(max(this.nitrate + timeScale * this.changeNitrate(), 0), 1000000);
-    float nitrosomonas = min(max(this.nitrosomonas + timeScale * this.changeNitrosomonas(), .01), 1000000);
-    float nitrobacter = min(max(this.nitrobacter + timeScale * this.changeNitrobacter(), .01), 1000000);
+    float ammonia = new Vector3D(0, this.ammonia + timeScale * this.changeAmmonia(), 1000000).centermost();
+    float nitrite = new Vector3D(0, this.nitrite + timeScale * this.changeNitrite(), 1000000).centermost();
+    float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate(), 1000000).centermost();
+    float nitrosomonas = new Vector3D(.01, this.nitrosomonas + timeScale * this.changeNitrosomonas(), 1000000).centermost();
+    float nitrobacter = new Vector3D(.01, this.nitrobacter + timeScale * this.changeNitrobacter(), 1000000).centermost();
     int waste = this.waste + this.changeWaste();
     int time = this.getTime();
 
