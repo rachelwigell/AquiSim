@@ -33,8 +33,8 @@ public class Tank{
     this.temp = 24;
     this.roomTemp = 22;
     this.hardness = 6;
-    this.o2 = 11; //temp/2
-    this.co2 = 11; //temp/2
+    this.o2 = 3; //temp/2
+    this.co2 = 3; //temp/2
     this.ammonia = 0;
     this.nitrite = 0;
     this.nitrate = 0;
@@ -68,7 +68,7 @@ public class Tank{
   }
   
   public float changePH(){
-    float pH = .001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia + .1*this.hardness)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
+    float pH = .0001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
     return pH;
   }
 
@@ -86,14 +86,14 @@ public class Tank{
   public float changeO2(){
     float photosynthesis = (.5 + .5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2; //check this
     float respiration = (this.cmFish+this.plants.size())*this.o2; // and this
-    float o2 = .2*(photosynthesis-respiration+.2*this.surfaceArea)/this.volume+(this.o2+this.co2)*((100-this.temp)-(this.o2+this.co2))/this.volume;
+    float o2 = .02*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return o2;
   }
 
   public float changeCO2(){
     float photosynthesis = (.5+.5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
     float respiration = (this.cmFish+this.plants.size())*this.o2;
-    float co2 = .15*(respiration-photosynthesis+.2*this.surfaceArea)/this.volume+(this.co2+this.o2)*((100-this.temp)-(this.co2+this.o2))/this.volume;
+    float co2 = .015*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return co2;
   }
 
@@ -153,8 +153,8 @@ public class Tank{
     float pH = new Vector3D(.01, this.pH + timeScale * this.changePH(), 13.99).centermost();
     float temp = this.temp + timeScale * this.changeTemp();
     float hardness = max(this.hardness + timeScale * this.changeHard(), .01);
-    float o2 = max(this.o2 + timeScale * this.changeO2(), .01);
-    float co2 = max(this.co2 + timeScale * this.changeCO2(), .01);
+    float o2 = new Vector3D(.01, this.o2 + timeScale * this.changeO2(), 1000000).centermost();
+    float co2 = new Vector3D(.01, this.co2 + timeScale * this.changeCO2(), 1000000).centermost();
     float ammonia = new Vector3D(0, this.ammonia + timeScale * this.changeAmmonia(), 1000000).centermost();
     float nitrite = new Vector3D(0, this.nitrite + timeScale * this.changeNitrite(), 1000000).centermost();
     float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate(), 1000000).centermost();
