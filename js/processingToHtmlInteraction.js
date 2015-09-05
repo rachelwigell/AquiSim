@@ -7,13 +7,8 @@ window.onload = function() {
 };
 
 window.setInterval(function(){
-	//print_debug_string();
   	update_tank_stats();
 }, 2000)
-
-function print_debug_string(){
-	$('#debug').text(debug_string);
-}
 
 function update_tank_stats(){
 	$('#tank_stats_display').empty();
@@ -106,4 +101,11 @@ $('#help_topics').change(function(){
 	else if(selected_topic == 'gases'){
 		$('#help_text').text("Dissolved O2 and CO2 are influenced by the ratio of fish to plants. The fish are not directly affected by these levels, but their values do impact other aspects of tank chemistry. Increase the O2:CO2 ratio by keeping fewer fish or more plants!");
 	}
+})
+
+$('#perform_water_change').click(function(){
+	var processing = Processing.getInstanceById('processing');
+	var percent = $('#water_change_percentage').attr('data-slider');
+	console.log(percent);
+	processing.waterChange(percent);
 })

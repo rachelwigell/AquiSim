@@ -126,7 +126,7 @@ public class Tank{
     this.food.add(food);
   }
 
-  public int changeWaste(l){
+  public int changeWaste(){
     int waste = 0;
     for(Fish f: this.fish){
       int threshold = (int) (((float) max(f.fullness, 0)) / ((float) f.maxFullness) * f.size/2.0);
@@ -137,6 +137,21 @@ public class Tank{
       }
     }
     return waste;
+  }
+  
+  public Tank waterChange(double percent){
+    percent = .01*percent;
+    this.pH = Math.log10(percent*Math.pow(10, 8) + (1-percent)*Math.pow(10, this.pH));
+    this.temp = percent*24 + (1-percent)*this.temp;
+    this.hardness = percent*6 + (1-percent)*this.hardness;
+    this.o2 = percent*3 + (1-percent)*this.o2;
+    this.co2 = percent*3 + (1-percent)*this.co2;
+    this.ammonia = percent*0 + (1-percent)*this.ammonia;
+    this.nitrite = percent*0 + (1-percent)*this.nitrite;
+    this.nitrate = percent*0 + (1-percent)*this.nitrate;
+    this.nitrosomonas = (percent*.2)*.01 + (1-(percent*.2))*this.nitrosomonas;
+    this.nitrobacter = (percent*.2)*.01 + (1-(percent*.2))*this.nitrobacter;
+    return this;
   }
   
   public void progress(){

@@ -1,4 +1,4 @@
-Tank tank;
+public Tank tank;
 public final static int fieldX = window.screen.availWidth-100;
 public final static int fieldY = window.screen.availHeight-100;
 public final static int fieldZ = (fieldX*.1+fieldY*.1);
@@ -130,4 +130,8 @@ species_stats = {};
         "health": f.health
       };
     }
+  }
+  
+  public void waterChange(float percent){
+    tank.waterChange(percent);
   }
