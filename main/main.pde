@@ -20,7 +20,6 @@ public void populateSpeciesList(){
 void setup(){
   size(fieldX, fieldY, P3D);
   tank = new Tank();
-  camera();
   fill(color(0));
   populateSpeciesList();
   addFishToTank("Guppy", "Swimmy");
@@ -33,7 +32,7 @@ void draw(){
   background(bcolor.x, bcolor.y, bcolor.z);
   int spotColor = spotlightColor();
   spotLight(spotColor, spotColor, spotColor, fieldX/2, 0, 1500, 0, 0, -1, PI/4, 0);
-  //drawTank();
+  drawTank();
   drawAllFish();
   updateTankStats();
   updateFishStats();
@@ -47,24 +46,24 @@ void draw(){
 public void drawTank(){
   noStroke();
   pushMatrix();
-  translate((.5*fieldX), (.8*fieldY), -fieldZ);
+  translate((.5*fieldX), (.8*fieldY), -1.5*fieldZ);
   translate(0, (.5*fieldY), -1);
   fill(color(200, 180, 100));
   box(2*fieldX, fieldY, 1); //table
   translate(0, (-.8*fieldY), 1);
   fill(color(255));
   box((.95*fieldX), (fieldY), 1); //back
-  translate((.475*fieldX), 0, (.25*fieldZ));
-  box(1, (fieldY), (.5*fieldZ)); //right
+  translate((.475*fieldX), 0, (.5*fieldZ));
+  box(1, (fieldY), (fieldZ)); //right
   translate((-.95*fieldX), 0, 0);
-  box(1, (fieldY), (.5*fieldZ)); //left
-  translate((.475*fieldX), (.5*fieldY), 1);
+  box(1, (fieldY), (fieldZ)); //left
+  translate((.475*fieldX), (.5*fieldY), 0);
   fill(color(200));
-  box((.95*fieldX), 1, (.5*fieldZ)); //bottom
+  box((.95*fieldX), 1, (fieldZ)); //bottom
   fill(color(0, 0, 255, 20));
   translate(0, (-.5*fieldY) + (fieldY*.5*(1-tank.waterLevel)), 0);
   hint(DISABLE_DEPTH_TEST);
-  box((.95*fieldX), (fieldY*tank.waterLevel), (.5*fieldZ)); //water
+  box((.95*fieldX), (fieldY*tank.waterLevel), (fieldZ)); //water
   popMatrix();
 }
 
@@ -74,7 +73,7 @@ void drawAllFish(){
     Fish f = (Fish) tank.fish.get(i);
     noStroke();
     pushMatrix();
-    translate(fieldX/2, fieldY/2, 0);
+    translate(fieldX/2, fieldY/2, -fieldZ);
     translate(f.position.x, f.position.y, f.position.z);
     rotateX(f.orientation.x);
     rotateY(f.orientation.y);
@@ -93,6 +92,7 @@ public void populateSpeciesStats(){
   for(int i = 0; i < speciesList.size(); i++){
     Fish f = (Fish) speciesList.get(i);
     species_stats[f.species] = {
+      "image url": f.sprite,
       "Species:": f.species,
       "Ease of care:": f.ease + "/5",
       "Ammonia levels tolerated:": "0-" + f.ammonia + ' ppm',

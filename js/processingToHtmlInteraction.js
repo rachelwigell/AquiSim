@@ -75,7 +75,12 @@ function update_species_stats(){
 		$('#add_fish').show();
 		for(var name in species_info){
 			stat = species_info[name];
-			$('#species_stats_display').append('<tr><td><b>' + name + '</b></td><td> ' + stat + '</td></tr>');	
+			if(name == "image url"){
+				$('#species_stats_display').append('<tr><td colspan="2"><center><img src="' + stat + '"></center></td></tr>');
+			}
+			else{
+				$('#species_stats_display').append('<tr><td><b>' + name + '</b></td><td> ' + stat + '</td></tr>');	
+			}
 		}
 	}	
 }
