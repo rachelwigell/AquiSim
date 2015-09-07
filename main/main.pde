@@ -33,8 +33,8 @@ void draw(){
   background(bcolor.x, bcolor.y, bcolor.z);
   int spotColor = spotlightColor();
   spotLight(spotColor, spotColor, spotColor, fieldX/2, 0, 1500, 0, 0, -1, PI/4, 0);
-  drawTank();
-  //drawAllFish();
+  //drawTank();
+  drawAllFish();
   updateTankStats();
   updateFishStats();
   tank.progress();
@@ -74,11 +74,12 @@ void drawAllFish(){
     Fish f = (Fish) tank.fish.get(i);
     noStroke();
     pushMatrix();
+    translate(fieldX/2, fieldY/2, 0);
     translate(f.position.x, f.position.y, f.position.z);
     rotateX(f.orientation.x);
     rotateY(f.orientation.y);
     rotateZ(f.orientation.z);
-    shape(f.model, 400, 400, 0);
+    shape(f.model);
     popMatrix();
     //updatePosition(f);
   }

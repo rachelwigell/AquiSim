@@ -18,7 +18,7 @@ public class Guppy extends Fish{
     this.ammonia = 10;
     this.nitrite = 10;
     this.nitrate = 60;
-    this.model = loadShape("graphics/endlerslivebearer.obj");
+    this.model = loadShape("lowpolyfish.obj");
     this.sprite = "graphics/endlerslivebearer.png";
     this.position = new Vector3D(0, 0, 0);
     this.velocity = new Vector3D(0, 0, 0);
