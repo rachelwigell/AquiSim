@@ -7,7 +7,7 @@ public class Guppy extends Fish{
     this.maxHealth = this.ease*24*60*5;
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
-    this.fullness = this.maxHappyFull;
+    this.fullness = this.maxFullness;
     this.size = 5;
     this.minPH = 7;
     this.maxPH = 8.5;
@@ -18,10 +18,8 @@ public class Guppy extends Fish{
     this.ammonia = 10;
     this.nitrite = 10;
     this.nitrate = 60;
-    //this.model = new OBJModel(window, "graphics/endlerslivebearer.obj", Visual.POLYGON);
-    //this.sprite = "graphics/endlerslivebearer.png";
-    //this.model.scale(10);
-    //this.model.translateToCenter();
+    this.model = loadShape("graphics/endlerslivebearer.obj");
+    this.sprite = "graphics/endlerslivebearer.png";
     this.position = new Vector3D(0, 0, 0);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);

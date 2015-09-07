@@ -17,7 +17,7 @@ public abstract class Fish {
   public double ammonia;
   public double nitrite;
   public double nitrate;
-  public OBJModel model;
+  public PShape model;
   public String sprite;
   public Vector3D position;
   public Vector3D orientation;
@@ -26,7 +26,7 @@ public abstract class Fish {
   public Vector3D acceleration;
   
   public Fish createFromNickname(String nickname){
-    this.nickname = nickname;
+    this.name = nickname;
     return this;
   }
   
@@ -34,7 +34,7 @@ public abstract class Fish {
       String status,
       long fullness,
       int health){
-    this.nickname = nickname;
+    this.name = nickname;
     this.status = status;
     this.fullness = fullness;
     this.health = health;

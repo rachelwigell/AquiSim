@@ -14,7 +14,7 @@ function update_tank_stats(){
 	$('#tank_stats_display').empty();
 	for(var name in tank_stats){
 		stat = tank_stats[name];
-		$('#tank_stats_display').append(name + ': ' + stat + '<br>');
+		$('#tank_stats_display').append('<tr><td><b>' + name + ':</b></td><td> ' + stat + '</td></tr>');
 	}
 }
 
@@ -34,10 +34,20 @@ function update_fish_stats(){
 	}
 	else{
 		fish_info = fish_stats[selected_fish];
-		for(var name in fish_info){
-			stat = fish_info[name];
-			$('#fish_stats_display').append(name + ': ' + stat +'<br>');	
-		}
+		var row = '<tr><td><b>Name:</b></td><td>' + fish_info['Name:'] + '</td><td><b>Ammonia levels tolerated:</b></td><td>' + fish_info["Ammonia levels tolerated:"] + '</td></tr>';
+		$('#fish_stats_display').append(row);
+		row = '<tr><td><b>Species:</b></td><td>' + fish_info['Species:'] + '</td><td><b>Nitrite levels tolerated:</b></td><td>' + fish_info["Nitrite levels tolerated:"] + '</td></tr>';
+		$('#fish_stats_display').append(row);
+		row = '<tr><td colspan="2"><img src="' + fish_info['image url'] + '"></td><td><b>Nitrate levels tolerated:</b></td><td>' + fish_info["Nitrate levels tolerated:"] + '</td></tr>';
+		$('#fish_stats_display').append(row);
+		row = '<tr><td><b>Status:</b></td><td>' + fish_info['Status:'] + '</td><td><b>pH levels tolerated:</b></td><td>' + fish_info["pH levels tolerated:"] + '</td></tr>';
+		$('#fish_stats_display').append(row);
+		var health_percentage = fish_info['health'] * 100 / fish_info['max health'];
+		row = '<tr><td><b>Health:</b></td><td><div class="progress"><span class="meter" style="width: ' + health_percentage + '%"></span></div></td><td><b>Temperatures tolerated:</b></td><td>' + fish_info["Temperatures tolerated:"] + '</td></tr>';
+		$('#fish_stats_display').append(row);
+		var fullness_percentage = fish_info['fullness'] * 100 / fish_info['max fullness'];
+		row = '<tr><td><b>Fullness:</b></td><td><div class="progress"><span class="meter" style="width: ' + fullness_percentage + '%"></span></div></td><td><b>Hardness levels tolerated:</b></td><td>' + fish_info["Hardness levels tolerated:"] + '</td></tr>';
+		$('#fish_stats_display').append(row);
 	}	
 }
 
@@ -60,12 +70,12 @@ function update_species_stats(){
 	else{
 		species_info = species_stats[selected_species];
 		$('#nickname_entry').attr('placeholder', 'Give your ' + selected_species + ' a name!');
-		$('#add_fish').text("Add a " + selected_species + "!");
+		$('#add_fish').text('Add a ' + selected_species + '!');
 		$('#nickname_entry').show();
 		$('#add_fish').show();
 		for(var name in species_info){
 			stat = species_info[name];
-			$('#species_stats_display').append(name + ': ' + stat +'<br>');	
+			$('#species_stats_display').append('<tr><td><b>' + name + '</b></td><td> ' + stat + '</td></tr>');	
 		}
 	}	
 }
@@ -108,4 +118,11 @@ $('#perform_water_change').click(function(){
 	var percent = $('#water_change_percentage').attr('data-slider');
 	console.log(percent);
 	processing.waterChange(percent);
+})
+
+$('#add_fish').click(function(){
+	var processing = Processing.getInstanceById('processing');
+	var nickname = $('#nickname_entry').val();
+	var species = $('#species_list').find(':selected').val();
+	processing.addFishToTank(species, nickname);
 })
