@@ -17,7 +17,8 @@ public abstract class Fish {
   public double ammonia;
   public double nitrite;
   public double nitrate;
-  public PShape model;
+  //public PShape model;
+  public ArrayList model;
   public String sprite;
   public Vector3D position;
   public Vector3D orientation;
@@ -39,5 +40,21 @@ public abstract class Fish {
     this.fullness = fullness;
     this.health = health;
     return this;
+  }
+  
+  public int setHealth(){
+    if(this.status == "Happy."){
+      this.health = min(this.maxHealth, this.health+1);
+    }
+    else{
+     this.health  = max(0, this.health-1);
+    }
+    return this.health;
+  }
+
+  public long changeHunger(){
+    int hunger = (int) (this.size/2); //hunger changes relative to fish size
+    this.fullness = Math.max(this.fullness - hunger, 0);
+    return hunger;
   }
 }

@@ -8,6 +8,14 @@ public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
 public Tank tank;
 public ArrayList speciesList = new ArrayList();
+public Selection_in_P3D_OPENGL_A3D picker;
+public int backMinX = 99999;
+public int backMaxX = -1;
+public int backMaxY = -1;
+public int leftMinX = 99999;
+public int rightMaxX = -1;
+public int sidesMaxY = -1;
+public int updateCount = 0;
 
 tank_stats =  {};
 fish_stats = {};
@@ -19,24 +27,34 @@ public void populateSpeciesList(){
 
 void setup(){
   size(fieldX, fieldY, P3D);
+  frameRate(30); //causes draw() to be called 30 times per second
+  picker = new Selection_in_P3D_OPENGL_A3D();
+  
   tank = new Tank();
-  fill(color(0));
   populateSpeciesList();
-  addFishToTank("Guppy", "Swimmy");
   populateSpeciesStats();
-  tank.progress();
+  
+  //determineBounds();
+  
+  addFishToTank("Guppy", "Swimmy");
 }
 
 void draw(){
   Vector3D bcolor = backgroundColor();
   background(bcolor.x, bcolor.y, bcolor.z);
+//  lights();
   int spotColor = spotlightColor();
-  spotLight(spotColor, spotColor, spotColor, fieldX/2, 0, 1500, 0, 0, -1, PI/4, 0);
+  ambientLight(spotColor, spotColor, spotColor);
+//  spotLight(spotColor, spotColor, spotColor, fieldX/4, 0, 400, 0, 0, -1, PI/2, 0);
   drawTank();
   drawAllFish();
-  updateTankStats();
-  updateFishStats();
-  tank.progress();
+  if(updateCount > 150){ //operations to happen every 5 seconds
+      tank.progress();
+      updateTankStats();
+      updateFishStats();
+      updateCount = 0;
+    }
+  updateCount++;
 }
 
 /**************************************************
@@ -51,14 +69,15 @@ public void drawTank(){
   fill(color(200, 180, 100));
   box(2*fieldX, fieldY, 1); //table
   translate(0, (-.8*fieldY), 1);
-  fill(color(255));
+  fill(color(200));
   box((.95*fieldX), (fieldY), 1); //back
+  fill(color(255));
   translate((.475*fieldX), 0, (.5*fieldZ));
   box(1, (fieldY), (fieldZ)); //right
   translate((-.95*fieldX), 0, 0);
   box(1, (fieldY), (fieldZ)); //left
   translate((.475*fieldX), (.5*fieldY), 0);
-  fill(color(200));
+  fill(color(180));
   box((.95*fieldX), 1, (fieldZ)); //bottom
   fill(color(0, 0, 255, 20));
   translate(0, (-.5*fieldY) + (fieldY*.5*(1-tank.waterLevel)), 0);
@@ -78,10 +97,289 @@ void drawAllFish(){
     rotateX(f.orientation.x);
     rotateY(f.orientation.y);
     rotateZ(f.orientation.z);
-    shape(f.model);
+    Vector3D currentColor = (Vector3D) f.model.get(0); //side
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-20, -6, 7.5);
+    vertex(20, -6, 7.5);
+    vertex(20, 6, 7.5);
+    vertex(-20, 6, 7.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(1); //back trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(40, -1.5, 2.5);
+    vertex(20, -6, 7.5);
+    vertex(20, 6, 7.5);
+    vertex(40, 1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(2); //top trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-20, -6, 7.5);
+    vertex(-4, -18, 2.5);
+    vertex(4, -18, 2.5);
+    vertex(20, -6, 7.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(3); //top (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-4, -18, 2.5);
+    vertex(-4, -18, -2.5);
+    vertex(4, -18, -2.5);
+    vertex(4, -18, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(4); //top back triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(4, -18, 2.5);
+    vertex(20, -6, 7.5);
+    vertex(40, -1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(5); //top of top back triangle (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(4, -18, -2.5);
+    vertex(4, -18, 2.5);
+    vertex(40, -1.5, 2.5);
+    vertex(40, -1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(6); //bottom trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-20, 6, 7.5);
+    vertex(-4, 18, 2.5);
+    vertex(4, 18, 2.5);
+    vertex(20, 6, 7.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(7); //bottom back triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(4, 18, 2.5);
+    vertex(20, 6, 7.5);
+    vertex(40, 1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(8); //bottom of bottom back triangle (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(4, 18, -2.5);
+    vertex(4, 18, 2.5);
+    vertex(40, 1.5, 2.5);
+    vertex(40, 1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(9); //bottom of bottom trapezoid (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-20, 6, 7.5);
+    vertex(-4, 18, 2.5);
+    vertex(4, 18, 2.5);
+    vertex(20, 6, 7.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(10); //front trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-40, -1.5, 2.5);
+    vertex(-20, -6, 7.5);
+    vertex(-20, 6, 7.5);
+    vertex(-40, 1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(11); //top front triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-4, -18, 2.5);
+    vertex(-20, -6, 7.5);
+    vertex(-40, -1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(12); //top of top front triangle (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-4, -18, -2.5);
+    vertex(-4, -18, 2.5);
+    vertex(-40, -1.5, 2.5);
+    vertex(-40, -1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(13); //bottom front triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-4, 18, 2.5);
+    vertex(-20, 6, 7.5);
+    vertex(-40, 1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(14); //bottom of bottom front triangle (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-4, 18, -2.5);
+    vertex(-4, 18, 2.5);
+    vertex(-40, 1.5, 2.5);
+    vertex(-40, 1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(15); //front (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-40, 1.5, -2.5);
+    vertex(-40, 1.5, 2.5);
+    vertex(-40, -1.5, 2.5);
+    vertex(-40, -1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(16); //side tail
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(40, -1.5, 2.5);
+    vertex(58, -20, 2.5);
+    vertex(58, -15, 2.5);
+    vertex(52, 0, 2.5);
+    vertex(58, 15, 2.5);
+    vertex(58, 20, 2.5);
+    vertex(40, 1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(17); //tail sides (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(40, -1.5, 2.5);
+    vertex(40, -1.5, -2.5);
+    vertex(58, -20, -2.5);
+    vertex(58, -20, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(18); //tail sides (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(58, -20, -2.5);
+    vertex(58, -20, 2.5);
+    vertex(58, -15, 2.5);
+    vertex(58, -15, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(19); //tail sides (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(58, -15, 2.5);
+    vertex(58, -15, -2.5);
+    vertex(52, 0, -2.5);
+    vertex(52, 0, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(20); //tail sides (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(52, 0, 2.5);
+    vertex(52, 0, -2.5);
+    vertex(58, 15, -2.5);
+    vertex(58, 15, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(21); //tail sides (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(58, 15, 2.5);
+    vertex(58, 15, -2.5);
+    vertex(58, 20, -2.5);
+    vertex(58, 20, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(22); //tail sides (not repeat)
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(58, 20, 2.5);
+    vertex(58, 20, -2.5);
+    vertex(40, 1.5, -2.5);
+    vertex(40, 1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(0); //side
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-20, -6, -7.5);
+    vertex(20, -6, -7.5);
+    vertex(20, 6, -7.5);
+    vertex(-20, 6, -7.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(1); //back trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(40, -1.5, -2.5);
+    vertex(20, -6, -7.5);
+    vertex(20, 6, -7.5);
+    vertex(40, 1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(2); //top trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-20, -6, -7.5);
+    vertex(-4, -18, -2.5);
+    vertex(4, -18, -2.5);
+    vertex(20, -6, -7.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(4); //top back triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(4, -18, -2.5);
+    vertex(20, -6, -7.5);
+    vertex(40, -1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(6); //bottom trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-20, 6, -7.5);
+    vertex(-4, 18, -2.5);
+    vertex(4, 18, -2.5);
+    vertex(20, 6, -7.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(7); //bottom back triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(4, 18, -2.5);
+    vertex(20, 6, -7.5);
+    vertex(40, 1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(10); //front trapezoid
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-40, -1.5, -2.5);
+    vertex(-20, -6, -7.5);
+    vertex(-20, 6, -7.5);
+    vertex(-40, 1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(11); //top front triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-4, -18, -2.5);
+    vertex(-20, -6, -7.5);
+    vertex(-40, -1.5, -2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(13); //bottom front triangle
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(-4, 18, 2.5);
+    vertex(-20, 6, 7.5);
+    vertex(-40, 1.5, 2.5);
+    endShape(CLOSE);
+    currentColor = (Vector3D) f.model.get(16); //side tail
+    fill(currentColor.x, currentColor.y, currentColor.z);
+    beginShape();
+    vertex(40, -1.5, -2.5);
+    vertex(58, -20, -2.5);
+    vertex(58, -15, -2.5);
+    vertex(52, 0, -2.5);
+    vertex(58, 15, -2.5);
+    vertex(58, 20, -2.5);
+    vertex(40, 1.5, -2.5);
+    endShape(CLOSE);
     popMatrix();
-    //updatePosition(f);
+    updatePosition(f);
   }
+}
+
+public void mouseReleased(){
+    picker.captureViewMatrix(fieldX, fieldY);
+    picker.calculatePickPoints(mouseX,height-mouseY);
+    PVector start = picker.ptStartPos;
+    PVector end = picker.ptEndPos;
+//    console.log(start);
+//    console.log(end);
+//    if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
+//      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z)));
+//    }
+//    else if(onLeftSide(mouseX, mouseY)){
+//      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z), true));
+//    }
+//    else if(onRightSide(mouseX, mouseY)){
+//      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z), false));
+//    }
 }
 
 /**************************************************
@@ -161,10 +459,10 @@ public Vector3D backgroundColor(){
 
 public int spotlightColor(){
   int time = tank.time;
-  return  ((255.0/1020.0)*(720-abs(720-time) + 300));
+  return  ((200.0/1320.0)*(720-abs(720-time) + 600));
 }
 
-public void addFishToTank(String speciesName, String nickname){
+public Fish addFishToTank(String speciesName, String nickname){
   Fish toAdd = null;
   for(int i=0; i<speciesList.size(); i++){
     Fish f = (Fish) speciesList.get(i);
@@ -173,4 +471,57 @@ public void addFishToTank(String speciesName, String nickname){
       tank.addFish(toAdd);
     }
   }
+  return toAdd;
+}
+
+public void drawDummyBox(){
+    noLights();
+    noStroke();
+    fill(255, 0, 0);
+    pushMatrix();
+    translate((.5*fieldX), (.5*fieldY), (-1.5*fieldZ));
+    box((.95*fieldX), (fieldY), 1); //back
+    fill(255, 255, 0);
+    translate((.475*fieldX), 0, (.5*fieldZ));
+    box(1, (fieldY), (fieldZ)); //right
+    translate((-.95*fieldX), 0, 0);
+    box(1, (fieldY), (fieldZ)); //left
+    popMatrix();
+}
+
+public void determineBounds(){
+    drawDummyBox();
+    loadPixels();
+    draw();
+    int x = 0;
+    int y = 0;
+    for(int i: pixels){
+      if(i == -65536){
+        if(x < backMinX) backMinX = x;
+        else if(x > backMaxX) backMaxX = x;
+        if(y > backMaxY) backMaxY = y;
+      }
+      else if (i == -256){
+        if( x < leftMinX) leftMinX = x;
+        else if(x > rightMaxX) rightMaxX = x;
+        if(y > sidesMaxY) sidesMaxY = y;
+      }
+      x++;
+      if(x >= fieldX){
+        x = 0;
+        y++;
+      }
+    }
+  }
+
+public void addFoodToTank(Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float factor = 0;
+}
+
+public void updatePosition(Fish fish){
+  float x = new Vector3D((-.475*fieldX+fish.dimensions.x/2.0), fish.position.x+fish.velocity.x, (.475*fieldX-fish.dimensions.x/2.0)).centermost();
+  float y = new Vector3D((-fieldY*.5*(1-tank.waterLevel)+fish.dimensions.y/2.0), fish.position.y+fish.velocity.y, (fieldY*.5*(1-tank.waterLevel)-fish.dimensions.y/2.0)).centermost();
+  float z = new Vector3D((-.5*fieldZ+fish.dimensions.x/2.0), fish.position.z+fish.velocity.z, (.5*fieldZ-fish.dimensions.x/2.0)).centermost();
+  fish.position = new Vector3D(x, y, z);
 }

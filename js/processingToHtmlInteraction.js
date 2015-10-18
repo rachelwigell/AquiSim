@@ -38,7 +38,7 @@ function update_fish_stats(){
 		$('#fish_stats_display').append(row);
 		row = '<tr><td><b>Species:</b></td><td>' + fish_info['Species:'] + '</td><td><b>Nitrite levels tolerated:</b></td><td>' + fish_info["Nitrite levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
-		row = '<tr><td colspan="2"><img src="' + fish_info['image url'] + '"></td><td><b>Nitrate levels tolerated:</b></td><td>' + fish_info["Nitrate levels tolerated:"] + '</td></tr>';
+		row = '<tr><td colspan="2"><center><img src="' + fish_info['image url'] + '"></center></td><td><b>Nitrate levels tolerated:</b></td><td>' + fish_info["Nitrate levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
 		row = '<tr><td><b>Status:</b></td><td>' + fish_info['Status:'] + '</td><td><b>pH levels tolerated:</b></td><td>' + fish_info["pH levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);

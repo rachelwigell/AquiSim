@@ -11870,12 +11870,10 @@
       cam.set(xX, xY, xZ, 0, yX, yY, yZ, 0, zX, zY, zZ, 0, 0, 0, 0, 1);
 
       cam.translate(-eyeX, -eyeY, -eyeZ);
-
       cameraInv.reset();
       cameraInv.invApply(xX, xY, xZ, 0, yX, yY, yZ, 0, zX, zY, zZ, 0, 0, 0, 0, 1);
 
-      cameraInv.translate(eyeX, eyeY, eyeZ);
-
+      cameraInv.translate(eyeX, eyeY, eyeZ);  
       modelView.set(cam);
       modelViewInv.set(cameraInv);
     };
@@ -16088,7 +16086,7 @@
     * @see updatePixels
     */
     p.loadPixels = function() {
-      p.imageData = drawing.$ensureContext().getImageData(0, 0, p.width, p.height);
+      p.imageData = drawing.$ensureContext().canvas.getImageData(0, 0, p.width, p.height);
     };
 
     // Draws a 1-Dimensional pixel array to Canvas

@@ -154,12 +154,49 @@ public class Tank{
     return this;
   }
   
+  public String fishHappiness(Fish f){
+    if(f.fullness <= 0){
+      f.status = "Hungry!";
+    }
+    else if(this.ammonia > f.ammonia){
+      f.status = "Ammonia too high.";
+    }
+    else if(this.nitrite > f.nitrite){
+      f.status = "Nitrite too high.";
+    }
+    else if(this.nitrate > f.nitrate){
+      f.status = "Nitrate too high.";
+    }
+    else if(this.pH < f.minPH){
+      f.status = "pH too low.";
+    }
+    else if(this.pH > f.maxPH){
+      f.status = "pH too high.";
+    }
+    else if(this.temp < f.minTemp){
+      f.status = "Temperature too low.";
+    }
+    else if(this.temp > f.maxTemp){
+      f.status = "Temperature too high.";
+    }
+    else if(this.hardness < f.minHard){
+      f.status = "Hardness too low.";
+    }
+    else if(this.hardness > f.maxHard){
+      f.status = "Hardness too high.";
+    }
+    else{ //if none of the above, then  it's happy
+      f.status = "Happy.";
+    }
+    return f.status;
+  }
+  
   public void progress(){
     //per fish operations
     for(Fish f: this.fish){
-      //f.changeHunger(); //update fish's hunger level 
-      //f.happy(this); //update fish's happiness status
-      //f.setHealth(); //update fish's health
+      f.changeHunger(); //update fish's hunger level 
+      this.fishHappiness(f); //update fish's happiness status
+      f.setHealth(); //update fish's health
       //f.handleDeceased(visual); //check if fish is dead and perform necessary operations if so
     }
 
