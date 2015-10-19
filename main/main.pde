@@ -160,7 +160,7 @@ void drawAllFish(){
     vertex(20, 6, 7.5);
     vertex(40, 1.5, 2.5);
     endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(8); //bottom of bottom back triangle (not repeat)
+    currentColor = (Vector3D) f.model.get(8); //bottom of bottom trapezoid (not repeat)
     fill(currentColor.x, currentColor.y, currentColor.z);
     beginShape();
     vertex(4, 18, -2.5);
@@ -168,13 +168,13 @@ void drawAllFish(){
     vertex(-4, 18, 2.5);
     vertex(-4, 18, -2.5);
     endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(9); //bottom of bottom trapezoid (not repeat)
+    currentColor = (Vector3D) f.model.get(9); //bottom of bottom back triangle (not repeat)
     fill(currentColor.x, currentColor.y, currentColor.z);
     beginShape();
-    vertex(-20, 6, 7.5);
-    vertex(-4, 18, 2.5);
     vertex(4, 18, 2.5);
-    vertex(20, 6, 7.5);
+    vertex(4, 18, -2.5);
+    vertex(40, 1.5, -2.5);
+    vertex(40, 1.5, 2.5);
     endShape(CLOSE);
     currentColor = (Vector3D) f.model.get(10); //front trapezoid
     fill(currentColor.x, currentColor.y, currentColor.z);
