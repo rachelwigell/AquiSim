@@ -46,6 +46,7 @@ void draw(){
   ambientLight(spotColor, spotColor, spotColor);
   drawTank();
   drawAllFish();
+  drawAllWaste();
   if(updateCount > 150){ //operations to happen every 5 seconds
       tank.progress();
       updateTankStats();
@@ -364,6 +365,34 @@ void drawAllFish(){
     updatePosition(f);
   }
 }
+  
+public void drawAllWaste(){
+//    for(int i = 0; i < this.tank.poops.length; i++){
+//      Poop p = (Poop) this.tank.poops.get(i);
+//      drawWaste(p);
+//      updatePosition(p);
+//    }
+  for(int i = 0; i < tank.food.size(); i++){
+    Food f = (Food) tank.food.get(i);
+    drawWaste(f);
+    f.updatePosition();
+  }
+//    for(int i = 0; i < this.tank.deadFish.length; i++){
+//      DeadFish d = (DeadFish) this.tank.deadFish.get(i);
+//      drawDeadFish(d);
+//      updatePosition(d);
+//    }
+}
+  
+public void drawWaste(Waste s){
+  noStroke();
+  pushMatrix();
+  translate(fieldX/2, fieldY/2, -fieldZ);
+  translate(s.position.x, s.position.y, s.position.z);
+  fill(s.RGBcolor.x, s.RGBcolor.y, s.RGBcolor.z);
+  sphere(s.dimensions.x);
+  popMatrix();    
+}
 
 public void mouseReleased(){
     picker.captureViewMatrix(fieldX, fieldY);
@@ -489,11 +518,6 @@ public void determineBounds(){
   sidesMaxY = int(screenY(0.25*fieldX, fieldY, -.5*fieldZ));
 }
 
-public void addFoodToTank(Vector3D start, Vector3D end){
-  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-  float factor = 0;
-}
-
 public void updatePosition(Fish fish){
   fish.position.x = new Vector3D((-.475*fieldX+fish.dimensions.x/2.0), fish.position.x+fish.velocity.x, (.475*fieldX-fish.dimensions.x/2.0)).centermost();
   fish.position.y = new Vector3D((fieldY/2-fish.dimensions.y/2.0), fish.position.y+fish.velocity.y, (fieldY*(.5-tank.waterLevel)+fish.dimensions.y/2.0)).centermost();
@@ -502,9 +526,9 @@ public void updatePosition(Fish fish){
 }
 
 public void updateAcceleration(Fish fish){
-  fish.acceleration.x += random(-.125, .125);
+  fish.acceleration.x += random(-.25, .25);
   fish.acceleration.y += random(-.125, .125);
-  fish.acceleration.z += random(-.125, .125);
+  fish.acceleration.z += random(-.25, .25);
 }
 
 public void updateVelocity(Fish fish){
