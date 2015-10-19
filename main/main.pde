@@ -409,12 +409,17 @@ public void mouseReleased(){
       position.y = -position.y;
       tank.addFood(new Food(position));
     }
-//    else if(onLeftSide(mouseX, mouseY)){
-//      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z), true));
-//    }
-//    else if(onRightSide(mouseX, mouseY)){
-//      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z), false));
-//    } 
+    else if((side = onSide(mouseX, mouseY)) != "No"){
+      Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+      float x;
+      if(side == "left") x = .025*fieldX;
+      else x = .975*fieldX;
+      float factor = (x-start.x)/normal.x;
+      Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+      Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
+      position.y = -position.y;
+      tank.addFood(new Food(position));
+    } 
 }
 
 /**************************************************
@@ -552,4 +557,38 @@ public void updateOrientationRelativeToVelocity(Fish fish){
   else if(velocity.z == 0 && velocity.x > 0) fish.orientation.y = PI;
   else if(velocity.x == 0 && velocity.z < 0) fish.orientation.y = (3*PI/2.0);
   fish.orientation.z = new Vector3D(-1, -velocity.y, 1).centermost() * PI/6;
+}
+
+public float triangleArea(Vector3D point1, Vector3D point2, Vector3D point3){
+  return (float) Math.abs(((point1.x*(point2.y-point3.y)) + point2.x*(point3.y-point1.y) + point3.x*(point1.y-point2.y))/2.0);
+}
+
+public String onSide(float mouseX, float mouseY){
+  Vector3D point = new Vector3D(mouseX, mouseY, 0);
+  
+    Vector3D leftBottomLeft = new Vector3D(leftMinX, sidesMaxY, 0);
+    Vector3D leftBottomRight = new Vector3D(backMinX, backMaxY, 0);
+    Vector3D leftTopRight = new Vector3D(backMinX, 0, 0);
+    Vector3D leftTopLeft = new Vector3D(leftMinX, 0, 0);
+    float area = triangleArea(leftBottomLeft, leftBottomRight, leftTopLeft) + triangleArea(leftBottomRight, leftTopRight, leftTopLeft);
+    float pointArea  = triangleArea(leftBottomLeft, point, leftBottomRight) + triangleArea(leftBottomRight, point, leftTopRight) +
+        triangleArea(leftTopRight, point, leftTopLeft) + triangleArea(leftTopLeft, point, leftBottomLeft);
+        
+    if(pointArea <= area){
+      return "left";
+    }
+
+    Vector3D rightBottomLeft = new Vector3D(backMaxX, backMaxY, 0);
+    Vector3D rightBottomRight = new Vector3D(rightMaxX, sidesMaxY, 0);
+    Vector3D rightTopRight = new Vector3D(rightMaxX, 0, 0);
+    Vector3D rightTopLeft = new Vector3D(backMaxX, 0, 0);
+    float area = triangleArea(rightBottomLeft, rightBottomRight, rightTopLeft) + triangleArea(rightBottomRight, rightTopRight, rightTopLeft);
+    float pointArea  = triangleArea(rightBottomLeft, point, rightBottomRight) + triangleArea(rightBottomRight, point, rightTopRight) +
+        triangleArea(rightTopRight, point, rightTopLeft) + triangleArea(rightTopLeft, point, rightBottomLeft);
+
+    if(pointArea <= area){
+      return "right";
+    }
+    
+    return "No";
 }
