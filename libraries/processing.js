@@ -16086,7 +16086,7 @@
     * @see updatePixels
     */
     p.loadPixels = function() {
-      p.imageData = drawing.$ensureContext().canvas.getImageData(0, 0, p.width, p.height);
+      p.imageData = drawing.$ensureContext().getImageData(0, 0, p.width, p.height);
     };
 
     // Draws a 1-Dimensional pixel array to Canvas

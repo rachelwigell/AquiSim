@@ -9,12 +9,12 @@ public final static int fieldZ = (fieldX*.1+fieldY*.1);
 public Tank tank;
 public ArrayList speciesList = new ArrayList();
 public Selection_in_P3D_OPENGL_A3D picker;
-public int backMinX = 99999;
-public int backMaxX = -1;
-public int backMaxY = -1;
-public int leftMinX = 99999;
-public int rightMaxX = -1;
-public int sidesMaxY = -1;
+public int backMinX = null;
+public int backMaxX = null;
+public int backMaxY = null;
+public int leftMinX = null;
+public int rightMaxX = null;
+public int sidesMaxY = null;
 public int updateCount = 0;
 
 tank_stats =  {};
@@ -34,7 +34,7 @@ void setup(){
   populateSpeciesList();
   populateSpeciesStats();
   
-  //determineBounds();
+  determineBounds();
   
   addFishToTank("Guppy", "Swimmy");
 }
@@ -42,10 +42,8 @@ void setup(){
 void draw(){
   Vector3D bcolor = backgroundColor();
   background(bcolor.x, bcolor.y, bcolor.z);
-//  lights();
   int spotColor = spotlightColor();
   ambientLight(spotColor, spotColor, spotColor);
-//  spotLight(spotColor, spotColor, spotColor, fieldX/4, 0, 400, 0, 0, -1, PI/2, 0);
   drawTank();
   drawAllFish();
   if(updateCount > 150){ //operations to happen every 5 seconds
@@ -83,6 +81,9 @@ public void drawTank(){
   translate(0, (-.5*fieldY) + (fieldY*.5*(1-tank.waterLevel)), 0);
   hint(DISABLE_DEPTH_TEST);
   box((.95*fieldX), (fieldY*tank.waterLevel), (fieldZ)); //water
+  fill(50, 50, 50, 20);
+  translate(0, -.5*fieldY*tank.waterLevel, 0);
+  box((.95*fieldX), 1, fieldZ);
   popMatrix();
 }
 
@@ -164,8 +165,8 @@ void drawAllFish(){
     beginShape();
     vertex(4, 18, -2.5);
     vertex(4, 18, 2.5);
-    vertex(40, 1.5, 2.5);
-    vertex(40, 1.5, -2.5);
+    vertex(-4, 18, 2.5);
+    vertex(-4, 18, -2.5);
     endShape(CLOSE);
     currentColor = (Vector3D) f.model.get(9); //bottom of bottom trapezoid (not repeat)
     fill(currentColor.x, currentColor.y, currentColor.z);
@@ -367,19 +368,24 @@ void drawAllFish(){
 public void mouseReleased(){
     picker.captureViewMatrix(fieldX, fieldY);
     picker.calculatePickPoints(mouseX,height-mouseY);
-    PVector start = picker.ptStartPos;
-    PVector end = picker.ptEndPos;
-//    console.log(start);
-//    console.log(end);
-//    if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
-//      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z)));
-//    }
+    Vector3D start = new Vector3D(picker.ptStartPos.x, picker.ptStartPos.y, picker.ptStartPos.z);
+    Vector3D end = new Vector3D(picker.ptEndPos.x, picker.ptEndPos.y, picker.ptEndPos.z);
+    if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
+      Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+      float percent = random(0, 1);
+      float z = (float) (-fieldZ + 30 + percent*(.5*fieldZ)-30);
+      float factor = (z-start.z)/normal.z;
+      Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+      Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
+      position.y = -position.y;
+      tank.addFood(new Food(position));
+    }
 //    else if(onLeftSide(mouseX, mouseY)){
 //      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z), true));
 //    }
 //    else if(onRightSide(mouseX, mouseY)){
 //      tank.addFood(new Food(this, new Vector3D(start.x, start.y, start.z), new Vector3D(end.x, end.y, end.z), false));
-//    }
+//    } 
 }
 
 /**************************************************
@@ -474,45 +480,14 @@ public Fish addFishToTank(String speciesName, String nickname){
   return toAdd;
 }
 
-public void drawDummyBox(){
-    noLights();
-    noStroke();
-    fill(255, 0, 0);
-    pushMatrix();
-    translate((.5*fieldX), (.5*fieldY), (-1.5*fieldZ));
-    box((.95*fieldX), (fieldY), 1); //back
-    fill(255, 255, 0);
-    translate((.475*fieldX), 0, (.5*fieldZ));
-    box(1, (fieldY), (fieldZ)); //right
-    translate((-.95*fieldX), 0, 0);
-    box(1, (fieldY), (fieldZ)); //left
-    popMatrix();
-}
-
 public void determineBounds(){
-    drawDummyBox();
-    loadPixels();
-    draw();
-    int x = 0;
-    int y = 0;
-    for(int i: pixels){
-      if(i == -65536){
-        if(x < backMinX) backMinX = x;
-        else if(x > backMaxX) backMaxX = x;
-        if(y > backMaxY) backMaxY = y;
-      }
-      else if (i == -256){
-        if( x < leftMinX) leftMinX = x;
-        else if(x > rightMaxX) rightMaxX = x;
-        if(y > sidesMaxY) sidesMaxY = y;
-      }
-      x++;
-      if(x >= fieldX){
-        x = 0;
-        y++;
-      }
-    }
-  }
+  backMinX = int(screenX(.025*fieldX, .5*fieldY, -1.5*fieldZ));
+  backMaxX = fieldX -  backMinX;
+  backMaxY = int(screenY(.5*fieldX, fieldY, -1.5*fieldZ));
+  leftMinX = int(screenX(.025*fieldX, fieldY/2, -.5*fieldZ));
+  rightMaxX = fieldX - leftMinX;
+  sidesMaxY = int(screenY(0.25*fieldX, fieldY, -.5*fieldZ));
+}
 
 public void addFoodToTank(Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
@@ -527,15 +502,15 @@ public void updatePosition(Fish fish){
 }
 
 public void updateAcceleration(Fish fish){
-  fish.acceleration.x += random()*.25-.125;
-  fish.acceleration.y += random()*.25-.125;
-  fish.acceleration.z += random()*.25-.125;
+  fish.acceleration.x += random(-.125, .125);
+  fish.acceleration.y += random(-.125, .125);
+  fish.acceleration.z += random(-.125, .125);
 }
 
 public void updateVelocity(Fish fish){
-  fish.velocity.x = new Vector3D(-1, fish.velocity.x + fish.acceleration.x, 1).centermost();
-  fish.velocity.y = new Vector3D(-1, fish.velocity.y + fish.acceleration.y, 1).centermost();
-  fish.velocity.z = new Vector3D(-1, fish.velocity.z + fish.acceleration.z, 1).centermost();
+  fish.velocity.x = new Vector3D(-2, fish.velocity.x + fish.acceleration.x, 2).centermost();
+  fish.velocity.y = new Vector3D(-2, fish.velocity.y + fish.acceleration.y, 2).centermost();
+  fish.velocity.z = new Vector3D(-2, fish.velocity.z + fish.acceleration.z, 2).centermost();
 //  fish.velocity = fish.velocity.addVector(hungerContribution(tank));
   updateOrientationRelativeToVelocity(fish);
   updateAcceleration(fish);
