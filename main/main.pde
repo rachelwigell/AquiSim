@@ -520,8 +520,37 @@ public void addFoodToTank(Vector3D start, Vector3D end){
 }
 
 public void updatePosition(Fish fish){
-  float x = new Vector3D((-.475*fieldX+fish.dimensions.x/2.0), fish.position.x+fish.velocity.x, (.475*fieldX-fish.dimensions.x/2.0)).centermost();
-  float y = new Vector3D((-fieldY*.5*(1-tank.waterLevel)+fish.dimensions.y/2.0), fish.position.y+fish.velocity.y, (fieldY*.5*(1-tank.waterLevel)-fish.dimensions.y/2.0)).centermost();
-  float z = new Vector3D((-.5*fieldZ+fish.dimensions.x/2.0), fish.position.z+fish.velocity.z, (.5*fieldZ-fish.dimensions.x/2.0)).centermost();
-  fish.position = new Vector3D(x, y, z);
+  fish.position.x = new Vector3D((-.475*fieldX+fish.dimensions.x/2.0), fish.position.x+fish.velocity.x, (.475*fieldX-fish.dimensions.x/2.0)).centermost();
+  fish.position.y = new Vector3D((fieldY/2-fish.dimensions.y/2.0), fish.position.y+fish.velocity.y, (fieldY*(.5-tank.waterLevel)+fish.dimensions.y/2.0)).centermost();
+  fish.position.z = new Vector3D((-.5*fieldZ+fish.dimensions.x/2.0), fish.position.z+fish.velocity.z, (.5*fieldZ-fish.dimensions.x/2.0)).centermost();
+  updateVelocity(fish);
+}
+
+public void updateAcceleration(Fish fish){
+  fish.acceleration.x += random()*.25-.125;
+  fish.acceleration.y += random()*.25-.125;
+  fish.acceleration.z += random()*.25-.125;
+}
+
+public void updateVelocity(Fish fish){
+  fish.velocity.x = new Vector3D(-1, fish.velocity.x + fish.acceleration.x, 1).centermost();
+  fish.velocity.y = new Vector3D(-1, fish.velocity.y + fish.acceleration.y, 1).centermost();
+  fish.velocity.z = new Vector3D(-1, fish.velocity.z + fish.acceleration.z, 1).centermost();
+//  fish.velocity = fish.velocity.addVector(hungerContribution(tank));
+  updateOrientationRelativeToVelocity(fish);
+  updateAcceleration(fish);
+}
+
+public void updateOrientationRelativeToVelocity(Fish fish){
+  Vector3D velocity = fish.velocity;  
+  double angle = Math.asin(Math.abs(velocity.z)/velocity.magnitude());
+  if(velocity.x < 0 && velocity.z > 0) fish.orientation.y = angle;
+  else if(velocity.x > 0 && velocity.z > 0) fish.orientation.y = (PI - angle);
+  else if(velocity.x > 0 && velocity.z < 0) fish.orientation.y = (PI + angle);
+  else if(velocity.x < 0 && velocity.z < 0) fish.orientation.y = -angle;
+  else if(velocity.z == 0 && velocity.x < 0) fish.orientation.y = 0;
+  else if(velocity.x == 0 && velocity.z > 0) fish.orientation.y = (PI/2.0);
+  else if(velocity.z == 0 && velocity.x > 0) fish.orientation.y = PI;
+  else if(velocity.x == 0 && velocity.z < 0) fish.orientation.y = (3*PI/2.0);
+  fish.orientation.z = new Vector3D(-1, -velocity.y, 1).centermost() * PI/6;
 }
