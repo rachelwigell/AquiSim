@@ -399,35 +399,37 @@ public void mouseReleased(){
     picker.calculatePickPoints(mouseX,height-mouseY);
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
-    if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
+    // first check whether waste was clicked on; if so, remove it
+    Waste w = removeWaste(start, end);
+    if(w != null){
+      w.removeFromTank(tank);
+    }
+    // clicked back of tank - place food
+    else if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
       Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-      console.log(normal.x, normal.y, normal.z);
       float percent = random(0, 1);
       float z = (float) (-fieldZ + 30 + percent*(.5*fieldZ)-30);
       float factor = (z-start.z)/normal.z;
       Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-      Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
-      tank.addFood(new Food(position));
+      tank.addFood(new Food(absolutePosition));
     }
+    // clicked side of tank - place food
     else if((side = onSide(mouseX, mouseY)) != "No"){
       Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-      console.log(normal.x, normal.y, normal.z);
       float x;
       if(side == "left") x = .025*fieldX;
       else x = .975*fieldX;
       float factor = (x-start.x)/normal.x;
       Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-      Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
-      tank.addFood(new Food(position));
+      tank.addFood(new Food(absolutePosition));
     }
+    // clicked bottom of tank - place food
     else if(onBottom(mouseX, mouseY)){
       Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
       float y = fieldY;
-      console.log(normal.x, normal.y, normal.z);
       float factor = (y-start.y)/normal.y;
       Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-      Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
-      tank.addFood(new Food(position));
+      tank.addFood(new Food(absolutePosition));
     }
 }
 
@@ -615,4 +617,41 @@ public boolean onBottom(float x, float y){
       triangleArea(topRight, point, topLeft) + triangleArea(topLeft, point, bottomLeft);
   
   return pointArea <= area;
+}
+
+public Waste removeWaste(Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  Waste closest = null;
+  float z = -100000;
+//  for(Poop p: tank.poops){
+//    if(raySphereIntersect(start, normal, p.absolutePosition, p.dimensions.x*2)){
+//      if(p.absolutePosition.z > z){
+//        z = p.absolutePosition.z;
+//        closest = p;
+//      } 
+//    }
+//  }
+  for(int i = 0; i < tank.food.size(); i++){
+    Food f = (Food) tank.food.get(i);
+    if(raySphereIntersect(start, normal, f.absolutePosition, f.dimensions.x*2)){
+      if(f.absolutePosition.z > z){
+        z = f.absolutePosition.z;
+        closest = f;
+      }
+    }
+  }
+//  for(DeadFish d: tank.deadFish){
+//    if(clickedDeadFish(d, start, normal)){
+//      if(d.absolutePosition.z > z){
+//        z = d.absolutePosition.z;
+//        closest = d;
+//      }        
+//    }
+//  }
+  return closest;
+}
+
+public boolean raySphereIntersect(Vector3D rayOrigin, Vector3D rayNormal, Vector3D sphereCenter, float sphereRadius){
+  double determinant = Math.pow(rayNormal.dotProduct(rayOrigin.addVector(sphereCenter.multiplyScalar(-1))), 2) - Math.pow(rayOrigin.addVector(sphereCenter.multiplyScalar(-1)).magnitude(), 2) + Math.pow(sphereRadius, 2);
+  return determinant >= 0;
 }

@@ -47,4 +47,8 @@ public class Vector3D {
     float magnitude = this.magnitude();
     return new Vector3D(this.x/magnitude, this.y/magnitude, this.z/magnitude);
   }
+  
+  public float dotProduct(Vector3D vector){
+    return (float) (this.x*vector.x + this.y*vector.y + this.z*vector.z);
+  }
 }

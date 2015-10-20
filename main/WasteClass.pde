@@ -6,18 +6,20 @@ public abstract class Waste {
   public Vector3D dimensions;
   public Vector3D restingPosition;
   public Vector3D speedChangeLocation;
-  
-  public void updatePosition(){
-    if((this.velocity.y > 0 && this.position.y < this.restingPosition.y)
-        || (this.velocity.y < 0 && this.position.y > this.restingPosition.y)){
+
+  public void updatePosition() {
+    if ((this.velocity.y > 0 && this.position.y < this.restingPosition.y)
+      || (this.velocity.y < 0 && this.position.y > this.restingPosition.y)) {
       this.position = this.position.addVector(velocity);
-      if(this.velocity.y > 1){
-        if(this.position.y > this.speedChangeLocation.y){
+      this.absolutePosition = this.absolutePosition.addVector(velocity);
+      if (this.velocity.y > 1) {
+        if (this.position.y > this.speedChangeLocation.y) {
           this.velocity.y = 1;
         }
       }
     }
   }
-  
-  public void removeFromTank(Tank t){}
+
+  public void removeFromTank(Tank t) {}
 }
+
