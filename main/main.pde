@@ -90,7 +90,7 @@ public void drawTank(){
 
 void drawAllFish(){
   hint(ENABLE_DEPTH_TEST);
-  for(int i=0; i<tank.fish.size(); i++){
+  for(int i=0; i < tank.fish.size(); i++){
     Fish f = (Fish) tank.fish.get(i);
     noStroke();
     pushMatrix();
@@ -515,12 +515,11 @@ public int spotlightColor(){
 
 public Fish addFishToTank(String speciesName, String nickname){
   Fish toAdd = null;
-  for(int i=0; i<speciesList.size(); i++){
-    Fish f = (Fish) speciesList.get(i);
-    if(f.species.equals(speciesName)){
-      toAdd = f.createFromNickname(nickname);
-      tank.addFish(toAdd);
-    }
+  if(speciesName == "Guppy"){
+    toAdd = new Guppy(nickname);
+  }
+  if(toAdd != null){
+    tank.addFish(toAdd);
   }
   return toAdd;
 }

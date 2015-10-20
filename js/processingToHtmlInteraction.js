@@ -8,6 +8,7 @@ window.onload = function() {
 
 window.setInterval(function(){
   	update_tank_stats();
+  	update_fish_dropdown();
 }, 2000)
 
 function update_tank_stats(){

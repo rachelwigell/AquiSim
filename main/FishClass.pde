@@ -26,22 +26,6 @@ public abstract class Fish {
   public Vector3D velocity;
   public Vector3D acceleration;
   
-  public Fish createFromNickname(String nickname){
-    this.name = nickname;
-    return this;
-  }
-  
-  public Fish createFromParameters(String nickname,
-      String status,
-      long fullness,
-      int health){
-    this.name = nickname;
-    this.status = status;
-    this.fullness = fullness;
-    this.health = health;
-    return this;
-  }
-  
   public int setHealth(){
     if(this.status == "Happy."){
       this.health = min(this.maxHealth, this.health+1);
