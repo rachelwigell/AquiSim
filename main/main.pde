@@ -397,29 +397,38 @@ public void drawWaste(Waste s){
 public void mouseReleased(){
     picker.captureViewMatrix(fieldX, fieldY);
     picker.calculatePickPoints(mouseX,height-mouseY);
-    Vector3D start = new Vector3D(picker.ptStartPos.x, picker.ptStartPos.y, picker.ptStartPos.z);
-    Vector3D end = new Vector3D(picker.ptEndPos.x, picker.ptEndPos.y, picker.ptEndPos.z);
+    Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+    Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
     if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
       Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+      console.log(normal.x, normal.y, normal.z);
       float percent = random(0, 1);
       float z = (float) (-fieldZ + 30 + percent*(.5*fieldZ)-30);
       float factor = (z-start.z)/normal.z;
       Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
       Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
-      position.y = -position.y;
       tank.addFood(new Food(position));
     }
     else if((side = onSide(mouseX, mouseY)) != "No"){
       Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+      console.log(normal.x, normal.y, normal.z);
       float x;
       if(side == "left") x = .025*fieldX;
       else x = .975*fieldX;
       float factor = (x-start.x)/normal.x;
       Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
       Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
-      position.y = -position.y;
       tank.addFood(new Food(position));
-    } 
+    }
+    else if(onBottom(mouseX, mouseY)){
+      Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+      float y = fieldY;
+      console.log(normal.x, normal.y, normal.z);
+      float factor = (y-start.y)/normal.y;
+      Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+      Vector3D position = absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
+      tank.addFood(new Food(position));
+    }
 }
 
 /**************************************************
@@ -563,8 +572,8 @@ public float triangleArea(Vector3D point1, Vector3D point2, Vector3D point3){
   return (float) Math.abs(((point1.x*(point2.y-point3.y)) + point2.x*(point3.y-point1.y) + point3.x*(point1.y-point2.y))/2.0);
 }
 
-public String onSide(float mouseX, float mouseY){
-  Vector3D point = new Vector3D(mouseX, mouseY, 0);
+public String onSide(float x, float y){
+  Vector3D point = new Vector3D(x, y, 0);
   
     Vector3D leftBottomLeft = new Vector3D(leftMinX, sidesMaxY, 0);
     Vector3D leftBottomRight = new Vector3D(backMinX, backMaxY, 0);
@@ -591,4 +600,19 @@ public String onSide(float mouseX, float mouseY){
     }
     
     return "No";
+}
+
+public boolean onBottom(float x, float y){
+  Vector3D point = new Vector3D(x, y, 0);
+  
+  Vector3D bottomLeft = new Vector3D(leftMinX, sidesMaxY, 0);
+  Vector3D bottomRight = new Vector3D(rightMaxX, sidesMaxY, 0);
+  Vector3D topRight = new Vector3D(backMaxX, backMaxY, 0);
+  Vector3D topLeft = new Vector3D(backMinX, backMaxY, 0);
+  
+  float area = triangleArea(bottomLeft, bottomRight, topLeft) + triangleArea(bottomRight, topRight, topLeft);
+  float pointArea  = triangleArea(bottomLeft, point, bottomRight) + triangleArea(bottomRight, point, topRight) +
+      triangleArea(topRight, point, topLeft) + triangleArea(topLeft, point, bottomLeft);
+  
+  return pointArea <= area;
 }
