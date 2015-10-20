@@ -47,6 +47,7 @@ void draw(){
   drawTank();
   drawAllFish();
   drawAllWaste();
+  tank.allEat();
   if(updateCount > 150){ //operations to happen every 5 seconds
       tank.progress();
       updateTankStats();
@@ -346,9 +347,9 @@ void drawAllFish(){
     currentColor = (Vector3D) f.model.get(13); //bottom front triangle
     fill(currentColor.x, currentColor.y, currentColor.z);
     beginShape();
-    vertex(-4, 18, 2.5);
-    vertex(-20, 6, 7.5);
-    vertex(-40, 1.5, 2.5);
+    vertex(-4, 18, -2.5);
+    vertex(-20, 6, -7.5);
+    vertex(-40, 1.5, -2.5);
     endShape(CLOSE);
     currentColor = (Vector3D) f.model.get(16); //side tail
     fill(currentColor.x, currentColor.y, currentColor.z);
@@ -430,6 +431,10 @@ public void mouseReleased(){
       float factor = (y-start.y)/normal.y;
       Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
       tank.addFood(new Food(absolutePosition));
+    }
+    if(mouseButton == RIGHT){
+      console.log("skipping ahead 1 hour");
+      skipAhead(60);
     }
 }
 
@@ -550,7 +555,7 @@ public void updateVelocity(Fish fish){
   fish.velocity.x = new Vector3D(-2, fish.velocity.x + fish.acceleration.x, 2).centermost();
   fish.velocity.y = new Vector3D(-2, fish.velocity.y + fish.acceleration.y, 2).centermost();
   fish.velocity.z = new Vector3D(-2, fish.velocity.z + fish.acceleration.z, 2).centermost();
-//  fish.velocity = fish.velocity.addVector(hungerContribution(tank));
+  fish.velocity = fish.velocity.addVector(hungerContribution(tank, fish));
   updateOrientationRelativeToVelocity(fish);
   updateAcceleration(fish);
 }
@@ -621,7 +626,7 @@ public boolean onBottom(float x, float y){
 public Waste removeWaste(Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   Waste closest = null;
-  float z = -100000;
+  float z = MIN_FLOAT;
 //  for(Poop p: tank.poops){
 //    if(raySphereIntersect(start, normal, p.absolutePosition, p.dimensions.x*2)){
 //      if(p.absolutePosition.z > z){
@@ -653,4 +658,20 @@ public Waste removeWaste(Vector3D start, Vector3D end){
 public boolean raySphereIntersect(Vector3D rayOrigin, Vector3D rayNormal, Vector3D sphereCenter, float sphereRadius){
   double determinant = Math.pow(rayNormal.dotProduct(rayOrigin.addVector(sphereCenter.multiplyScalar(-1))), 2) - Math.pow(rayOrigin.addVector(sphereCenter.multiplyScalar(-1)).magnitude(), 2) + Math.pow(sphereRadius, 2);
   return determinant >= 0;
+}
+
+public Vector3D hungerContribution(Tank tank, Fish f){
+  Vector3D nearestFood = tank.nearestFood(f.position);
+  if(nearestFood == null) return new Vector3D(0,0,0);
+  float percent = max((.8-(max(f.fullness, 0)/(double) f.maxFullness))*6, 0);
+  Vector3D normal = nearestFood.addVector(f.position.multiplyScalar(-1)).normalize();
+  return normal.multiplyScalar(percent);
+}
+
+public void skipAhead(int minutes){
+  for(int i = 0; i < minutes*12; i++){
+    tank.progress();
+//    moveAllFish(visual);
+//    allRandomizedEat();
+  }
 }

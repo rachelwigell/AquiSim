@@ -230,5 +230,44 @@ public class Tank{
     this.waste = waste;
     this.time = time;
   }
+  
+  public Vector3D nearestFood(Vector3D position){
+    Vector3D closest = null;
+    float distance = MAX_FLOAT;
+    for(int i = 0; i < this.food.size(); i++){
+      Food f = (Food) this.food.get(i);
+      float fDistance = f.position.squareDistance(position);
+      if(fDistance < distance){
+        distance = fDistance;
+        closest = f.position;
+      }
+    }
+    return closest;
+  }
+  
+  public boolean eat(Fish fish, Food food){
+    if(fish.position.distance(food.position) < food.dimensions.x*4){
+      fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
+      return true;
+    }
+    return false;
+  }
+  
+  public void allEat(){
+    ArrayList eaten = new ArrayList();
+    for(int i = 0; i < this.fish.size(); i++){
+      Fish aFish = (Fish) this.fish.get(i);
+      for(int j = 0; j < this.food.size(); j++){
+        Food aFood = (Food) this.food.get(j);
+        if(this.eat(aFish, aFood)){
+          eaten.add(aFood);
+        }
+      }
+      for(int i = 0; i < eaten.size(); i++){
+        Food aFood = (Food) eaten.get(i);
+        this.food.remove(aFood);
+      }
+    }
+  }
 
 }
