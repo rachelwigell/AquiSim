@@ -15,4 +15,10 @@ public class Poop extends Waste{
   public void removeFromTank(Tank t){
     t.poops.remove(this);
   }
+  
+  public void updateVelocity(){
+    if(this.position.y >= this.restingPosition.y && this.velocity.y > 0){
+      this.velocity.y = 0;
+    }
+  }
 }

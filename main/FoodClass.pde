@@ -18,4 +18,13 @@ public class Food extends Waste{
   public void removeFromTank(Tank t){
     t.food.remove(this);
   }
+  
+  public void updateVelocity(){
+    if(this.position.y >= this.speedChangeLocation.y && this.velocity.y > 1){
+      this.velocity.y = 1;
+    }
+    if(this.position.y >= this.restingPosition.y && this.velocity.y > 0){
+      this.velocity.y = 0;
+    }
+  }
 }

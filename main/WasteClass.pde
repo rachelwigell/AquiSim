@@ -8,17 +8,13 @@ public abstract class Waste {
   public Vector3D speedChangeLocation;
 
   public void updatePosition() {
-    if ((this.velocity.y > 0 && this.position.y < this.restingPosition.y) || (this.velocity.y < 0 && this.position.y > this.restingPosition.y)) {
-      this.position = this.position.addVector(velocity);
-      this.absolutePosition = this.absolutePosition.addVector(velocity);
-      if (this.velocity.y > 1) {
-        if (this.speedChangeLocation != null && this.position.y > this.speedChangeLocation.y) {
-          this.velocity.y = 1;
-        }
-      }
-    }
+    this.updateVelocity();
+    this.position = this.position.addVector(velocity);
+    this.absolutePosition = this.absolutePosition.addVector(velocity);
   }
 
   public void removeFromTank(Tank t) {}
+  
+  public void updateVelocity(){}
 }
 

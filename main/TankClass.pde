@@ -197,7 +197,7 @@ public class Tank{
       f.changeHunger(); //update fish's hunger level 
       this.fishHappiness(f); //update fish's happiness status
       f.setHealth(); //update fish's health
-      //f.handleDeceased(visual); //check if fish is dead and perform necessary operations if so
+      this.handleDeceased(f); //check if fish is dead and perform necessary operations if so
     }
 
     //tank operations
@@ -272,6 +272,18 @@ public class Tank{
   
   public void addPoop(Fish f){
     this.poops.add(new Poop(f));
+  }
+  
+  public void handleDeceased(Fish f){
+    if(f.health <= 0){
+      this.fish.remove(f);
+      this.waste += f.size;
+      this.addDeadFish(f);
+    }
+  }
+  
+  public void addDeadFish(VFish f){
+    this.deadFish.add(new DeadFish(f));
   }
 
 }

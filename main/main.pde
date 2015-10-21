@@ -89,11 +89,8 @@ public void drawTank(){
   popMatrix();
 }
 
-void drawAllFish(){
-  hint(ENABLE_DEPTH_TEST);
-  for(int i=0; i < tank.fish.size(); i++){
-    Fish f = (Fish) tank.fish.get(i);
-    noStroke();
+void drawFish(Fish f){
+  noStroke();
     pushMatrix();
     translate(fieldX/2, fieldY/2, -fieldZ);
     translate(f.position.x, f.position.y, f.position.z);
@@ -363,6 +360,13 @@ void drawAllFish(){
     vertex(40, 1.5, -2.5);
     endShape(CLOSE);
     popMatrix();
+}
+
+void drawAllFish(){
+  hint(ENABLE_DEPTH_TEST);
+  for(int i=0; i < tank.fish.size(); i++){
+    Fish f = (Fish) tank.fish.get(i);
+    drawFish(f, false);
     updatePosition(f);
   }
 }
@@ -378,11 +382,11 @@ public void drawAllWaste(){
     drawWaste(f);
     f.updatePosition();
   }
-//    for(int i = 0; i < this.tank.deadFish.length; i++){
-//      DeadFish d = (DeadFish) this.tank.deadFish.get(i);
-//      drawDeadFish(d);
-//      updatePosition(d);
-//    }
+  for(int i = 0; i < tank.deadFish.size(); i++){
+    DeadFish d = (DeadFish) tank.deadFish.get(i);
+    drawFish(d.sprite);
+    d.updatePosition();
+  }
 }
   
 public void drawWaste(Waste s){
