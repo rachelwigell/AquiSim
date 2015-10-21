@@ -359,6 +359,11 @@ void drawFish(Fish f){
     vertex(58, 20, -2.5);
     vertex(40, 1.5, -2.5);
     endShape(CLOSE);
+    fill(0);
+    translate(-30, 0, 2.5);
+    sphere(4);
+    translate(0, 0, -5);
+    sphere(4);
     popMatrix();
 }
 
