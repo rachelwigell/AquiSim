@@ -1,14 +1,17 @@
+var selected_fish = 'select';
+
 window.onload = function() {
-	setTimeout(update_tank_stats, 2000);
-	setTimeout(update_fish_dropdown, 2000);
-	setTimeout(update_fish_stats, 2000);
-	setTimeout(update_species_dropdown, 2000);
-	setTimeout(update_species_stats, 2000);
+	setTimeout(update_tank_stats, 1000);
+	setTimeout(update_fish_dropdown, 1000);
+	setTimeout(update_fish_stats, 1000);
+	setTimeout(update_species_dropdown, 1000);
+	setTimeout(update_species_stats, 1000);
 };
 
 window.setInterval(function(){
   	update_tank_stats();
   	update_fish_dropdown();
+  	update_fish_stats();
 }, 2000)
 
 function update_tank_stats(){
@@ -29,7 +32,6 @@ function update_fish_dropdown(){
 
 function update_fish_stats(){
 	$('#fish_stats_display').empty();
-	var selected_fish = $('#fish_list').find(':selected').val();
 	if(selected_fish == 'select'){
 		$('#fish_stats_display').text('No fish selected.');
 	}
@@ -87,6 +89,7 @@ function update_species_stats(){
 }
 
 $('#fish_list').change(function(){
+	selected_fish = $('#fish_list').find(':selected').val();
 	update_fish_stats();
 })
 
