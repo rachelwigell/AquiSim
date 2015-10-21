@@ -649,14 +649,15 @@ public Waste removeWaste(Vector3D start, Vector3D end){
       }
     }
   }
-//  for(DeadFish d: tank.deadFish){
-//    if(clickedDeadFish(d, start, normal)){
-//      if(d.absolutePosition.z > z){
-//        z = d.absolutePosition.z;
-//        closest = d;
-//      }        
-//    }
-//  }
+  for(int i = 0; i < tank.deadFish.size(); i++){
+    DeadFish d = (DeadFish) tank.deadFish.get(i);
+    if(clickedDeadFish(d, start, normal)){
+      if(d.absolutePosition.z > z){
+        z = d.absolutePosition.z;
+        closest = d;
+      }        
+    }
+  }
   return closest;
 }
 
@@ -679,4 +680,13 @@ public void skipAhead(int minutes){
 //    moveAllFish(visual);
 //    allRandomizedEat();
   }
+}
+
+public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNormal){
+  float width = abs((cos(d.sprite.orientation.y)*d.dimensions.x) + abs(sin(d.sprite.orientation.y)*d.dimensions.z));
+  float height = d.dimensions.y;
+  float dist = (d.absolutePosition.z-rayOrigin.z)/rayNormal.z;
+  Vector3D pointAt = rayOrigin.addVector(rayNormal.multiplyScalar(dist));
+  return pointAt.x < (d.absolutePosition.x + width/2.0) && pointAt.x > (d.absolutePosition.x - width/2.0)
+      && pointAt.y < (d.absolutePosition.y + height/2.0) && pointAt.y > (d.absolutePosition.y - height/2.0);
 }
