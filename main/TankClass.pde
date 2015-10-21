@@ -26,7 +26,7 @@ public class Tank{
   public final float volume = waterLevel*60*30*40/1000.0;
   public final float surfaceArea = 60*30;
   
-  public Tank(){
+  public Tank(){  
     this.cmFish = 0;
     this.plants = new ArrayList();
     this.pH=8;
@@ -133,7 +133,7 @@ public class Tank{
       int rand = random(2000);
       if(rand < threshold){
         waste++;
-        //addPoop(visual, f);
+        addPoop(f);
       }
     }
     return waste;
@@ -268,6 +268,10 @@ public class Tank{
         this.food.remove(aFood);
       }
     }
+  }
+  
+  public void addPoop(Fish f){
+    this.poops.add(new Poop(f));
   }
 
 }

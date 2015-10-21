@@ -368,11 +368,11 @@ void drawAllFish(){
 }
   
 public void drawAllWaste(){
-//    for(int i = 0; i < this.tank.poops.length; i++){
-//      Poop p = (Poop) this.tank.poops.get(i);
-//      drawWaste(p);
-//      updatePosition(p);
-//    }
+  for(int i = 0; i < tank.poops.size(); i++){
+    Poop p = (Poop) tank.poops.get(i);
+    drawWaste(p);
+    p.updatePosition();
+  }
   for(int i = 0; i < tank.food.size(); i++){
     Food f = (Food) tank.food.get(i);
     drawWaste(f);
@@ -627,14 +627,15 @@ public Waste removeWaste(Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   Waste closest = null;
   float z = MIN_FLOAT;
-//  for(Poop p: tank.poops){
-//    if(raySphereIntersect(start, normal, p.absolutePosition, p.dimensions.x*2)){
-//      if(p.absolutePosition.z > z){
-//        z = p.absolutePosition.z;
-//        closest = p;
-//      } 
-//    }
-//  }
+  for(int i = 0; i < tank.poops.size(); i++){
+    Poop p = (Poop) tank.poops.get(i);
+    if(raySphereIntersect(start, normal, p.absolutePosition, p.dimensions.x*2)){
+      if(p.absolutePosition.z > z){
+        z = p.absolutePosition.z;
+        closest = p;
+      } 
+    }
+  }
   for(int i = 0; i < tank.food.size(); i++){
     Food f = (Food) tank.food.get(i);
     if(raySphereIntersect(start, normal, f.absolutePosition, f.dimensions.x*2)){
