@@ -93,290 +93,12 @@ public void drawTank(){
   popMatrix();
 }
 
-void drawFish(Fish f){
-  noStroke();
-    pushMatrix();
-    translate(fieldX/2, fieldY/2, -fieldZ);
-    translate(f.position.x, f.position.y, f.position.z);
-    rotateX(f.orientation.x);
-    rotateY(f.orientation.y);
-    rotateZ(f.orientation.z);
-    Vector3D currentColor = (Vector3D) f.model.get(0); //side
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-20, -6, 7.5);
-    vertex(20, -6, 7.5);
-    vertex(20, 6, 7.5);
-    vertex(-20, 6, 7.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(1); //back trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(40, -1.5, 2.5);
-    vertex(20, -6, 7.5);
-    vertex(20, 6, 7.5);
-    vertex(40, 1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(2); //top trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-20, -6, 7.5);
-    vertex(-4, -18, 2.5);
-    vertex(4, -18, 2.5);
-    vertex(20, -6, 7.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(3); //top (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-4, -18, 2.5);
-    vertex(-4, -18, -2.5);
-    vertex(4, -18, -2.5);
-    vertex(4, -18, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(4); //top back triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(4, -18, 2.5);
-    vertex(20, -6, 7.5);
-    vertex(40, -1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(5); //top of top back triangle (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(4, -18, -2.5);
-    vertex(4, -18, 2.5);
-    vertex(40, -1.5, 2.5);
-    vertex(40, -1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(6); //bottom trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-20, 6, 7.5);
-    vertex(-4, 18, 2.5);
-    vertex(4, 18, 2.5);
-    vertex(20, 6, 7.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(7); //bottom back triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(4, 18, 2.5);
-    vertex(20, 6, 7.5);
-    vertex(40, 1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(8); //bottom of bottom trapezoid (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(4, 18, -2.5);
-    vertex(4, 18, 2.5);
-    vertex(-4, 18, 2.5);
-    vertex(-4, 18, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(9); //bottom of bottom back triangle (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(4, 18, 2.5);
-    vertex(4, 18, -2.5);
-    vertex(40, 1.5, -2.5);
-    vertex(40, 1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(10); //front trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-40, -1.5, 2.5);
-    vertex(-20, -6, 7.5);
-    vertex(-20, 6, 7.5);
-    vertex(-40, 1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(11); //top front triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-4, -18, 2.5);
-    vertex(-20, -6, 7.5);
-    vertex(-40, -1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(12); //top of top front triangle (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-4, -18, -2.5);
-    vertex(-4, -18, 2.5);
-    vertex(-40, -1.5, 2.5);
-    vertex(-40, -1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(13); //bottom front triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-4, 18, 2.5);
-    vertex(-20, 6, 7.5);
-    vertex(-40, 1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(14); //bottom of bottom front triangle (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-4, 18, -2.5);
-    vertex(-4, 18, 2.5);
-    vertex(-40, 1.5, 2.5);
-    vertex(-40, 1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(15); //front (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-40, 1.5, -2.5);
-    vertex(-40, 1.5, 2.5);
-    vertex(-40, -1.5, 2.5);
-    vertex(-40, -1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(16); //side tail
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(40, -1.5, 2.5);
-    vertex(58, -20, 2.5);
-    vertex(58, -15, 2.5);
-    vertex(52, 0, 2.5);
-    vertex(58, 15, 2.5);
-    vertex(58, 20, 2.5);
-    vertex(40, 1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(17); //tail sides (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(40, -1.5, 2.5);
-    vertex(40, -1.5, -2.5);
-    vertex(58, -20, -2.5);
-    vertex(58, -20, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(18); //tail sides (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(58, -20, -2.5);
-    vertex(58, -20, 2.5);
-    vertex(58, -15, 2.5);
-    vertex(58, -15, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(19); //tail sides (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(58, -15, 2.5);
-    vertex(58, -15, -2.5);
-    vertex(52, 0, -2.5);
-    vertex(52, 0, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(20); //tail sides (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(52, 0, 2.5);
-    vertex(52, 0, -2.5);
-    vertex(58, 15, -2.5);
-    vertex(58, 15, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(21); //tail sides (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(58, 15, 2.5);
-    vertex(58, 15, -2.5);
-    vertex(58, 20, -2.5);
-    vertex(58, 20, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(22); //tail sides (not repeat)
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(58, 20, 2.5);
-    vertex(58, 20, -2.5);
-    vertex(40, 1.5, -2.5);
-    vertex(40, 1.5, 2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(0); //side
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-20, -6, -7.5);
-    vertex(20, -6, -7.5);
-    vertex(20, 6, -7.5);
-    vertex(-20, 6, -7.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(1); //back trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(40, -1.5, -2.5);
-    vertex(20, -6, -7.5);
-    vertex(20, 6, -7.5);
-    vertex(40, 1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(2); //top trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-20, -6, -7.5);
-    vertex(-4, -18, -2.5);
-    vertex(4, -18, -2.5);
-    vertex(20, -6, -7.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(4); //top back triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(4, -18, -2.5);
-    vertex(20, -6, -7.5);
-    vertex(40, -1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(6); //bottom trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-20, 6, -7.5);
-    vertex(-4, 18, -2.5);
-    vertex(4, 18, -2.5);
-    vertex(20, 6, -7.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(7); //bottom back triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(4, 18, -2.5);
-    vertex(20, 6, -7.5);
-    vertex(40, 1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(10); //front trapezoid
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-40, -1.5, -2.5);
-    vertex(-20, -6, -7.5);
-    vertex(-20, 6, -7.5);
-    vertex(-40, 1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(11); //top front triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-4, -18, -2.5);
-    vertex(-20, -6, -7.5);
-    vertex(-40, -1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(13); //bottom front triangle
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(-4, 18, -2.5);
-    vertex(-20, 6, -7.5);
-    vertex(-40, 1.5, -2.5);
-    endShape(CLOSE);
-    currentColor = (Vector3D) f.model.get(16); //side tail
-    fill(currentColor.x, currentColor.y, currentColor.z);
-    beginShape();
-    vertex(40, -1.5, -2.5);
-    vertex(58, -20, -2.5);
-    vertex(58, -15, -2.5);
-    vertex(52, 0, -2.5);
-    vertex(58, 15, -2.5);
-    vertex(58, 20, -2.5);
-    vertex(40, 1.5, -2.5);
-    endShape(CLOSE);
-    fill(0);
-    translate(-30, 0, 2.5);
-    sphere(4);
-    translate(0, 0, -5);
-    sphere(4);
-    popMatrix();
-}
-
 void drawAllFish(){
   hint(ENABLE_DEPTH_TEST);
   for(int i=0; i < tank.fish.size(); i++){
     Fish f = (Fish) tank.fish.get(i);
-    drawFish(f);
-    updatePosition(f);
+    f.drawFish();
+    f.updatePosition();
   }
 }
   
@@ -393,7 +115,7 @@ public void drawAllWaste(){
   }
   for(int i = 0; i < tank.deadFish.size(); i++){
     DeadFish d = (DeadFish) tank.deadFish.get(i);
-    drawFish(d.sprite);
+    d.sprite.drawFish();
     d.updatePosition();
   }
 }
@@ -453,36 +175,9 @@ public void mouseReleased(){
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
     if(clickMode == "DEFAULT"){
       // first check whether waste was clicked on; if so, remove it
-      Waste w = removeWaste(start, end);
-      if(w != null){
-        w.removeFromTank(tank);
-      }
-      // clicked back of tank - place food
-      else if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
-        Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-        float percent = random(0, 1);
-        float z = (float) (-fieldZ + 30 + percent*(.5*fieldZ)-30);
-        float factor = (z-start.z)/normal.z;
-        Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-        tank.addFood(new Food(absolutePosition));
-      }
-      // clicked side of tank - place food
-      else if((side = onSide(mouseX, mouseY)) != "No"){
-        Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-        float x;
-        if(side == "left") x = .025*fieldX;
-        else x = .975*fieldX;
-        float factor = (x-start.x)/normal.x;
-        Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-        tank.addFood(new Food(absolutePosition));
-      }
-      // clicked bottom of tank - place food
-      else if(onBottom(mouseX, mouseY)){
-        Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-        float y = fieldY;
-        float factor = (y-start.y)/normal.y;
-        Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-        tank.addFood(new Food(absolutePosition));
+      wasteRemoved = handleWasteClick(start, end);
+      if(!wasteRemoved){
+        handleFoodClick(mouseX, mouseY, start, end);
       }
     }
     else if(clickMode == "PLANT"){
@@ -597,42 +292,6 @@ public void determineBounds(){
   sidesMaxY = int(screenY(0.25*fieldX, fieldY, -.5*fieldZ));
 }
 
-public void updatePosition(Fish fish){
-  fish.position.x = new Vector3D((-.475*fieldX+fish.dimensions.x/2.0), fish.position.x+fish.velocity.x, (.475*fieldX-fish.dimensions.x/2.0)).centermost();
-  fish.position.y = new Vector3D((fieldY/2-fish.dimensions.y/2.0), fish.position.y+fish.velocity.y, (fieldY*(.5-tank.waterLevel)+fish.dimensions.y/2.0)).centermost();
-  fish.position.z = new Vector3D((-.5*fieldZ+fish.dimensions.x/2.0), fish.position.z+fish.velocity.z, (.5*fieldZ-fish.dimensions.x/2.0)).centermost();
-  updateVelocity(fish);
-}
-
-public void updateAcceleration(Fish fish){
-  fish.acceleration.x += random(-.25, .25);
-  fish.acceleration.y += random(-.125, .125);
-  fish.acceleration.z += random(-.25, .25);
-}
-
-public void updateVelocity(Fish fish){
-  fish.velocity.x = new Vector3D(-2, fish.velocity.x + fish.acceleration.x, 2).centermost();
-  fish.velocity.y = new Vector3D(-2, fish.velocity.y + fish.acceleration.y, 2).centermost();
-  fish.velocity.z = new Vector3D(-2, fish.velocity.z + fish.acceleration.z, 2).centermost();
-  fish.velocity = fish.velocity.addVector(hungerContribution(tank, fish));
-  updateOrientationRelativeToVelocity(fish);
-  updateAcceleration(fish);
-}
-
-public void updateOrientationRelativeToVelocity(Fish fish){
-  Vector3D velocity = fish.velocity;  
-  double angle = Math.asin(Math.abs(velocity.z)/velocity.magnitude());
-  if(velocity.x < 0 && velocity.z > 0) fish.orientation.y = angle;
-  else if(velocity.x > 0 && velocity.z > 0) fish.orientation.y = (PI - angle);
-  else if(velocity.x > 0 && velocity.z < 0) fish.orientation.y = (PI + angle);
-  else if(velocity.x < 0 && velocity.z < 0) fish.orientation.y = -angle;
-  else if(velocity.z == 0 && velocity.x < 0) fish.orientation.y = 0;
-  else if(velocity.x == 0 && velocity.z > 0) fish.orientation.y = (PI/2.0);
-  else if(velocity.z == 0 && velocity.x > 0) fish.orientation.y = PI;
-  else if(velocity.x == 0 && velocity.z < 0) fish.orientation.y = (3*PI/2.0);
-  fish.orientation.z = new Vector3D(-1, -velocity.y, 1).centermost() * PI/6;
-}
-
 public float triangleArea(Vector3D point1, Vector3D point2, Vector3D point3){
   return (float) Math.abs(((point1.x*(point2.y-point3.y)) + point2.x*(point3.y-point1.y) + point3.x*(point1.y-point2.y))/2.0);
 }
@@ -721,14 +380,6 @@ public boolean raySphereIntersect(Vector3D rayOrigin, Vector3D rayNormal, Vector
   return determinant >= 0;
 }
 
-public Vector3D hungerContribution(Tank tank, Fish f){
-  Vector3D nearestFood = tank.nearestFood(f.position);
-  if(nearestFood == null) return new Vector3D(0,0,0);
-  float percent = max((.8-(max(f.fullness, 0)/(double) f.maxFullness))*6, 0);
-  Vector3D normal = nearestFood.addVector(f.position.multiplyScalar(-1)).normalize();
-  return normal.multiplyScalar(percent);
-}
-
 public void skipAhead(int minutes){
   for(int i = 0; i < minutes*12; i++){
     tank.progress();
@@ -757,4 +408,43 @@ public void cancelPlant(){
   $('#add_plant').attr('hidden', false);
   $('#new_plant').attr('hidden', true);
   $('#plant_instructions').empty();
+}
+
+public boolean handleWasteClick(Vector3D start, Vector3D end){
+  Waste w = removeWaste(start, end);
+  if(w != null){
+    w.removeFromTank(tank);
+    return true;
+  }
+  return false;
+}
+  
+public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end){
+  // clicked back of tank - place food
+  if(xCoord >= backMinX && xCoord <= backMaxX && yCoord <= backMaxY){
+    Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+    float percent = random(0, 1);
+    float z = (-fieldZ + 30 + percent*(.5*fieldZ)-30);
+    float factor = (z-start.z)/normal.z;
+    Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+    tank.addFood(new Food(absolutePosition));
+  }
+  // clicked side of tank - place food
+  else if((side = onSide(xCoord, yCoord)) != "No"){
+    Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+    float x;
+    if(side == "left") x = .025*fieldX;
+    else x = .975*fieldX;
+    float factor = (x-start.x)/normal.x;
+    Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+    tank.addFood(new Food(absolutePosition));
+  }
+  // clicked bottom of tank - place food
+  else if(onBottom(xCoord, yCoord)){
+    Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+    float y = fieldY;
+    float factor = (y-start.y)/normal.y;
+    Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+    tank.addFood(new Food(absolutePosition));
+  }
 }
