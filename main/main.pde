@@ -486,13 +486,9 @@ public void mouseReleased(){
       }
     }
     else if(clickMode == "PLANT"){
-      console.log(clickMode);
       if(onBottom(mouseX, mouseY)){
           tank.plants.add(previewPlant);
-          previewPlant = null;
-          $('#add_plant').attr('hidden', false);
-          $('#new_plant').attr('hidden', true);
-          clickMode = "DEFAULT";
+          cancelPlant();
       }
     }
     if(mouseButton == RIGHT){
@@ -758,4 +754,7 @@ public void createPlantPreview(){
 public void cancelPlant(){
   clickMode = "DEFAULT";
   previewPlant = null;
+  $('#add_plant').attr('hidden', false);
+  $('#new_plant').attr('hidden', true);
+  $('#plant_instructions').empty();
 }

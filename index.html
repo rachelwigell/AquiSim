@@ -26,11 +26,9 @@
 	<div class="row"><h4><center>Tank Health</center></h4></div>
 	<div class="row">
 		<div class="small-6 columns">
-			<b>Tank Stats</b><br>
 			<table id = "tank_stats_display"></table>
 		</div>
 		<div class="small-6 columns" id="water_change">
-			<b>Water Change</b><br>
 			<p align = "left">Changing the water can help bring chemistry back to neutral values, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.</p>
 			Change what percent of the water?
 			<div class="small-6 columns">
@@ -48,22 +46,18 @@
 	<div class="row"><h4>Fish Health</h4></div>
 	<div class="row">
 		<div class="small-4 columns">
-			<b>Select a Fish</b>
 			<select id="fish_list" type="select"></select>
 		</div>
 		<div class="small-8 columns">
-			<b>Selected Fish Stats</b><br>
 			<table id="fish_stats_display"></table>
 		</div>
 	</div>
-	<div class="row"><h4>Add Fish or Plants</h4></div>
+	<div class="row"><h4>Add Fish</h4></div>
 	<div class="row">
 		<div class="small-6 columns">
-			<b>Fish Species Available</b>
 			<select id="species_list" type="select"></select>
 		</div>
 		<div class="small-6 columns">
-			<b>Selected Species Stats</b><br>
 			<table id="species_stats_display"></table>
 			<div class="small-6 columns">
         		<input type="text" placeholder="Swimmy" id="nickname_entry" hidden=true />
@@ -73,6 +67,7 @@
       		</div>
 		</div>
 	</div>
+	<div class="row"><h4>Add Plants</h4></div>
 	<div class="row">
 		<div class="small-3 columns">
 			<button type="button" id="add_plant">Add a Plant</button>
@@ -82,7 +77,7 @@
 			<button type="button" id="cancel_plant">Cancel Plant Addition</button>
 		</div>
 		<div class="small-6 columns">
-			<p id="plant_instructions"></p>
+			<p align="left" id="plant_instructions"></p>
 		</div>
 	</div>
 	<div class="row"><h4>Save or Load Tank</h4></div>

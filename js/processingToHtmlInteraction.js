@@ -1,11 +1,11 @@
 var selected_fish = 'select';
 
 window.onload = function() {
-	setTimeout(update_tank_stats, 1000);
-	setTimeout(update_fish_dropdown, 1000);
-	setTimeout(update_fish_stats, 1000);
-	setTimeout(update_species_dropdown, 1000);
-	setTimeout(update_species_stats, 1000);
+	setTimeout(update_tank_stats, 50);
+	setTimeout(update_fish_dropdown, 50);
+	setTimeout(update_fish_stats, 50);
+	setTimeout(update_species_dropdown, 50);
+	setTimeout(update_species_stats, 50);
 };
 
 window.setInterval(function(){
@@ -28,12 +28,13 @@ function update_fish_dropdown(){
 	for(var fish in fish_stats){
 		$('#fish_list').append(new Option(fish, fish));
 	}
+	$('#fish_list').val(selected_fish);
 }
 
 function update_fish_stats(){
 	$('#fish_stats_display').empty();
 	if(selected_fish == 'select'){
-		$('#fish_stats_display').text('No fish selected.');
+		$('#fish_stats_display').empty();
 	}
 	else{
 		fish_info = fish_stats[selected_fish];
@@ -66,7 +67,7 @@ function update_species_stats(){
 	$('#species_stats_display').empty();
 	var selected_species = $('#species_list').find(':selected').val();
 	if(selected_species == 'select'){
-		$('#species_stats_display').text('No species selected.');
+		$('#species_stats_display').empty();
 		$('#nickname_entry').hide();
 		$('#add_fish').hide();
 	}
@@ -131,7 +132,7 @@ $('#perform_water_change').click(function(){
 	var percent = $('#water_change_percentage').attr('data-slider');
 	console.log(percent);
 	processing.waterChange(percent);
-	update_button_text('perform_water_change', percent + '% of water changed.')
+	update_button_text('perform_water_change', 'Changed ' + percent + '%.')
 	setTimeout(update_button_text, 1500, 'perform_water_change', 'Change Water')
 })
 
@@ -147,6 +148,7 @@ $('#add_fish').click(function(){
 $('#add_plant').click(function(){
 	$('#add_plant').attr('hidden', true);
 	$('#new_plant').attr('hidden', false);
+	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one. If you decide you don't want a plant after all, click cancel.")
 	var processing = Processing.getInstanceById('processing');
 	processing.createPlantPreview();
 })
@@ -159,6 +161,7 @@ $('#new_plant').click(function(){
 $('#cancel_plant').click(function(){
 	$('#add_plant').attr('hidden', false);
 	$('#new_plant').attr('hidden', true);
+	$('#plant_instructions').empty();
 	var processing = Processing.getInstanceById('processing');
 	processing.cancelPlant();
 })
