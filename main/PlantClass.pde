@@ -9,7 +9,7 @@ public class Plant {
  Vector3D RGBcolor;
   
  public Plant(float xVal, float yVal, float zVal, int numBranches, int endLevel, Vector3D RGBcolor, float stack){
-   this.numBranches = numBranches;
+   this.numBranches = numBranches-stack;
    this.endLevel = endLevel;
    this.level = 1;
    this.RGBcolor = RGBcolor;
@@ -26,7 +26,7 @@ public class Plant {
  }
  
  public Plant(float xVal, float zVal, int numBranches, int endLevel){
-   this.colorRGB = new Vector3D(random(0, 100), random(150, 200), random(80, 150));
+   this.colorRGB = new Vector3D(random(0, 100), random(100, 200), random(50, 150));
    this.stack = new Plant[3];
    Plant bottom = new Plant(xVal, fieldY/2, zVal, numBranches, endLevel, this.colorRGB, 0);
    Plant middle = new Plant(bottom.path.end.x, bottom.path.end.y, bottom.path.end.z, numBranches, endLevel, this.colorRGB, 1);

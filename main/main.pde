@@ -21,7 +21,7 @@ tank_stats =  {};
 fish_stats = {};
 species_stats = {};
 
-Plant p = new Plant(0, 0, 6, 3);
+Plant p = new Plant(0, 0, 7, 3);
 
 public void populateSpeciesList(){
   speciesList.add(new Guppy("Swimmy"));
