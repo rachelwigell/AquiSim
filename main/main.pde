@@ -371,7 +371,7 @@ void drawAllFish(){
   hint(ENABLE_DEPTH_TEST);
   for(int i=0; i < tank.fish.size(); i++){
     Fish f = (Fish) tank.fish.get(i);
-    drawFish(f, false);
+    drawFish(f);
     updatePosition(f);
   }
 }

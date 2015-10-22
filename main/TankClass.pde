@@ -254,17 +254,17 @@ public class Tank{
   }
   
   public void allEat(){
-    ArrayList eaten = new ArrayList();
     for(int i = 0; i < this.fish.size(); i++){
       Fish aFish = (Fish) this.fish.get(i);
+      ArrayList eaten = new ArrayList();
       for(int j = 0; j < this.food.size(); j++){
         Food aFood = (Food) this.food.get(j);
         if(this.eat(aFish, aFood)){
           eaten.add(aFood);
         }
       }
-      for(int i = 0; i < eaten.size(); i++){
-        Food aFood = (Food) eaten.get(i);
+      for(int k = 0; k < eaten.size(); k++){
+        Food aFood = (Food) eaten.get(k);
         this.food.remove(aFood);
       }
     }
