@@ -105,7 +105,7 @@ $('#species_list').change(function(){
 $('#help_topics').change(function(){
 	var selected_topic = $('#help_topics').find(':selected').val();
 	if(selected_topic == 'fish'){
-		$('#help_text').text("Fish can be kept healthy by keeping the properties of the aquarium such as pH and temperature within the safe range, which varies for each species of fish, and by ensuring that they do not get hungry. See the other items in this menu to learn how to influence the chemistry of your tank's water!");
+		$('#help_text').text("Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!");
 	}
 	else if(selected_topic == 'pH'){
 		$('#help_text').text("pH refers to the acidity of the tank water. Each fish has a range of pH's in which it can survive. pH will usually tend to rise naturally over time, but is lowered by the presence of waste and food in the water.");
@@ -130,7 +130,6 @@ $('#help_topics').change(function(){
 $('#perform_water_change').click(function(){
 	var processing = Processing.getInstanceById('processing');
 	var percent = $('#water_change_percentage').attr('data-slider');
-	console.log(percent);
 	processing.waterChange(percent);
 	update_button_text('perform_water_change', 'Changed ' + percent + '%.')
 	setTimeout(update_button_text, 1500, 'perform_water_change', 'Change Water')
