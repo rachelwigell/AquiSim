@@ -408,7 +408,7 @@ public void drawWaste(Waste s){
 }
 
 public void drawPlant(Plant plant){
-  stroke(0, 200, 90);
+  stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
   strokeWeight(4);
   pushMatrix();
   translate(fieldX/2, fieldY/2, -fieldZ);

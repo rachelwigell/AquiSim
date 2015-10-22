@@ -5,22 +5,13 @@ public class Plant {
   Plant[] branches;
   int level;
   int endLevel;
-  
-  public Plant(Line path, int numBranches, int endLevel){
-    this.path = path;
-    this.numBranches = numBranches;
-    this.endLevel = endLevel;
-    this.level = 1;
-    this.branches = new Plant[numBranches];
-    for(int i = 0; i < numBranches; i++){
-      branches[i] = new Plant(this);
-    }
-  }
+  Vector3D RGBcolor;
   
   public Plant(float xPos, float zPos, int numBranches, int endLevel){
     this.numBranches = numBranches;
     this.endLevel = endLevel;
     this.level = 1;
+    this.RGBcolor = new Vector3D(random(0, 100), random(150, 200), random(80, 150));
     Vector3D startPoint = new Vector3D(xPos, fieldY/2, zPos);
     float height = random(200, 300);
     float xAngle = random(-50, 50);
@@ -37,6 +28,7 @@ public class Plant {
     this.level = root.level+1;
     this.numBranches = root.numBranches;
     this.endLevel = root.endLevel;
+    this.RGBcolor = root.RGBcolor;
     float branchY = root.path.end.y - .8*random((root.path.end.y-(root.path.start.y)));
     Vector3D branchStart = root.path.getPointWithThisY(branchY);
     float branchLength = root.path.length/(random(2, 3));
