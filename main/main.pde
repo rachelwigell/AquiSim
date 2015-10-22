@@ -21,7 +21,7 @@ tank_stats =  {};
 fish_stats = {};
 species_stats = {};
 
-Plant p = new Plant(0, 0, 8, 3);
+Plant p = new Plant(0, 0, 6, 3);
 
 public void populateSpeciesList(){
   speciesList.add(new Guppy("Swimmy"));
@@ -407,9 +407,9 @@ public void drawWaste(Waste s){
   popMatrix();    
 }
 
-public void drawPlant(Plant plant){
+public void drawStack(Plant plant){
   stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
-  strokeWeight(4);
+  strokeWeight(3);
   pushMatrix();
   translate(fieldX/2, fieldY/2, -fieldZ);
   line(plant.path.start.x, plant.path.start.y, plant.path.start.z,
@@ -418,8 +418,14 @@ public void drawPlant(Plant plant){
   if(plant.level < plant.endLevel){
     for(int i = 0; i < plant.numBranches; i++){
       Plant b = (Plant) plant.branches[i];
-      drawPlant(b);
+      drawStack(b);
     }
+  }
+}
+
+public void drawPlant(Plant plant){
+  for(int i = 0; i < 3; i++){
+    drawStack(plant.stack[i]);
   }
 }
 

@@ -9,14 +9,6 @@ public class Line {
     this.length = end.distance(start);
   }
   
-  public Line(Vector3D start, Vector3D end, Polygon startFace, Polygon endFace){
-    this.start = start;
-    this.end = end;
-    this.length = end.distance(start);
-    this.startFace = startFace;
-    this.endFace = endFace;
-  }
-  
   public void drawLine(PApplet visual){
     visual.line(start.x, start.y,  start.z, end.x, end.y, end.z);
   }
