@@ -143,3 +143,22 @@ $('#add_fish').click(function(){
 	update_button_text('add_fish', species + ' added!');
 	setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
 })
+
+$('#add_plant').click(function(){
+	$('#add_plant').attr('hidden', true);
+	$('#new_plant').attr('hidden', false);
+	var processing = Processing.getInstanceById('processing');
+	processing.createPlantPreview();
+})
+
+$('#new_plant').click(function(){
+	var processing = Processing.getInstanceById('processing');
+	processing.createPlantPreview();
+})
+
+$('#cancel_plant').click(function(){
+	$('#add_plant').attr('hidden', false);
+	$('#new_plant').attr('hidden', true);
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
+})

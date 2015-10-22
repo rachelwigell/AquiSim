@@ -21,7 +21,8 @@ tank_stats =  {};
 fish_stats = {};
 species_stats = {};
 
-Plant p = new Plant(0, 0, 7, 3);
+String clickMode = "DEFAULT";
+Plant previewPlant = null;//new Plant(0, 0, 7, 3);
 
 public void populateSpeciesList(){
   speciesList.add(new Guppy("Swimmy"));
@@ -50,7 +51,7 @@ void draw(){
   drawAllFish();
   drawAllWaste();
   tank.allEat();
-  drawPlant(p);
+  drawAllPlants();
   if(updateCount > 150){ //operations to happen every 5 seconds
       tank.progress();
       updateTankStats();
@@ -408,13 +409,9 @@ public void drawWaste(Waste s){
 }
 
 public void drawStack(Plant plant){
-  stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
   strokeWeight(5-plant.level);
-  pushMatrix();
-  translate(fieldX/2, fieldY/2, -fieldZ);
   line(plant.path.start.x, plant.path.start.y, plant.path.start.z,
     plant.path.end.x, plant.path.end.y, plant.path.end.z);
-  popMatrix();
   if(plant.level < plant.endLevel){
     for(int i = 0; i < plant.numBranches; i++){
       Plant b = (Plant) plant.branches[i];
@@ -424,8 +421,28 @@ public void drawStack(Plant plant){
 }
 
 public void drawPlant(Plant plant){
-  for(int i = 0; i < 3; i++){
-    drawStack(plant.stack[i]);
+  for(int j = 0; j < 3; j++){
+    stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
+    pushMatrix();
+    translate(fieldX/2, fieldY/2, -fieldZ);
+    translate(plant.position.x, plant.position.y, plant.position.z);
+    drawStack(plant.stack[j]);
+    popMatrix();
+  }
+}
+
+public void drawAllPlants(){
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant plant = (Plant) tank.plants.get(i);
+    drawPlant(plant);
+  }
+  if(previewPlant != null && onBottom(mouseX, mouseY)){
+    picker.captureViewMatrix(fieldX, fieldY);
+    picker.calculatePickPoints(mouseX,height-mouseY);
+    Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+    Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+    previewPlant.changePosition(start, end);
+    drawPlant(previewPlant);
   }
 }
 
@@ -434,37 +451,49 @@ public void mouseReleased(){
     picker.calculatePickPoints(mouseX,height-mouseY);
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
-    // first check whether waste was clicked on; if so, remove it
-    Waste w = removeWaste(start, end);
-    if(w != null){
-      w.removeFromTank(tank);
+    if(clickMode == "DEFAULT"){
+      // first check whether waste was clicked on; if so, remove it
+      Waste w = removeWaste(start, end);
+      if(w != null){
+        w.removeFromTank(tank);
+      }
+      // clicked back of tank - place food
+      else if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
+        Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+        float percent = random(0, 1);
+        float z = (float) (-fieldZ + 30 + percent*(.5*fieldZ)-30);
+        float factor = (z-start.z)/normal.z;
+        Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+        tank.addFood(new Food(absolutePosition));
+      }
+      // clicked side of tank - place food
+      else if((side = onSide(mouseX, mouseY)) != "No"){
+        Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+        float x;
+        if(side == "left") x = .025*fieldX;
+        else x = .975*fieldX;
+        float factor = (x-start.x)/normal.x;
+        Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+        tank.addFood(new Food(absolutePosition));
+      }
+      // clicked bottom of tank - place food
+      else if(onBottom(mouseX, mouseY)){
+        Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+        float y = fieldY;
+        float factor = (y-start.y)/normal.y;
+        Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+        tank.addFood(new Food(absolutePosition));
+      }
     }
-    // clicked back of tank - place food
-    else if(mouseX >= backMinX && mouseX <= backMaxX && mouseY <= backMaxY){
-      Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-      float percent = random(0, 1);
-      float z = (float) (-fieldZ + 30 + percent*(.5*fieldZ)-30);
-      float factor = (z-start.z)/normal.z;
-      Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-      tank.addFood(new Food(absolutePosition));
-    }
-    // clicked side of tank - place food
-    else if((side = onSide(mouseX, mouseY)) != "No"){
-      Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-      float x;
-      if(side == "left") x = .025*fieldX;
-      else x = .975*fieldX;
-      float factor = (x-start.x)/normal.x;
-      Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-      tank.addFood(new Food(absolutePosition));
-    }
-    // clicked bottom of tank - place food
-    else if(onBottom(mouseX, mouseY)){
-      Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-      float y = fieldY;
-      float factor = (y-start.y)/normal.y;
-      Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-      tank.addFood(new Food(absolutePosition));
+    else if(clickMode == "PLANT"){
+      console.log(clickMode);
+      if(onBottom(mouseX, mouseY)){
+          tank.plants.add(previewPlant);
+          previewPlant = null;
+          $('#add_plant').attr('hidden', false);
+          $('#new_plant').attr('hidden', true);
+          clickMode = "DEFAULT";
+      }
     }
     if(mouseButton == RIGHT){
       console.log("skipping ahead 1 hour");
@@ -719,4 +748,14 @@ public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNorma
   Vector3D pointAt = rayOrigin.addVector(rayNormal.multiplyScalar(dist));
   return pointAt.x < (d.absolutePosition.x + width/2.0) && pointAt.x > (d.absolutePosition.x - width/2.0)
       && pointAt.y < (d.absolutePosition.y + height/2.0) && pointAt.y > (d.absolutePosition.y - height/2.0);
+}
+
+public void createPlantPreview(){
+  clickMode = "PLANT";
+  previewPlant = new Plant(0, 0, 7, 3);
+}
+
+public void cancelPlant(){
+  clickMode = "DEFAULT";
+  previewPlant = null;
 }
