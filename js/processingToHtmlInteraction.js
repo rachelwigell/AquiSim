@@ -88,6 +88,10 @@ function update_species_stats(){
 	}	
 }
 
+function update_button_text(button_name, text){
+	$('#'+button_name).text(text)
+}
+
 $('#fish_list').change(function(){
 	selected_fish = $('#fish_list').find(':selected').val();
 	update_fish_stats();
@@ -127,6 +131,8 @@ $('#perform_water_change').click(function(){
 	var percent = $('#water_change_percentage').attr('data-slider');
 	console.log(percent);
 	processing.waterChange(percent);
+	update_button_text('perform_water_change', percent + '% of water changed.')
+	setTimeout(update_button_text, 1500, 'perform_water_change', 'Change Water')
 })
 
 $('#add_fish').click(function(){
@@ -134,4 +140,6 @@ $('#add_fish').click(function(){
 	var nickname = $('#nickname_entry').val();
 	var species = $('#species_list').find(':selected').val();
 	processing.addFishToTank(species, nickname);
+	update_button_text('add_fish', species + ' added!');
+	setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
 })

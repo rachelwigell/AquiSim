@@ -409,7 +409,7 @@ public void drawWaste(Waste s){
 
 public void drawStack(Plant plant){
   stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
-  strokeWeight(3);
+  strokeWeight(5-plant.level);
   pushMatrix();
   translate(fieldX/2, fieldY/2, -fieldZ);
   line(plant.path.start.x, plant.path.start.y, plant.path.start.z,
