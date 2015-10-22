@@ -8,20 +8,16 @@ public class Plant {
  int endLevel;
  Vector3D RGBcolor;
   
- public Plant(float xVal, float yVal, float zVal, int numBranches, int endLevel, Vector3D RGBcolor){
+ public Plant(float xVal, float yVal, float zVal, int numBranches, int endLevel, Vector3D RGBcolor, float stack){
    this.numBranches = numBranches;
    this.endLevel = endLevel;
    this.level = 1;
    this.RGBcolor = RGBcolor;
-   //float xPos = new Vector3D(-.475*fieldX, xVal, .475*fieldX).centermost();
-   //float zPos = new Vector3D(-.5*fieldZ, zVal, .5*fieldZ).centermost();
    Vector3D startPoint = new Vector3D(xVal, yVal, zVal);
-   float height = random(70, 250);
+   float height = random(100, 350)/(.8*stack+1);
    float xAngle = random(-50, 50);
    float zAngle = random(-50, 50);
    Vector3D endPoint = startPoint.addVector(new Vector3D(xAngle, -height, zAngle));
-   //endPoint.x = new Vector3D(-.475*fieldX, endPoint.x, .475*fieldX).centermost();
-   //endPoint.z = new Vector3D(-.5*fieldZ, endPoint.z, .5*fieldZ).centermost();
    this.path = new Line(startPoint, endPoint);
    this.branches = new Plant[numBranches];
    for(int i = 0; i < numBranches; i++){
@@ -32,9 +28,9 @@ public class Plant {
  public Plant(float xVal, float zVal, int numBranches, int endLevel){
    this.colorRGB = new Vector3D(random(0, 100), random(150, 200), random(80, 150));
    this.stack = new Plant[3];
-   Plant bottom = new Plant(xVal, fieldY/2, zVal, numBranches, endLevel, this.colorRGB);
-   Plant middle = new Plant(bottom.path.end.x, bottom.path.end.y, bottom.path.end.z, numBranches, endLevel, this.colorRGB);
-   Plant top = new Plant(middle.path.end.x, middle.path.end.y, middle.path.end.z, numBranches, endLevel, this.colorRGB);
+   Plant bottom = new Plant(xVal, fieldY/2, zVal, numBranches, endLevel, this.colorRGB, 0);
+   Plant middle = new Plant(bottom.path.end.x, bottom.path.end.y, bottom.path.end.z, numBranches, endLevel, this.colorRGB, 1);
+   Plant top = new Plant(middle.path.end.x, middle.path.end.y, middle.path.end.z, numBranches, endLevel, this.colorRGB, 2);
    this.stack[0] = bottom;
    this.stack[1] = middle;
    this.stack[2] = top;
@@ -47,7 +43,7 @@ public class Plant {
    this.RGBcolor = root.RGBcolor;
    float branchY = root.path.end.y - .9*random((root.path.end.y-(root.path.start.y)));
    Vector3D branchStart = root.path.getPointWithThisY(branchY);
-   float branchLength = root.path.length/(random(1.5, 2.5));
+   float branchLength = root.path.length/random(1.5, 2.5);
    float yNorm = random(-.8, .2);
    float xNorm = random(yNorm*yNorm-1, yNorm*yNorm+1);
    float pos = random(-1, 1);
@@ -64,9 +60,5 @@ public class Plant {
        branches[i] = new Plant(this);
      }
    }
- }
-  
- public void clip(){
-    
  }
 }
