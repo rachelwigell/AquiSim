@@ -15,6 +15,8 @@ window.setInterval(function(){
 }, 2000)
 
 function update_tank_stats(){
+	var processing = Processing.getInstanceById('processing');
+	processing.updateTankStats();
 	$('#tank_stats_display').empty();
 	for(var name in tank_stats){
 		stat = tank_stats[name];
@@ -132,6 +134,7 @@ $('#perform_water_change').click(function(){
 	var percent = $('#water_change_percentage').attr('data-slider');
 	processing.waterChange(percent);
 	update_button_text('perform_water_change', 'Changed ' + percent + '%.')
+	update_tank_stats();
 	setTimeout(update_button_text, 1500, 'perform_water_change', 'Change Water')
 })
 

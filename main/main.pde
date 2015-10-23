@@ -169,19 +169,21 @@ public void drawAllPlants(){
 }
 
 public void mouseReleased(){
+    int x = mouseX;
+    int y = mouseY;
     picker.captureViewMatrix(fieldX, fieldY);
-    picker.calculatePickPoints(mouseX,height-mouseY);
+    picker.calculatePickPoints(x,height-y);
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
     if(clickMode == "DEFAULT"){
       // first check whether waste was clicked on; if so, remove it
       wasteRemoved = handleWasteClick(start, end);
       if(!wasteRemoved){
-        handleFoodClick(mouseX, mouseY, start, end);
+        handleFoodClick(x, y, start, end);
       }
     }
     else if(clickMode == "PLANT"){
-      if(onBottom(mouseX, mouseY)){
+      if(onBottom(x, y)){
           tank.plants.add(previewPlant);
           cancelPlant();
       }
@@ -252,6 +254,7 @@ public void updateFishStats(){
 
 public void waterChange(float percent){
   tank.waterChange(percent);
+  updateTankStats();
 }
 
 /**************************************************
