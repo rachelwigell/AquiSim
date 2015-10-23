@@ -1,11 +1,11 @@
 var selected_fish = 'select';
 
 window.onload = function() {
-	setTimeout(update_tank_stats, 50);
-	setTimeout(update_fish_dropdown, 50);
-	setTimeout(update_fish_stats, 50);
-	setTimeout(update_species_dropdown, 50);
-	setTimeout(update_species_stats, 50);
+	setTimeout(update_tank_stats, 1000);
+	setTimeout(update_fish_dropdown, 1000);
+	setTimeout(update_fish_stats, 1000);
+	setTimeout(update_species_dropdown, 1000);
+	setTimeout(update_species_stats, 1000);
 };
 
 window.setInterval(function(){
