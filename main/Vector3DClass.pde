@@ -45,6 +45,9 @@ public class Vector3D {
   
   public Vector3D normalize(){
     float magnitude = this.magnitude();
+    if(magnitude == 0){
+      return new Vector3D(0, 0, 0);
+    }
     return new Vector3D(this.x/magnitude, this.y/magnitude, this.z/magnitude);
   }
   

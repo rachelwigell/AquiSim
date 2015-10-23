@@ -59,16 +59,24 @@ public abstract class Fish {
     this.velocity.x = new Vector3D(-2, this.velocity.x + this.acceleration.x, 2).centermost();
     this.velocity.y = new Vector3D(-2, this.velocity.y + this.acceleration.y, 2).centermost();
     this.velocity.z = new Vector3D(-2, this.velocity.z + this.acceleration.z, 2).centermost();
-    this.velocity = this.velocity.addVector(hungerContribution(tank, this));
+    this.velocity = this.velocity.addVector(this.centerPull());
+    this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
   }
   
-  public Vector3D hungerContribution(Tank tank){
+  public Vector3D hungerContribution(){
     Vector3D nearestFood = tank.nearestFood(this.position);
     if(nearestFood == null) return new Vector3D(0,0,0);
     float percent = max((.8-(max(this.fullness, 0)/((double) this.maxFullness)))*6, 0);
     Vector3D normal = nearestFood.addVector(this.position.multiplyScalar(-1)).normalize();
+    return normal.multiplyScalar(percent);
+  }
+  
+  public Vector3D centerPull(){
+    Vector3D center = new Vector3D(0, 0, 0);
+    float percent = 1.5*this.position.squareDistance(center)/(pow(fieldX/2, 2) + pow(fieldZ, 2) + pow(fieldY/2, 2));
+    Vector3D normal = center.addVector(this.position.multiplyScalar(-1)).normalize();
     return normal.multiplyScalar(percent);
   }
   
