@@ -54,8 +54,6 @@ void draw(){
   drawAllPlants();
   if(updateCount > 150){ //operations to happen every 5 seconds
       tank.progress();
-      updateTankStats();
-      updateFishStats();
       updateCount = 0;
     }
   updateCount++;
@@ -254,7 +252,6 @@ public void updateFishStats(){
 
 public void waterChange(float percent){
   tank.waterChange(percent);
-  updateTankStats();
 }
 
 /**************************************************
@@ -282,6 +279,7 @@ public Fish addFishToTank(String speciesName, String nickname){
   }
   if(toAdd != null){
     tank.addFish(toAdd);
+    updateFishStats();
   }
   return toAdd;
 }

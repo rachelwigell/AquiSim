@@ -10,7 +10,6 @@ window.onload = function() {
 
 window.setInterval(function(){
   	update_tank_stats();
-  	update_fish_dropdown();
   	update_fish_stats();
 }, 2000)
 
@@ -39,6 +38,8 @@ function update_fish_stats(){
 		$('#fish_stats_display').empty();
 	}
 	else{
+		var processing = Processing.getInstanceById('processing');
+		processing.updateFishStats();
 		fish_info = fish_stats[selected_fish];
 		var row = '<tr><td><b>Name:</b></td><td>' + fish_info['Name:'] + '</td><td><b>Ammonia levels tolerated:</b></td><td>' + fish_info["Ammonia levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
@@ -133,7 +134,7 @@ $('#perform_water_change').click(function(){
 	var processing = Processing.getInstanceById('processing');
 	var percent = $('#water_change_percentage').attr('data-slider');
 	processing.waterChange(percent);
-	update_button_text('perform_water_change', 'Changed ' + percent + '%.')
+	update_button_text('perform_water_change', 'Changed ' + percent + '%')
 	update_tank_stats();
 	setTimeout(update_button_text, 1500, 'perform_water_change', 'Change Water')
 })
@@ -143,6 +144,7 @@ $('#add_fish').click(function(){
 	var nickname = $('#nickname_entry').val();
 	var species = $('#species_list').find(':selected').val();
 	processing.addFishToTank(species, nickname);
+	update_fish_dropdown();
 	update_button_text('add_fish', species + ' added!');
 	setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
 })
