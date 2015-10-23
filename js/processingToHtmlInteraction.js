@@ -50,10 +50,10 @@ function update_fish_stats(){
 		row = '<tr><td><b>Status:</b></td><td>' + fish_info['Status:'] + '</td><td><b>pH levels tolerated:</b></td><td>' + fish_info["pH levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
 		var health_percentage = fish_info['health'] * 100 / fish_info['max health'];
-		row = '<tr><td><b>Health:</b></td><td><div class="progress"><span class="meter" style="width: ' + health_percentage + '%"></span></div></td><td><b>Temperatures tolerated:</b></td><td>' + fish_info["Temperatures tolerated:"] + '</td></tr>';
+		row = '<tr><td><b>Health:</b></td><td><div class="progress round"><span class="meter" style="width: ' + health_percentage + '%"></span></div></td><td><b>Temperatures tolerated:</b></td><td>' + fish_info["Temperatures tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
 		var fullness_percentage = fish_info['fullness'] * 100 / fish_info['max fullness'];
-		row = '<tr><td><b>Fullness:</b></td><td><div class="progress"><span class="meter" style="width: ' + fullness_percentage + '%"></span></div></td><td><b>Hardness levels tolerated:</b></td><td>' + fish_info["Hardness levels tolerated:"] + '</td></tr>';
+		row = '<tr><td><b>Fullness:</b></td><td><div class="progress round"><span class="meter" style="width: ' + fullness_percentage + '%"></span></div></td><td><b>Hardness levels tolerated:</b></td><td>' + fish_info["Hardness levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
 	}	
 }
@@ -111,10 +111,10 @@ $('#help_topics').change(function(){
 		$('#help_text').text("Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!");
 	}
 	else if(selected_topic == 'pH'){
-		$('#help_text').text("pH refers to the acidity of the tank water. Each fish has a range of pH's in which it can survive. pH will usually tend to rise naturally over time, but is lowered by the presence of waste and food in the water.");
+		$('#help_text').text("pH refers to the acidity of the tank water. Each fish has a range of pH's in which it can survive. pH is lowered by the presence of waste and food in the water. If you need to raise it, perform a water change.");
 	}
 	else if(selected_topic == 'temperature'){
-		$('#help_text').text("Water temperature is initially 24 degrees Celsius but will tend toward room temperature, which varies based on time of day. Each species of fish has a range of temperatures in which it can survive.");
+		$('#help_text').text("Water temperature varies based on time of day. Each species of fish has a range of temperatures in which it can survive.");
 	}
 	else if(selected_topic == 'hardness'){
 		$('#help_text').text("Water hardness is a measure of how many minerals are dissolved in the water. Each fish has a range of hardnesses that it prefers. Hardness cannot directly be controlled in this game, but will fluctuate natrually.");
