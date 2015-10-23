@@ -152,6 +152,9 @@ $('#add_fish').click(function(){
 $('#add_plant').click(function(){
 	$('#add_plant').attr('hidden', true);
 	$('#new_plant').attr('hidden', false);
+	$('#delete_plant').attr('hidden', true);
+	$('#cancel_plant_add').attr('hidden', false);
+	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one. If you decide you don't want a plant after all, click cancel.")
 	var processing = Processing.getInstanceById('processing');
 	processing.createPlantPreview();
@@ -162,10 +165,30 @@ $('#new_plant').click(function(){
 	processing.createPlantPreview();
 })
 
-$('#cancel_plant').click(function(){
+$('#cancel_plant_add').click(function(){
 	$('#add_plant').attr('hidden', false);
 	$('#new_plant').attr('hidden', true);
+	$('#delete_plant').attr('hidden', false);
+	$('#cancel_plant_add').attr('hidden', true);
+	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').empty();
 	var processing = Processing.getInstanceById('processing');
 	processing.cancelPlant();
+})
+
+$('#delete_plant').click(function(){
+	$('#add_plant').attr('hidden', true);
+	$('#new_plant').attr('hidden', true);
+	$('#delete_plant').attr('hidden', true);
+	$('#cancel_plant_add').attr('hidden', true);
+	$('#cancel_plant_delete').attr('hidden', false);
+})
+
+$('#cancel_plant_delete').click(function(){
+	$('#add_plant').attr('hidden', false);
+	$('#new_plant').attr('hidden', true);
+	$('#delete_plant').attr('hidden', false);
+	$('#cancel_plant_add').attr('hidden', true);
+	$('#cancel_plant_delete').attr('hidden', true);
+	$('#plant_instructions').empty();
 })
