@@ -191,6 +191,27 @@ public class Tank{
     return f.status;
   }
   
+  public float getParameter(String parameter){
+    if(parameter == "Ammonia"){
+      return this.ammonia;
+    }
+    if(parameter == "Nitrite"){
+      return this.nitrite;
+    }
+    if(parameter == "Nitrate"){
+      return this.nitrate;
+    }
+    if(parameter == "pH"){
+      return this.pH;
+    }
+    if(parameter == "Temperature"){
+      return this.temp;
+    }
+    if(parameter == "Hardness"){
+      return this.hardness;
+    }
+  }
+  
   public void progress(){
     //per fish operations
     for(Fish f: this.fish){

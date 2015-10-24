@@ -4,8 +4,8 @@ public abstract class Fish {
   public String status;
   public long fullness;
   public long maxFullness;
-  public long maxHealth;
-  public long health;
+  public double maxHealth;
+  public double health;
   public int ease;
   public double size;
   public double minPH;
@@ -28,33 +28,75 @@ public abstract class Fish {
   public Vector3D acceleration;
   public HashMap dangerRatings;
 
-  public setDangerRatings() {
+  public void setDangerRatings() {
     this.dangerRatings = new HashMap();
     this.dangerRatings.put("Ammonia", 3);
     this.dangerRatings.put("Nitrite", 2);
     this.dangerRatings.put("Nitrate", 1);
     this.dangerRatings.put("pH", 2);
     this.dangerRatings.put("Hardness", 1);
-    this.dangerRating.put("Temperature", 2);
+    this.dangerRatings.put("Temperature", 1);
+  }
+  
+  public double getParameter(String parameter, boolean high){
+    if(parameter == "Ammonia"){
+      return this.ammonia;
+    }
+    if(parameter == "Nitrite"){
+      return this.nitrite;
+    }
+    if(parameter == "Nitrate"){
+      return this.nitrate;
+    }
+    if(parameter == "pH"){
+      if(high){
+        return this.maxPH;
+      }
+      else{
+        return this.minPH;
+      }
+    }
+    if(parameter == "Temperature"){
+      if(high){
+        return this.maxTemp;
+      }
+      else{
+        return this.minTemp;
+      }
+    }
+    if(parameter == "Hardness"){
+      if(high){
+        return this.maxHard;
+      }
+      else{
+        return this.minHard;
+      }
+    }
   }
 
   public int setHealth() {
     if (this.status == "Happy.") {
       this.health = min(this.maxHealth, this.health+1);
     }
+    else if (this.status == "Hungry!") {
+      this.health = min(0, this.health-2);
+    }
     else {
       String problemElement = "";
       Iterator i = this.dangerRatings.entrySet().iterator();
       while (i.hasNext()) {
-        Map.Entry danger = (Map.Entry) i.next();
-        String dangerKey = (String) danger.getKey();
-        if (this.status.contains(dangerKey)) {
-          problemElement = dangerKey;
-          break;
-        }
+       Map.Entry danger = (Map.Entry) i.next();
+       String dangerKey = (String) danger.getKey();
+       if (this.status.contains(dangerKey)) {
+         problemElement = dangerKey;
+         break;
+       }
       }
       boolean problemDirection = status.contains("high");
-      this.health = max(0, this.health-1);
+      float dist = 0;
+      dist = abs(tank.getParameter(problemElement) - this.getParameter(problemElement, problemDirection));
+      float reduction = dist*this.dangerRatings.get(problemElement);
+      this.health = max(0, this.health-reduction);
     }
     return this.health;
   }
