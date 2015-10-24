@@ -202,10 +202,10 @@ public void mouseReleased(){
     else if(clickMode == "DELETE"){
       handlePlantDeleteClick(x, y);
     }
-    if(mouseButton == RIGHT){
-      console.log("skipping ahead 1 hour");
-      skipAhead(60);
-    }
+    //if(mouseButton == RIGHT){
+    //  console.log("skipping ahead 1 hour");
+    //  skipAhead(60);
+    //}
 }
 
 /**************************************************
