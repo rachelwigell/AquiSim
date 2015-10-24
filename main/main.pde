@@ -228,15 +228,15 @@ public void populateSpeciesStats(){
 
 public void updateTankStats(){
   tank_stats.pH = tank.pH.toFixed(2);
-  tank_stats.temperature = tank.temp.toFixed(2) + ' °C';
+  tank_stats.temperature = tank.temp.toFixed(1) + ' °C';
   tank_stats.hardness = tank.hardness.toFixed(2) + ' dH';
   tank_stats.ammonia = tank.ammonia.toFixed(2) + ' ppm';
   tank_stats.nitrite = tank.nitrite.toFixed(2) + ' ppm';
   tank_stats.nitrate = tank.nitrate.toFixed(2) + ' ppm';
-  tank_stats.o2 = tank.o2.toFixed(2) + ' ppm';
-  tank_stats.co2 = tank.co2.toFixed(2) + ' ppm';
-  tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(2) + ' bacteria';
-  tank_stats.nitrobacter = tank.nitrobacter.toFixed(2) + ' bacteria';
+  tank_stats.o2 = tank.o2.toFixed(1) + ' ppm';
+  tank_stats.co2 = tank.co2.toFixed(1) + ' ppm';
+  tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(0) + ' bacteria';
+  tank_stats.nitrobacter = tank.nitrobacter.toFixed(0) + ' bacteria';
   tank_stats.food = tank.food.size() + ' noms';
   tank_stats.waste = tank.waste + ' poops';
 }

@@ -26,38 +26,60 @@ public abstract class Fish {
   public Vector3D dimensions;
   public Vector3D velocity;
   public Vector3D acceleration;
-  
-  public int setHealth(){
-    if(this.status == "Happy."){
+  public HashMap dangerRatings;
+
+  public setDangerRatings() {
+    this.dangerRatings = new HashMap();
+    this.dangerRatings.put("Ammonia", 3);
+    this.dangerRatings.put("Nitrite", 2);
+    this.dangerRatings.put("Nitrate", 1);
+    this.dangerRatings.put("pH", 2);
+    this.dangerRatings.put("Hardness", 1);
+    this.dangerRating.put("Temperature", 2);
+  }
+
+  public int setHealth() {
+    if (this.status == "Happy.") {
       this.health = min(this.maxHealth, this.health+1);
     }
-    else{
-     this.health  = max(0, this.health-1);
+    else {
+      String problemElement = "";
+      Iterator i = this.dangerRatings.entrySet().iterator();
+      while (i.hasNext()) {
+        Map.Entry danger = (Map.Entry) i.next();
+        String dangerKey = (String) danger.getKey();
+        if (this.status.contains(dangerKey)) {
+          problemElement = dangerKey;
+          break;
+        }
+      }
+      boolean problemDirection = status.contains("high");
+      this.health = max(0, this.health-1);
     }
     return this.health;
   }
 
-  public long changeHunger(){
+  public long changeHunger() {
     int hunger = (int) (this.size/2); //hunger changes relative to fish size
     this.fullness = Math.max(this.fullness - hunger, 0);
     return hunger;
   }
-  
-  public void updatePosition(){
+
+  public void updatePosition() {
     this.position.x = new Vector3D((-.475*fieldX+this.dimensions.x/2.0), this.position.x+this.velocity.x, (.475*fieldX-this.dimensions.x/2.0)).centermost();
     this.position.y = new Vector3D((-.5*fieldY*tank.waterLevel+this.dimensions.y/2.0), this.position.y+this.velocity.y, (.5*fieldY*tank.waterLevel-this.dimensions.y/2.0)).centermost();
     this.position.z = new Vector3D((-.5*fieldZ+this.dimensions.x/2.0), this.position.z+this.velocity.z, (.5*fieldZ-this.dimensions.x/2.0)).centermost();
     this.absolutePosition = this.position.addVector(new Vector3D(zero.x, zero.y, zero.z));
     this.updateVelocity();
   }
-  
-  public void updateAcceleration(){
+
+  public void updateAcceleration() {
     this.acceleration.x += random(-.25, .25);
     this.acceleration.y += random(-.125, .125);
     this.acceleration.z += random(-.25, .25);
   }
-  
-  public void updateVelocity(){
+
+  public void updateVelocity() {
     this.velocity.x = new Vector3D(-2, this.velocity.x + this.acceleration.x, 2).centermost();
     this.velocity.y = new Vector3D(-2, this.velocity.y + this.acceleration.y, 2).centermost();
     this.velocity.z = new Vector3D(-2, this.velocity.z + this.acceleration.z, 2).centermost();
@@ -66,38 +88,38 @@ public abstract class Fish {
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
   }
-  
-  public Vector3D hungerContribution(){
+
+  public Vector3D hungerContribution() {
     Vector3D nearestFood = tank.nearestFood(this.absolutePosition);
-    if(nearestFood == null) return new Vector3D(0,0,0);
+    if (nearestFood == null) return new Vector3D(0, 0, 0);
     nearestFood = nearestFood.addVector(new Vector3D(-zero.x, -zero.y, -zero.z));
     float percent = max((.8-(max(this.fullness, 0)/((double) this.maxFullness)))*6, 0);
     Vector3D normal = nearestFood.addVector(this.position.multiplyScalar(-1)).normalize();
     return normal.multiplyScalar(percent);
   }
-  
-  public Vector3D centerPull(){
+
+  public Vector3D centerPull() {
     Vector3D middle = new Vector3D(0, 0, 0);
     float percent = 1.8*this.position.squareDistance(middle)/(pow(zero.x, 2) + pow(zero.y, 2) + pow(zero.z, 2));
     Vector3D normal = middle.addVector(this.position.multiplyScalar(-1)).normalize();
     return normal.multiplyScalar(percent);
   }
-  
-  public void updateOrientationRelativeToVelocity(){
+
+  public void updateOrientationRelativeToVelocity() {
     Vector3D velocity = this.velocity;  
     double angle = Math.asin(Math.abs(velocity.z)/velocity.magnitude());
-    if(velocity.x < 0 && velocity.z > 0) this.orientation.y = angle;
-    else if(velocity.x > 0 && velocity.z > 0) this.orientation.y = (PI - angle);
-    else if(velocity.x > 0 && velocity.z < 0) this.orientation.y = (PI + angle);
-    else if(velocity.x < 0 && velocity.z < 0) this.orientation.y = -angle;
-    else if(velocity.z == 0 && velocity.x < 0) this.orientation.y = 0;
-    else if(velocity.x == 0 && velocity.z > 0) this.orientation.y = (PI/2.0);
-    else if(velocity.z == 0 && velocity.x > 0) this.orientation.y = PI;
-    else if(velocity.x == 0 && velocity.z < 0) this.orientation.y = (3*PI/2.0);
+    if (velocity.x < 0 && velocity.z > 0) this.orientation.y = angle;
+    else if (velocity.x > 0 && velocity.z > 0) this.orientation.y = (PI - angle);
+    else if (velocity.x > 0 && velocity.z < 0) this.orientation.y = (PI + angle);
+    else if (velocity.x < 0 && velocity.z < 0) this.orientation.y = -angle;
+    else if (velocity.z == 0 && velocity.x < 0) this.orientation.y = 0;
+    else if (velocity.x == 0 && velocity.z > 0) this.orientation.y = (PI/2.0);
+    else if (velocity.z == 0 && velocity.x > 0) this.orientation.y = PI;
+    else if (velocity.x == 0 && velocity.z < 0) this.orientation.y = (3*PI/2.0);
     this.orientation.z = new Vector3D(-1, -velocity.y, 1).centermost() * PI/6;
   }
-  
-  void drawFish(){
+
+  void drawFish() {
     noStroke();
     pushMatrix();
     translate(zero.x, zero.y, zero.z);

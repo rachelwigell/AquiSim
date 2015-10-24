@@ -26,6 +26,7 @@ public class Guppy extends Fish{
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
     this.dimensions = new Vector3D(80, 36, 15);
+    this.setDangerRatings();
   }
   
   public ArrayList setModel(){
