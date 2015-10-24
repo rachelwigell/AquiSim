@@ -51,10 +51,10 @@ function update_fish_stats(){
 		row = '<tr><td><b>Status:</b></td><td>' + fish_info['Status:'] + '</td><td><b>pH levels tolerated:</b></td><td>' + fish_info["pH levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
 		var health_percentage = fish_info['health'] * 100 / fish_info['max health'];
-		row = '<tr><td><b>Health:</b></td><td><div class="progress round"><span class="meter" style="width: ' + health_percentage + '%"></span></div></td><td><b>Temperatures tolerated:</b></td><td>' + fish_info["Temperatures tolerated:"] + '</td></tr>';
+		row = '<tr><td><b>Health:</b></td><td><div class="progress round" style="width: 100px"><span class="meter" style="width: ' + health_percentage + '%"></span></div></td><td><b>Temperatures tolerated:</b></td><td>' + fish_info["Temperatures tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
 		var fullness_percentage = fish_info['fullness'] * 100 / fish_info['max fullness'];
-		row = '<tr><td><b>Fullness:</b></td><td><div class="progress round"><span class="meter" style="width: ' + fullness_percentage + '%"></span></div></td><td><b>Hardness levels tolerated:</b></td><td>' + fish_info["Hardness levels tolerated:"] + '</td></tr>';
+		row = '<tr><td><b>Fullness:</b></td><td><div class="progress round" style="width: 100px"><span class="meter" style="width: ' + fullness_percentage + '%"></span></div></td><td><b>Hardness levels tolerated:</b></td><td>' + fish_info["Hardness levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);
 	}	
 }
@@ -156,7 +156,7 @@ $('#add_plant').click(function(){
 	$('#delete_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', false);
 	$('#cancel_plant_delete').attr('hidden', true);
-	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one.")
+	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one")
 	var processing = Processing.getInstanceById('processing');
 	processing.createPlantPreview();
 })
