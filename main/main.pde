@@ -22,11 +22,9 @@ fish_stats = {};
 species_stats = {};
 
 String clickMode = "DEFAULT";
-Plant previewPlant = null;//new Plant(0, 0, 7, 3);
-
-public void populateSpeciesList(){
-  speciesList.add(new Guppy("Swimmy"));
-}
+Plant previewPlant = null;
+Vector3D zero = null;
+Vector3D center = null;
 
 void setup(){
   size(fieldX, fieldY, P3D);
@@ -36,6 +34,8 @@ void setup(){
   tank = new Tank();
   populateSpeciesList();
   populateSpeciesStats();
+  zero = new Vector3D(fieldX/2, fieldY*(1-.5*tank.waterLevel), -fieldZ);
+  center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
   determineBounds();
   
@@ -57,6 +57,19 @@ void draw(){
       updateCount = 0;
     }
   updateCount++;
+}
+
+public void populateSpeciesList(){
+  speciesList.add(new Guppy("Swimmy"));
+}
+
+public void determineBounds(){
+  backMinX = int(screenX(.025*fieldX, .5*fieldY, -1.5*fieldZ));
+  backMaxX = fieldX -  backMinX;
+  backMaxY = int(screenY(.5*fieldX, fieldY, -1.5*fieldZ));
+  leftMinX = int(screenX(.025*fieldX, fieldY/2, -.5*fieldZ));
+  rightMaxX = fieldX - leftMinX;
+  sidesMaxY = int(screenY(0.25*fieldX, fieldY, -.5*fieldZ));
 }
 
 /**************************************************
@@ -144,7 +157,7 @@ public void drawPlant(Plant plant){
   for(int j = 0; j < 3; j++){
     stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
     pushMatrix();
-    translate(fieldX/2, fieldY/2, -fieldZ);
+    translate(center.x, center.y, center.z);
     translate(plant.position.x, plant.position.y, plant.position.z);
     drawStack(plant.stack[j]);
     popMatrix();
@@ -284,15 +297,6 @@ public Fish addFishToTank(String speciesName, String nickname){
   return toAdd;
 }
 
-public void determineBounds(){
-  backMinX = int(screenX(.025*fieldX, .5*fieldY, -1.5*fieldZ));
-  backMaxX = fieldX -  backMinX;
-  backMaxY = int(screenY(.5*fieldX, fieldY, -1.5*fieldZ));
-  leftMinX = int(screenX(.025*fieldX, fieldY/2, -.5*fieldZ));
-  rightMaxX = fieldX - leftMinX;
-  sidesMaxY = int(screenY(0.25*fieldX, fieldY, -.5*fieldZ));
-}
-
 public float triangleArea(Vector3D point1, Vector3D point2, Vector3D point3){
   return (float) Math.abs(((point1.x*(point2.y-point3.y)) + point2.x*(point3.y-point1.y) + point3.x*(point1.y-point2.y))/2.0);
 }
@@ -406,9 +410,6 @@ public void createPlantPreview(){
 public void cancelPlant(){
   clickMode = "DEFAULT";
   previewPlant = null;
-  $('#add_plant').attr('hidden', false);
-  $('#new_plant').attr('hidden', true);
-  $('#plant_instructions').empty();
 }
 
 public boolean handleWasteClick(Vector3D start, Vector3D end){

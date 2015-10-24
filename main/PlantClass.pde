@@ -31,7 +31,7 @@ public Plant(float xVal, float yVal, float zVal, int numBranches, int endLevel, 
 public Plant(float xVal, float zVal, int numBranches, int endLevel){
   this.RGBcolor = new Vector3D(random(0, 100), random(100, 200), random(50, 150));
   this.position = new Vector3D(xVal, fieldY/2, zVal);
-  this.absolutePosition = this.position.addVector(new Vector3D(fieldX/2, fieldY/2, -fieldZ));
+  this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
   this.stack = new Plant[3];
   Plant bottom = new Plant(xVal, 0, zVal, numBranches, endLevel, this.colorRGB, 0);
   Plant middle = new Plant(bottom.path.end.x, bottom.path.end.y, bottom.path.end.z, numBranches, endLevel, this.colorRGB, 1);
@@ -70,7 +70,7 @@ public Plant(Plant root){
    float y = fieldY;
    float factor = (y-start.y)/normal.y;
    this.absolutePosition = start.addVector(normal.multiplyScalar(factor));
-   this.position = this.absolutePosition.addVector(new Vector3D(-fieldX/2, -fieldY/2, fieldZ));
+   this.position = this.absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
    return this;
  }
 }  

@@ -44,7 +44,7 @@ public abstract class Fish {
   
   public void updatePosition(){
     this.position.x = new Vector3D((-.475*fieldX+this.dimensions.x/2.0), this.position.x+this.velocity.x, (.475*fieldX-this.dimensions.x/2.0)).centermost();
-    this.position.y = new Vector3D((fieldY/2-this.dimensions.y/2.0), this.position.y+this.velocity.y, (fieldY*(.5-tank.waterLevel)+this.dimensions.y/2.0)).centermost();
+    this.position.y = new Vector3D((-.5*fieldY*tank.waterLevel-this.dimensions.y/2.0), this.position.y+this.velocity.y, (.5*fieldY*tank.waterLevel+this.dimensions.y/2.0)).centermost();
     this.position.z = new Vector3D((-.5*fieldZ+this.dimensions.x/2.0), this.position.z+this.velocity.z, (.5*fieldZ-this.dimensions.x/2.0)).centermost();
     this.updateVelocity();
   }
@@ -74,9 +74,9 @@ public abstract class Fish {
   }
   
   public Vector3D centerPull(){
-    Vector3D center = new Vector3D(0, 0, 0);
-    float percent = 1.5*this.position.squareDistance(center)/(pow(fieldX/2, 2) + pow(fieldZ, 2) + pow(fieldY/2, 2));
-    Vector3D normal = center.addVector(this.position.multiplyScalar(-1)).normalize();
+    Vector3D middle = new Vector3D(0, 0, 0);
+    float percent = 1.8*this.position.squareDistance(middle)/(pow(zero.x, 2) + pow(zero.y, 2) + pow(zero.z, 2));
+    Vector3D normal = middle.addVector(this.position.multiplyScalar(-1)).normalize();
     return normal.multiplyScalar(percent);
   }
   
@@ -97,7 +97,7 @@ public abstract class Fish {
   void drawFish(){
     noStroke();
     pushMatrix();
-    translate(fieldX/2, fieldY/2, -fieldZ);
+    translate(zero.x, zero.y, zero.z);
     translate(this.position.x, this.position.y, this.position.z);
     rotateX(this.orientation.x);
     rotateY(this.orientation.y);

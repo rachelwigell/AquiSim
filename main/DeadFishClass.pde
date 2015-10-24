@@ -8,7 +8,7 @@ public class DeadFish extends Waste{
     this.restingPosition = new Vector3D(0, fieldY*(.5-tank.waterLevel), 0);
     this.velocity = new Vector3D(0, -1, 0);
     this.position = origin.position;
-    this.absolutePosition = origin.position.addVector(new Vector3D(fieldX/2, fieldY/2, -fieldZ));   
+    this.absolutePosition = origin.position.addVector(new Vector3D(center.x, center.y, center.z));   
   }
   
   public void removeFromTank(Tank t){
