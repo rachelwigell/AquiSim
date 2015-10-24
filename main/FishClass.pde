@@ -95,14 +95,14 @@ public abstract class Fish {
       boolean problemDirection = status.contains("high");
       float dist = 0;
       dist = abs(tank.getParameter(problemElement) - this.getParameter(problemElement, problemDirection));
-      float reduction = dist*this.dangerRatings.get(problemElement);
+      float reduction = max(1, dist*this.dangerRatings.get(problemElement));
       this.health = max(0, this.health-reduction);
     }
     return this.health;
   }
   
   public void adapt(){
-    float adaptCoeff = .01;
+    float adaptCoeff = .005;
     if (this.status == "pH too high."){
        float dist = tank.pH - this.maxPH;
        this.minPH += adaptCoeff*dist;
