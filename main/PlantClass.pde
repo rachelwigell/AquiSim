@@ -29,10 +29,10 @@ public Plant(float xVal, float yVal, float zVal, int numBranches, int endLevel, 
 }
  
 public Plant(float xVal, float zVal, int numBranches, int endLevel){
-  Vector3D RGBcolor = new Vector3D(random(0, 100), random(100, 200), random(50, 150));
-  //while(!isUnique(RGBcolor)){
-  //  RGBcolor = new Vector3D(random(0, 100), random(100, 200), random(50, 150));
-  //}
+  Vector3D RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
+  while(!isUnique(RGBcolor)){
+   RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
+  }
   this.RGBcolor = RGBcolor;
   this.position = new Vector3D(xVal, fieldY/2, zVal);
   this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
@@ -78,13 +78,13 @@ public Plant(Plant root){
    return this;
  }
  
- //public boolean isUnique(Vector3D RGBcolor){
- //  for(int i = 0; i < tank.plants.size(); i++){
- //    Plant p = (Plant) tank.plants.get(i);
- //    if(p.RGBcolor.isEqual(RGBcolor)){
- //      return false;
- //    }
- //  }
- //  return true;
- //}
+ public boolean isUnique(Vector3D RGBcolor){
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    if(p.RGBcolor.isEqual(RGBcolor)){
+      return false;
+    }
+  }
+  return true;
+ }
 }  

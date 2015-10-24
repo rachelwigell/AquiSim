@@ -156,7 +156,7 @@ $('#add_plant').click(function(){
 	$('#delete_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', false);
 	$('#cancel_plant_delete').attr('hidden', true);
-	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one. If you decide you don't want a plant after all, click cancel.")
+	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one.")
 	var processing = Processing.getInstanceById('processing');
 	processing.createPlantPreview();
 })
@@ -183,6 +183,7 @@ $('#delete_plant').click(function(){
 	$('#delete_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', false);
+	$('#plant_instructions').text("Click a plant to delete it.");
 	var processing = Processing.getInstanceById('processing');
 	processing.deleteMode();
 })

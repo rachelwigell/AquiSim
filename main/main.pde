@@ -196,7 +196,7 @@ public void mouseReleased(){
     else if(clickMode == "PLANT"){
       if(onBottom(x, y)){
           tank.plants.add(previewPlant);
-          cancelPlant();
+          $('#cancel_plant_add').click();
       }
     }
     else if(clickMode == "DELETE"){
@@ -451,18 +451,18 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
   }
 }
 
-//public boolean handlePlantDeleteClick(int x, int y){
-//  clickedColor = get(x, fieldY-y);
-//  console.log(red(clickedColor), green(clickedColor), blue(clickedColor));
-//  for(int i = 0; i < tank.plants.size(); i++){
-//    Plant p = (Plant) tank.plants.get(i);
-//    if(p.RGBcolor.x == red(clickedColor) && p.RGBcolor.y == green(clickedColor) && p.RGBcolor.z == blue(clickedColor)){
-//      tank.plants.remove(p);
-//      return true;
-//    }
-//  }
-//  return false;
-//}
+public boolean handlePlantDeleteClick(int x, int y){
+ clickedColor = get(x, fieldY-y);
+ Vector3D clickedRGB = new Vector3D(red(clickedColor), green(clickedColor), blue(clickedColor));
+ for(int i = 0; i < tank.plants.size(); i++){
+   Plant p = (Plant) tank.plants.get(i);
+   if(p.RGBcolor.isEqual(clickedRGB)){
+     tank.plants.remove(p);
+     return true;
+   }
+ }
+ return false;
+}
 
 public void deleteMode(){
   clickMode = "DELETE";
