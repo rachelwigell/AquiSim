@@ -14,6 +14,7 @@ public class Poop extends Waste{
   
   public void removeFromTank(Tank t){
     t.poops.remove(this);
+    t.waste--;
   }
   
   public void updateVelocity(){

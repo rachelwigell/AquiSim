@@ -32,14 +32,14 @@ public class Tank{
     this.pH=8;
     this.temp = 24;
     this.roomTemp = 22;
-    this.hardness = 6;
+    this.hardness = 8;
     this.o2 = 3; //temp/2
     this.co2 = 3; //temp/2
     this.ammonia = 0;
     this.nitrite = 0;
     this.nitrate = 0;
-    this.nitrosomonas = .01;
-    this.nitrobacter = .01;
+    this.nitrosomonas = 1;
+    this.nitrobacter = 1;
     this.waste = 0;
     this.time = getTime();
     this.fish = new ArrayList();
@@ -79,7 +79,7 @@ public class Tank{
   }
 
   public float changeHard(){
-    float hardness = -.0008*this.co2*this.hardness/this.volume + .000005*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
+    float hardness = -.0008*this.co2*this.hardness/this.volume + .000002*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
     return hardness;
   }
 
@@ -98,7 +98,7 @@ public class Tank{
   }
 
   public float changeAmmonia(){
-    float ammonia = (.0001*this.temp*this.pH*(.1*this.waste + .1*this.food.size() + .001*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
+    float ammonia = (.000008*this.temp*this.pH*(this.waste + this.food.size() + .01*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
     return ammonia;
   }
 
@@ -113,12 +113,12 @@ public class Tank{
   }
 
   public float changeNitrosomonas(){
-    float nitrosomonas = .002*this.ammonia*this.nitrosomonas-.0019*this.nitrosomonas;
+    float nitrosomonas = .01*this.ammonia*this.nitrosomonas-.003*this.nitrosomonas;
     return nitrosomonas;
   }
 
   public float changeNitrobacter(){
-    float nitrobacter = .002*this.nitrite*this.nitrobacter-.0019*this.nitrobacter;
+    float nitrobacter = .01*this.nitrite*this.nitrobacter-.00*this.nitrobacter;
     return nitrobacter;
   }
   
@@ -143,14 +143,14 @@ public class Tank{
     percent = .01*percent;
     this.pH = Math.log10(percent*Math.pow(10, 8) + (1-percent)*Math.pow(10, this.pH));
     this.temp = percent*24 + (1-percent)*this.temp;
-    this.hardness = percent*6 + (1-percent)*this.hardness;
+    this.hardness = percent*8 + (1-percent)*this.hardness;
     this.o2 = percent*3 + (1-percent)*this.o2;
     this.co2 = percent*3 + (1-percent)*this.co2;
     this.ammonia = percent*0 + (1-percent)*this.ammonia;
     this.nitrite = percent*0 + (1-percent)*this.nitrite;
     this.nitrate = percent*0 + (1-percent)*this.nitrate;
-    this.nitrosomonas = (percent*.2)*.01 + (1-(percent*.2))*this.nitrosomonas;
-    this.nitrobacter = (percent*.2)*.01 + (1-(percent*.2))*this.nitrobacter;
+    this.nitrosomonas = (percent*.2)*1 + (1-(percent*.2))*this.nitrosomonas;
+    this.nitrobacter = (percent*.2)*1 + (1-(percent*.2))*this.nitrobacter;
     return this;
   }
   
@@ -210,8 +210,8 @@ public class Tank{
     float ammonia = new Vector3D(0, this.ammonia + timeScale * this.changeAmmonia(), 1000000).centermost();
     float nitrite = new Vector3D(0, this.nitrite + timeScale * this.changeNitrite(), 1000000).centermost();
     float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate(), 1000000).centermost();
-    float nitrosomonas = new Vector3D(.01, this.nitrosomonas + timeScale * this.changeNitrosomonas(), 1000000).centermost();
-    float nitrobacter = new Vector3D(.01, this.nitrobacter + timeScale * this.changeNitrobacter(), 1000000).centermost();
+    float nitrosomonas = new Vector3D(1, this.nitrosomonas + timeScale * this.changeNitrosomonas(), 1000000).centermost();
+    float nitrobacter = new Vector3D(1, this.nitrobacter + timeScale * this.changeNitrobacter(), 1000000).centermost();
     int waste = this.waste + this.changeWaste();
     int time = this.getTime();
 
