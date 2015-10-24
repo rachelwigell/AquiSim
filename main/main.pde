@@ -423,7 +423,7 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
   if(xCoord >= backMinX && xCoord <= backMaxX && yCoord <= backMaxY){
     Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
     float percent = random(0, 1);
-    float z = (-fieldZ + 30 + percent*(.5*fieldZ)-30);
+    float z = new Vector3D(-1.5*fieldZ+30, -1.5*fieldZ + percent*fieldZ, -.5*fieldZ-30).centermost();
     float factor = (z-start.z)/normal.z;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
     tank.addFood(new Food(absolutePosition));
@@ -432,8 +432,8 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
   else if((side = onSide(xCoord, yCoord)) != "No"){
     Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
     float x;
-    if(side == "left") x = .025*fieldX;
-    else x = .975*fieldX;
+    if(side == "left") x = .025*fieldX+30;
+    else x = .975*fieldX-30;
     float factor = (x-start.x)/normal.x;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
     tank.addFood(new Food(absolutePosition));
