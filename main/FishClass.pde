@@ -103,13 +103,7 @@ public abstract class Fish {
   
   public void adapt(){
     float adaptCoeff = .01;
-    if (this.status == "Happy.") {
-      return;
-    }
-    else if (this.status == "Hungry!") {
-      return;
-    }
-    else if (this.status == "pH too high."){
+    if (this.status == "pH too high."){
        float dist = tank.pH - this.maxPH;
        this.minPH += adaptCoeff*dist;
        this.maxPH += adaptCoeff*dist;
