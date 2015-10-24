@@ -242,6 +242,7 @@ public void updateTankStats(){
 }
 
 public void updateFishStats(){
+  fish_stats = {};
   for(int i = 0; i < tank.fish.size(); i++){
     Fish f = (Fish) (tank.fish.get(i));
     fish_stats[f.name] = {

@@ -11,6 +11,7 @@ window.onload = function() {
 window.setInterval(function(){
   	update_tank_stats();
   	update_fish_stats();
+  	update_fish_dropdown();
 }, 2000)
 
 function update_tank_stats(){
@@ -33,13 +34,13 @@ function update_fish_dropdown(){
 }
 
 function update_fish_stats(){
+	var processing = Processing.getInstanceById('processing');
+	processing.updateFishStats();
 	$('#fish_stats_display').empty();
 	if(selected_fish == 'select'){
 		$('#fish_stats_display').empty();
 	}
 	else{
-		var processing = Processing.getInstanceById('processing');
-		processing.updateFishStats();
 		fish_info = fish_stats[selected_fish];
 		var row = '<tr><td><b>Name:</b></td><td>' + fish_info['Name:'] + '</td><td><b>Ammonia levels tolerated:</b></td><td>' + fish_info["Ammonia levels tolerated:"] + '</td></tr>';
 		$('#fish_stats_display').append(row);

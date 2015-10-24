@@ -113,12 +113,12 @@ public class Tank{
   }
 
   public float changeNitrosomonas(){
-    float nitrosomonas = .01*this.ammonia*this.nitrosomonas-.003*this.nitrosomonas;
+    float nitrosomonas = .008*this.ammonia*this.nitrosomonas-.001*this.nitrosomonas;
     return nitrosomonas;
   }
 
   public float changeNitrobacter(){
-    float nitrobacter = .01*this.nitrite*this.nitrobacter-.003*this.nitrobacter;
+    float nitrobacter = .008*this.nitrite*this.nitrobacter-.001*this.nitrobacter;
     return nitrobacter;
   }
   
@@ -279,6 +279,9 @@ public class Tank{
       this.fish.remove(f);
       this.waste += f.size;
       this.addDeadFish(f);
+      selected_fish = "select";
+      update_fish_stats();
+      update_fish_dropdown();
     }
   }
   
