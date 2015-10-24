@@ -74,7 +74,7 @@ public abstract class Fish {
     }
   }
 
-  public int setHealth() {
+  public double setHealth() {
     if (this.status == "Happy.") {
       this.health = min(this.maxHealth, this.health+1);
     }
@@ -99,6 +99,58 @@ public abstract class Fish {
       this.health = max(0, this.health-reduction);
     }
     return this.health;
+  }
+  
+  public void adapt(){
+    float adaptCoeff = .01;
+    if (this.status == "Happy.") {
+      return;
+    }
+    else if (this.status == "Hungry!") {
+      return;
+    }
+    else if (this.status == "Ammonia too high."){
+       float dist = tank.ammonia - this.ammonia;
+       this.ammonia += adaptCoeff*dist;
+    }
+    else if (this.status == "Nitrite too high."){
+       float dist = tank.nitrite - this.nitrite;
+       this.nitrite += adaptCoeff*dist;
+    }
+    else if (this.status == "Nitrate too high."){
+       float dist = tank.nitrate - this.nitrate;
+       this.nitrate += adaptCoeff*dist;
+    }
+    else if (this.status == "pH too high."){
+       float dist = tank.pH - this.maxPH;
+       this.minPH += adaptCoeff*dist;
+       this.maxPH += adaptCoeff*dist;
+    }
+    else if (this.status == "pH too low."){
+       float dist = this.minPH - tank.pH;
+       this.minPH -= adaptCoeff*dist;
+       this.maxPH -= adaptCoeff*dist;
+    }
+    else if (this.status == "Temperature too high."){
+       float dist = tank.temp - this.maxTemp;
+       this.minTemp += adaptCoeff*dist;
+       this.maxTemp += adaptCoeff*dist;
+    }
+    else if (this.status == "Temperature too low."){
+       float dist = this.minTemp - tank.temp;
+       this.minTemp -= adaptCoeff*dist;
+       this.maxTemp -= adaptCoeff*dist;
+    }
+    else if (this.status == "Hardness too high."){
+       float dist = tank.hardness - this.maxHard;
+       this.minHard += adaptCoeff*dist;
+       this.maxHard += adaptCoeff*dist;
+    }
+    else if (this.status == "Hardness too low."){
+       float dist = this.minHard - tank.hardness;
+       this.minHard -= adaptCoeff*dist;
+       this.maxHard -= adaptCoeff*dist;
+    }
   }
 
   public long changeHunger() {

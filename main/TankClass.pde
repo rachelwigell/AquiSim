@@ -218,6 +218,7 @@ public class Tank{
       f.changeHunger(); //update fish's hunger level 
       this.fishHappiness(f); //update fish's happiness status
       f.setHealth(); //update fish's health
+      f.adapt();
       this.handleDeceased(f); //check if fish is dead and perform necessary operations if so
     }
 

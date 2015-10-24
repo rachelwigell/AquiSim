@@ -247,17 +247,17 @@ public void updateFishStats(){
     Fish f = (Fish) (tank.fish.get(i));
     fish_stats[f.name] = {
       "Name:": f.name,
-      "Ammonia levels tolerated:": "0-" + f.ammonia + ' ppm',
+      "Ammonia levels tolerated:": "0-" + f.ammonia.toFixed(1) + ' ppm',
       "Species:": f.species,
-      "Nitrite levels tolerated:": "0-" + f.nitrite + ' ppm',
+      "Nitrite levels tolerated:": "0-" + f.nitrite.toFixed(1) + ' ppm',
       "image url": f.sprite,
-      "Nitrate levels tolerated:": "0-" + f.nitrate + ' ppm',
+      "Nitrate levels tolerated:": "0-" + f.nitrate.toFixed(1) + ' ppm',
       "Status:": f.status,
-      "pH levels tolerated:": f.minPH + "-" + f.maxPH,
+      "pH levels tolerated:": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
       "fullness": f.fullness,
-      "Temperatures tolerated:": f.minTemp + "-" + f.maxTemp + ' °C',
+      "Temperatures tolerated:": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
       "health": f.health,
-      "Hardness levels tolerated:": f.minHard + "-" + f.maxHard + ' dH',
+      "Hardness levels tolerated:": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
       "max health": f.maxHealth,
       "max fullness": f.maxFullness
     };
