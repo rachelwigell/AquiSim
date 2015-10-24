@@ -29,7 +29,11 @@ public Plant(float xVal, float yVal, float zVal, int numBranches, int endLevel, 
 }
  
 public Plant(float xVal, float zVal, int numBranches, int endLevel){
-  this.RGBcolor = new Vector3D(random(0, 100), random(100, 200), random(50, 150));
+  Vector3D RGBcolor = new Vector3D(random(0, 100), random(100, 200), random(50, 150));
+  //while(!isUnique(RGBcolor)){
+  //  RGBcolor = new Vector3D(random(0, 100), random(100, 200), random(50, 150));
+  //}
+  this.RGBcolor = RGBcolor;
   this.position = new Vector3D(xVal, fieldY/2, zVal);
   this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
   this.stack = new Plant[3];
@@ -48,7 +52,7 @@ public Plant(Plant root){
   this.RGBcolor = root.RGBcolor;
   float branchY = root.path.end.y - .9*random((root.path.end.y-(root.path.start.y)));
   Vector3D branchStart = root.path.getPointWithThisY(branchY);
-  float branchLength = root.path.length/random(1.5, 2.5);
+  float branchLength = root.path.length/random(fieldY/550.0, fieldY/320.0);
   float yNorm = random(-.8, .2);
   float xNorm = random(yNorm*yNorm-1, yNorm*yNorm+1);
   float pos = random(-1, 1);
@@ -73,4 +77,14 @@ public Plant(Plant root){
    this.position = this.absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
    return this;
  }
+ 
+ //public boolean isUnique(Vector3D RGBcolor){
+ //  for(int i = 0; i < tank.plants.size(); i++){
+ //    Plant p = (Plant) tank.plants.get(i);
+ //    if(p.RGBcolor.isEqual(RGBcolor)){
+ //      return false;
+ //    }
+ //  }
+ //  return true;
+ //}
 }  

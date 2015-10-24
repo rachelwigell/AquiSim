@@ -183,6 +183,8 @@ $('#delete_plant').click(function(){
 	$('#delete_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', false);
+	var processing = Processing.getInstanceById('processing');
+	processing.deleteMode();
 })
 
 $('#cancel_plant_delete').click(function(){
@@ -192,4 +194,6 @@ $('#cancel_plant_delete').click(function(){
 	$('#cancel_plant_add').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').empty();
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
 })

@@ -199,6 +199,9 @@ public void mouseReleased(){
           cancelPlant();
       }
     }
+    else if(clickMode == "DELETE"){
+      handlePlantDeleteClick(x, y);
+    }
     if(mouseButton == RIGHT){
       console.log("skipping ahead 1 hour");
       skipAhead(60);
@@ -446,4 +449,21 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
     tank.addFood(new Food(absolutePosition));
   }
+}
+
+//public boolean handlePlantDeleteClick(int x, int y){
+//  clickedColor = get(x, fieldY-y);
+//  console.log(red(clickedColor), green(clickedColor), blue(clickedColor));
+//  for(int i = 0; i < tank.plants.size(); i++){
+//    Plant p = (Plant) tank.plants.get(i);
+//    if(p.RGBcolor.x == red(clickedColor) && p.RGBcolor.y == green(clickedColor) && p.RGBcolor.z == blue(clickedColor)){
+//      tank.plants.remove(p);
+//      return true;
+//    }
+//  }
+//  return false;
+//}
+
+public void deleteMode(){
+  clickMode = "DELETE";
 }

@@ -16086,7 +16086,15 @@
     * @see updatePixels
     */
     p.loadPixels = function() {
-      p.imageData = drawing.$ensureContext().getImageData(0, 0, p.width, p.height);
+      // if (render && render === PConstants.WEBGL) {
+      var holdPixels = new Uint8Array(p.width*p.height*4);
+      var context = document.getElementById('processing').getContext("webgl");
+      context.readPixels(0, 0, p.width, p.height, context.RGBA, context.UNSIGNED_BYTE, holdPixels);
+      p.imageData = holdPixels;
+      // }
+      // else{
+      //   p.imageData = drawing.$ensureContext().getImageData(0, 0, p.width, p.height);
+      // }
     };
 
     // Draws a 1-Dimensional pixel array to Canvas

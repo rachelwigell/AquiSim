@@ -54,4 +54,7 @@ public class Vector3D {
   public float dotProduct(Vector3D vector){
     return (float) (this.x*vector.x + this.y*vector.y + this.z*vector.z);
   }
+  
+  public boolean isEqual(Vector3D vector){
+    return this.x == vector.x && this.y == vector.y && this.z == vector.z;
 }
