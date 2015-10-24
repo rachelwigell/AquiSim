@@ -19,7 +19,7 @@ public class Guppy extends Fish{
     this.nitrite = 5;
     this.nitrate = 60;
     this.model = setModel();
-    this.sprite = "graphics/guppy.png";
+    this.sprite = "graphics/guppy.PNG";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
     this.velocity = new Vector3D(0, 0, 0);

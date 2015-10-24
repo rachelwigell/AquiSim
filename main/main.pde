@@ -467,3 +467,13 @@ public boolean handlePlantDeleteClick(int x, int y){
 public void deleteMode(){
   clickMode = "DELETE";
 }
+
+public boolean haveFishWithName(String name){
+  for(int i = 0; i < tank.fish.size(); i++){
+    Fish f = (Fish) tank.fish.get(i);
+    if(f.name == name){
+      return true;
+    }
+  }
+  return false;
+}

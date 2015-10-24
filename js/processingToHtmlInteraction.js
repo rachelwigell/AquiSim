@@ -144,10 +144,15 @@ $('#add_fish').click(function(){
 	var processing = Processing.getInstanceById('processing');
 	var nickname = $('#nickname_entry').val();
 	var species = $('#species_list').find(':selected').val();
-	processing.addFishToTank(species, nickname);
-	update_fish_dropdown();
-	update_button_text('add_fish', species + ' added!');
-	setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
+	if(processing.haveFishWithName(nickname)){
+		$('#nickname_entry').empty();
+	}
+	else{
+		processing.addFishToTank(species, nickname);
+		update_fish_dropdown();
+		update_button_text('add_fish', species + ' added!');
+		setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
+	}
 })
 
 $('#add_plant').click(function(){
