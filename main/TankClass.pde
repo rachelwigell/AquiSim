@@ -74,7 +74,7 @@ public class Tank{
 
   public float changeTemp(){
     this.roomTemp = 22 + 3*sin(pi/720.0*this.time-pi/2.0); //22 +/- 3
-    float temp = .00005*this.surfaceArea*(roomTemp - this.temp)/this.volume; //no heater feature yet
+    float temp = .001*this.surfaceArea*(roomTemp - this.temp)/this.volume;
     return temp;  
   }
 
