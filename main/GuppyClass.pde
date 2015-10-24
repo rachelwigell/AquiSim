@@ -15,8 +15,8 @@ public class Guppy extends Fish{
     this.maxTemp = 29;
     this.minHard = 8;
     this.maxHard = 20;
-    this.ammonia = 10;
-    this.nitrite = 10;
+    this.ammonia = 1;
+    this.nitrite = 5;
     this.nitrate = 60;
     this.model = setModel();
     this.sprite = "graphics/endlerslivebearer.png";
