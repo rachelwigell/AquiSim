@@ -79,7 +79,7 @@ public abstract class Fish {
       this.health = min(this.maxHealth, this.health+1);
     }
     else if (this.status == "Hungry!") {
-      this.health = min(0, this.health-2);
+      this.health = max(0, this.health-2);
     }
     else {
       String problemElement = "";
