@@ -79,7 +79,7 @@ public class Tank{
   }
 
   public float changeHard(){
-    float hardness = -.0008*this.co2*this.hardness/this.volume + .00001*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
+    float hardness = -.0008*this.co2*this.hardness/this.volume + .000005*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
     return hardness;
   }
 
@@ -98,17 +98,17 @@ public class Tank{
   }
 
   public float changeAmmonia(){
-    float ammonia = (.1*this.temp*this.pH*(this.waste + this.food.size() + .5*this.cmFish) - .1*this.nitrosomonas*this.ammonia)/this.volume;
+    float ammonia = (.0001*this.temp*this.pH*(.1*this.waste + .1*this.food.size() + .001*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
     return ammonia;
   }
 
   public float changeNitrite(){
-    float nitrite = (.2*this.ammonia*this.nitrosomonas - .2*this.nitrite*this.nitrobacter)/this.volume;
+    float nitrite = (.001*this.ammonia*this.nitrosomonas - .001*this.nitrite*this.nitrobacter)/this.volume;
     return nitrite;
   }
 
   public float changeNitrate(){
-    float nitrate = (.2*this.nitrite*this.nitrobacter-10*this.plants.size()*this.nitrate)/this.volume;
+    float nitrate = (.001*this.nitrite*this.nitrobacter-.001*this.plants.size()*this.nitrate)/this.volume;
     return nitrate;
   }
 
@@ -130,7 +130,7 @@ public class Tank{
     int waste = 0;
     for(Fish f: this.fish){
       int threshold = (int) (((float) max(f.fullness, 0)) / ((float) f.maxFullness) * f.size/2.0);
-      int rand = random(2000);
+      int rand = random(5000);
       if(rand < threshold){
         waste++;
         addPoop(f);
@@ -231,22 +231,22 @@ public class Tank{
     this.time = time;
   }
   
-  public Vector3D nearestFood(Vector3D position){
+  public Vector3D nearestFood(Vector3D absolutePosition){
     Vector3D closest = null;
     float distance = MAX_FLOAT;
     for(int i = 0; i < this.food.size(); i++){
       Food f = (Food) this.food.get(i);
-      float fDistance = f.position.squareDistance(position);
+      float fDistance = f.absolutePosition.squareDistance(absolutePosition);
       if(fDistance < distance){
         distance = fDistance;
-        closest = f.position;
+        closest = f.absolutePosition;
       }
     }
     return closest;
   }
   
   public boolean eat(Fish fish, Food food){
-    if(fish.position.distance(food.position) < food.dimensions.x*4){
+    if(fish.absolutePosition.distance(food.absolutePosition) < food.dimensions.x*8){
       fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
       return true;
     }
