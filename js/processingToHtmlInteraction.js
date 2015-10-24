@@ -145,7 +145,9 @@ $('#add_fish').click(function(){
 	var nickname = $('#nickname_entry').val();
 	var species = $('#species_list').find(':selected').val();
 	if(processing.haveFishWithName(nickname)){
-		$('#nickname_entry').empty();
+		$('#nickname_entry').val('');
+		update_button_text('add_fish', 'Please select a unique nickname.');
+		setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
 	}
 	else{
 		processing.addFishToTank(species, nickname);
