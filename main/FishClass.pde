@@ -109,18 +109,6 @@ public abstract class Fish {
     else if (this.status == "Hungry!") {
       return;
     }
-    else if (this.status == "Ammonia too high."){
-       float dist = tank.ammonia - this.ammonia;
-       this.ammonia += adaptCoeff*dist;
-    }
-    else if (this.status == "Nitrite too high."){
-       float dist = tank.nitrite - this.nitrite;
-       this.nitrite += adaptCoeff*dist;
-    }
-    else if (this.status == "Nitrate too high."){
-       float dist = tank.nitrate - this.nitrate;
-       this.nitrate += adaptCoeff*dist;
-    }
     else if (this.status == "pH too high."){
        float dist = tank.pH - this.maxPH;
        this.minPH += adaptCoeff*dist;
