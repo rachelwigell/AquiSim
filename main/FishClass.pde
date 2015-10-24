@@ -21,6 +21,7 @@ public abstract class Fish {
   public ArrayList model;
   public String sprite;
   public Vector3D position;
+  public Vector3D absolutePosition;
   public Vector3D orientation;
   public Vector3D dimensions;
   public Vector3D velocity;
@@ -44,8 +45,9 @@ public abstract class Fish {
   
   public void updatePosition(){
     this.position.x = new Vector3D((-.475*fieldX+this.dimensions.x/2.0), this.position.x+this.velocity.x, (.475*fieldX-this.dimensions.x/2.0)).centermost();
-    this.position.y = new Vector3D((-.5*fieldY*tank.waterLevel-this.dimensions.y/2.0), this.position.y+this.velocity.y, (.5*fieldY*tank.waterLevel+this.dimensions.y/2.0)).centermost();
+    this.position.y = new Vector3D((-.5*fieldY*tank.waterLevel+this.dimensions.y/2.0), this.position.y+this.velocity.y, (.5*fieldY*tank.waterLevel-this.dimensions.y/2.0)).centermost();
     this.position.z = new Vector3D((-.5*fieldZ+this.dimensions.x/2.0), this.position.z+this.velocity.z, (.5*fieldZ-this.dimensions.x/2.0)).centermost();
+    this.absolutePosition = this.position.addVector(new Vector3D(zero.x, zero.y, zero.z));
     this.updateVelocity();
   }
   

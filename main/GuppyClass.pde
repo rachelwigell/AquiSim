@@ -21,6 +21,7 @@ public class Guppy extends Fish{
     this.model = setModel();
     this.sprite = "graphics/endlerslivebearer.png";
     this.position = new Vector3D(0, 0, 0);
+    this.absolutePosition = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
