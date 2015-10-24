@@ -118,7 +118,7 @@ public class Tank{
   }
 
   public float changeNitrobacter(){
-    float nitrobacter = .01*this.nitrite*this.nitrobacter-.00*this.nitrobacter;
+    float nitrobacter = .01*this.nitrite*this.nitrobacter-.003*this.nitrobacter;
     return nitrobacter;
   }
   
