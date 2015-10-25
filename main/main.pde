@@ -198,9 +198,14 @@ public void mouseReleased(){
           tank.plants.add(previewPlant);
           $('#cancel_plant_add').click();
       }
+      else{
+        $('#cancel_plant_add').click();
+      }
     }
     else if(clickMode == "DELETE"){
-      handlePlantDeleteClick(x, y);
+      if(handlePlantDeleteClick(x, y)){
+         $('#cancel_plant_add').click();
+      }
     }
     //if(mouseButton == RIGHT){
     //  console.log("skipping ahead 1 hour");
@@ -458,6 +463,7 @@ public boolean handlePlantDeleteClick(int x, int y){
    Plant p = (Plant) tank.plants.get(i);
    if(p.RGBcolor.isEqual(clickedRGB)){
      tank.plants.remove(p);
+     handle_delete_plant();
      return true;
    }
  }
@@ -476,4 +482,8 @@ public boolean haveFishWithName(String name){
     }
   }
   return false;
+}
+
+public boolean hasPlants(){
+  return tank.plants.size() > 0;
 }

@@ -97,6 +97,16 @@ function update_button_text(button_name, text){
 	$('#'+button_name).text(text)
 }
 
+function handle_delete_plant(){
+	var processing = Processing.getInstanceById('processing');
+	if(processing.hasPlants()){
+		$('#delete_plant').attr('hidden', false);
+	}
+	else{
+		$('#delete_plant').attr('hidden', true);
+	}
+}
+
 $('#fish_list').change(function(){
 	selected_fish = $('#fish_list').find(':selected').val();
 	update_fish_stats();
@@ -176,7 +186,7 @@ $('#new_plant').click(function(){
 $('#cancel_plant_add').click(function(){
 	$('#add_plant').attr('hidden', false);
 	$('#new_plant').attr('hidden', true);
-	$('#delete_plant').attr('hidden', false);
+	handle_delete_plant();
 	$('#cancel_plant_add').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').empty();
@@ -198,7 +208,7 @@ $('#delete_plant').click(function(){
 $('#cancel_plant_delete').click(function(){
 	$('#add_plant').attr('hidden', false);
 	$('#new_plant').attr('hidden', true);
-	$('#delete_plant').attr('hidden', false);
+	handle_delete_plant();
 	$('#cancel_plant_add').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').empty();
