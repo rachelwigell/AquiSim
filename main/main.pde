@@ -39,7 +39,7 @@ void setup(){
   
   determineBounds();
   
-  //addFishToTank("Guppy", "Swimmy");
+  addFishToTank("Guppy", "Swimmy");
 }
 
 void draw(){

@@ -150,16 +150,32 @@ public abstract class Fish {
   }
 
   public void updateAcceleration() {
-    this.acceleration.x += random(-.25, .25);
-    this.acceleration.y += random(-.125, .125);
-    this.acceleration.z += random(-.25, .25);
+    this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
+    this.acceleration.y = new Vector3D(-1, this.acceleration.y+random(-.25, .25), 1).centermost();
+    this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
   }
 
   public void updateVelocity() {
+    if(this.position.x <= (-.475*fieldX+this.dimensions.x/2.0)){
+      this.acceleration.x = 1;
+    }
+    else if(this.position.x >= (.475*fieldX-this.dimensions.x/2.0)){
+      this.acceleration.x = -1;
+    }
     this.velocity.x = new Vector3D(-2, this.velocity.x + this.acceleration.x, 2).centermost();
+    if(this.position.y == (-.5*fieldY*tank.waterLevel+this.dimensions.y/2.0)){
+     this.acceleration.y = 1;
+    }
+    //let them hit the floor, in case they're going towards food that's there.
     this.velocity.y = new Vector3D(-2, this.velocity.y + this.acceleration.y, 2).centermost();
+    if(this.position.z == (-.5*fieldZ+this.dimensions.x/2.0)){
+     this.acceleration.z = 1;
+    }
+    else if(this.position.z == (.5*fieldZ-this.dimensions.x/2.0)){
+     this.acceleration.z = -1;
+    }
     this.velocity.z = new Vector3D(-2, this.velocity.z + this.acceleration.z, 2).centermost();
-    this.velocity = this.velocity.addVector(this.centerPull());
+    //this.velocity = this.velocity.addVector(this.centerPull());
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
