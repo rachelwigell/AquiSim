@@ -143,7 +143,7 @@ public abstract class Fish {
 
   public void updatePosition() {
     this.position.x = new Vector3D((-.475*fieldX+this.dimensions.x/2.0), this.position.x+this.velocity.x, (.475*fieldX-this.dimensions.x/2.0)).centermost();
-    this.position.y = new Vector3D((-.5*fieldY*tank.waterLevel+this.dimensions.y/2.0), this.position.y+this.velocity.y, (.5*fieldY*tank.waterLevel-this.dimensions.y/2.0)).centermost();
+    this.position.y = new Vector3D((-.5*fieldY*waterLevel+this.dimensions.y/2.0), this.position.y+this.velocity.y, (.5*fieldY*waterLevel-this.dimensions.y/2.0)).centermost();
     this.position.z = new Vector3D((-.5*fieldZ+this.dimensions.x/2.0), this.position.z+this.velocity.z, (.5*fieldZ-this.dimensions.x/2.0)).centermost();
     this.absolutePosition = this.position.addVector(new Vector3D(zero.x, zero.y, zero.z));
     this.updateVelocity();
@@ -163,7 +163,7 @@ public abstract class Fish {
       this.acceleration.x = -1;
     }
     this.velocity.x = new Vector3D(-2, this.velocity.x + this.acceleration.x, 2).centermost();
-    if(this.position.y == (-.5*fieldY*tank.waterLevel+this.dimensions.y/2.0)){
+    if(this.position.y == (-.5*fieldY*waterLevel+this.dimensions.y/2.0)){
      this.acceleration.y = 1;
     }
     //let them hit the floor, in case they're going towards food that's there.

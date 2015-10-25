@@ -9,7 +9,21 @@ public class Poop extends Waste{
     this.dimensions = new Vector3D(origin.size, origin.size, origin.size);
     this.RGBcolor = new Vector3D(150, 100, 0);
     this.restingPosition = new Vector3D(0, fieldY/2, 0);
-    this.speedChangeLocation = null
+    this.speedChangeLocation = null;
+  }
+  
+  //randomizes positions for save/load
+  public Poop(){
+    this.absolutePosition = new Vector3D(0, 0, 0);
+    this.absolutePosition.z = random(-1.5*fieldZ+30, -.5*fieldZ-30);
+    this.absolutePosition.y = fieldY;
+    this.absolutePosition.x = random(.025*fieldX+30, .975*fieldX-30);
+    this.position = this.absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
+    this.velocity = new Vector3D(0, 1, 0);
+    this.dimensions = new Vector3D(5, 5, 5);
+    this.RGBcolor = new Vector3D(150, 100, 0);
+    this.restingPosition = new Vector3D(0, fieldY/2, 0);
+    this.speedChangeLocation = null;
   }
   
   public void removeFromTank(Tank t){

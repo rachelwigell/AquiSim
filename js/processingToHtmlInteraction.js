@@ -12,6 +12,7 @@ window.setInterval(function(){
   	update_tank_stats();
   	update_fish_stats();
   	update_fish_dropdown();
+  	write_cookie();
 }, 2000)
 
 function update_tank_stats(){
@@ -91,6 +92,25 @@ function update_species_stats(){
 			}
 		}
 	}	
+}
+
+function write_cookie(){
+	var processing = Processing.getInstanceById('processing');
+	var cookie_string = processing.cookieString();
+	for(var i = 0; i < cookie_string.size(); i++){
+		document.cookie = cookie_string.get(i) + "expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
+	}
+}
+
+function get_cookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
 }
 
 function update_button_text(button_name, text){

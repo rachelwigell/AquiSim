@@ -21,7 +21,6 @@ public class Tank{
   public String name;
 
   public final float pi = 3.14159;
-  public final float waterLevel = .75;
   public final float timeScale = .01; //higher = harder
   public final float volume = waterLevel*60*30*40/1000.0;
   public final float surfaceArea = 60*30;
@@ -29,24 +28,56 @@ public class Tank{
   public Tank(){  
     this.cmFish = 0;
     this.plants = new ArrayList();
-    this.pH=8;
-    this.temp = 24;
+    String cookie = get_cookie("tank_pH");
+    if(cookie == "") this.pH = 8;
+    else this.pH = float(cookie);
+    cookie = get_cookie("tank_temp");
+    if(cookie == "") this.temp = 24;
+    else this.temp = float(cookie);
     this.roomTemp = 22;
-    this.hardness = 8;
-    this.o2 = 3; //temp/2
-    this.co2 = 3; //temp/2
-    this.ammonia = 0;
-    this.nitrite = 0;
-    this.nitrate = 0;
-    this.nitrosomonas = 1;
-    this.nitrobacter = 1;
+    cookie = get_cookie("tank_hard");
+    if(cookie == "") this.hardness = 8;
+    else this.hardness = float(cookie);
+    cookie = get_cookie("tank_o2");
+    if(cookie == "") this.o2 = 3;
+    else this.o2 = float(cookie);
+    cookie = get_cookie("tank_co2");
+    if(cookie == "") this.co2 = 3;
+    else this.co2 = float(cookie);
+    cookie = get_cookie("tank_ammonia");
+    if(cookie == "") this.ammonia = 0;
+    else this.ammonia = float(cookie);
+    cookie = get_cookie("tank_nitrite");
+    if(cookie == "") this.nitrite = 0;
+    else this.nitrite = float(cookie);
+    cookie = get_cookie("tank_nitrate");
+    if(cookie == "") this.nitrate = 0;
+    else this.nitrate = float(cookie);
+    cookie = get_cookie("tank_nitrosomonas");
+    if(cookie == "") this.nitrosomonas = 1;
+    else this.nitrosomonas = float(cookie);
+    cookie = get_cookie("tank_nitrobacter");
+    if(cookie == "") this.nitrobacter = 1;
+    else this.nitrobacter = float(cookie);
     this.waste = 0;
     this.time = getTime();
     this.fish = new ArrayList();
     this.poops = new ArrayList();
+    cookie = get_cookie("tank_poops");
+    if(cookie != ""){
+      for(int i; i < int(cookie); i++){
+        this.poops.add(new Poop());
+        this.waste++;
+      }
+    }
     this.food = new ArrayList();
+    cookie = get_cookie("tank_food");
+    if(cookie != ""){
+      for(int i; i < int(cookie); i++){
+        this.food.add(new Food());
+      }
+    }
     this.deadFish = new ArrayList();
-    this.name = "";
   }
   
   public int getTime(){

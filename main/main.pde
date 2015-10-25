@@ -16,6 +16,7 @@ public int leftMinX = null;
 public int rightMaxX = null;
 public int sidesMaxY = null;
 public int updateCount = 0;
+public float waterLevel = .8;
 
 tank_stats =  {};
 fish_stats = {};
@@ -30,12 +31,13 @@ void setup(){
   size(fieldX, fieldY, P3D);
   frameRate(30); //causes draw() to be called 30 times per second
   picker = new Selection_in_P3D_OPENGL_A3D();
+  zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
+  center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
   tank = new Tank();
+  
   populateSpeciesList();
   populateSpeciesStats();
-  zero = new Vector3D(fieldX/2, fieldY*(1-.5*tank.waterLevel), -fieldZ);
-  center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
   determineBounds();
   
@@ -95,11 +97,11 @@ public void drawTank(){
   fill(color(180));
   box((.95*fieldX), 1, (fieldZ)); //bottom
   fill(color(0, 0, 255, 20));
-  translate(0, (-.5*fieldY) + (fieldY*.5*(1-tank.waterLevel)), 0);
+  translate(0, (-.5*fieldY) + (fieldY*.5*(1-waterLevel)), 0);
   hint(DISABLE_DEPTH_TEST);
-  box((.95*fieldX), (fieldY*tank.waterLevel), (fieldZ)); //water
+  box((.95*fieldX), (fieldY*waterLevel), (fieldZ)); //water
   fill(50, 50, 50, 20);
-  translate(0, -.5*fieldY*tank.waterLevel, 0);
+  translate(0, -.5*fieldY*waterLevel, 0);
   box((.95*fieldX), 1, fieldZ);
   popMatrix();
 }
@@ -207,10 +209,10 @@ public void mouseReleased(){
          $('#cancel_plant_add').click();
       }
     }
-    //if(mouseButton == RIGHT){
-    //  console.log("skipping ahead 1 hour");
-    //  skipAhead(60);
-    //}
+    if(mouseButton == RIGHT){
+     console.log("skipping ahead 1 hour");
+     skipAhead(60);
+    }
 }
 
 /**************************************************
@@ -486,4 +488,24 @@ public boolean haveFishWithName(String name){
 
 public boolean hasPlants(){
   return tank.plants.size() > 0;
+}
+
+public ArrayList cookieString(){
+  cookieString = new ArrayList();
+  cookieString.add("tank_pH=" + tank.pH + ";");
+  cookieString.add("tank_temp=" + tank.temp + ";");
+  cookieString.add("tank_hard=" + tank.hardness + ";");
+  cookieString.add("tank_ammonia=" + tank.ammonia + ";");
+  cookieString.add("tank_nitrite=" + tank.nitrite + ";");
+  cookieString.add("tank_nitrate=" + tank.nitrate + ";");
+  cookieString.add("tank_o2=" + tank.o2 + ";");
+  cookieString.add("tank_co2=" + tank.co2 + ";");
+  cookieString.add("tank_nitrosomonas=" + tank.nitrosomonas + ";");
+  cookieString.add("tank_nitrobacter=" + tank.nitrobacter + ";");
+  cookieString.add("tank_food=" + tank.food.size() + ";");
+  cookieString.add("tank_poops=" + tank.poops.size() + ";");
+  //for(int i = 0; i < fish.size(); i++){
+    
+  //}
+  return cookieString;
 }
