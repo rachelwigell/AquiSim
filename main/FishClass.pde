@@ -175,7 +175,7 @@ public abstract class Fish {
      this.acceleration.z = -1;
     }
     this.velocity.z = new Vector3D(-2, this.velocity.z + this.acceleration.z, 2).centermost();
-    //this.velocity = this.velocity.addVector(this.centerPull());
+    this.velocity = this.velocity.addVector(this.centerPull());
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
