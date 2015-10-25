@@ -4,8 +4,28 @@
 	<link rel="stylesheet" href="libraries/foundation-5.5.2/css/normalize.css">
 	<script src="libraries/processing.js"></script>
 	<script src="libraries/jquery-1.11.3.min.js"></script>
+	<title>AquiSim</title>
 </head>
 <body>
+
+	<script>
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : 'AquiSim',
+	      xfbml      : true,
+	      version    : 'v1.0'
+	    });
+	  };
+
+	  (function(d, s, id){
+	     var js, fjs = d.getElementsByTagName(s)[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement(s); js.id = id;
+	     js.src = "//connect.facebook.net/en_US/sdk.js";
+	     fjs.parentNode.insertBefore(js, fjs);
+	   }(document, 'script', 'facebook-jssdk'));
+	</script>
+
 	<center>
 		<h2>Welcome to AquiSim!</h2>
 		<h4>The only aquarium game that simulates the complex system dynamics occurring inside every fish tank</h4>
@@ -107,21 +127,47 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="small-4 columns">
-			<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://rachelwigell.github.io/AquiSim/" data-text="Come play AquiSim, a realistic aquarium game!" data-hashtags="AquiSim">Tweet</a>
+		<div class="small-3 columns">
+			<a href="https://twitter.com/share"
+			   class="twitter-share-button"
+			   data-url="http://rachelwigell.github.io/AquiSim/"
+			   data-text="Come play AquiSim, a realistic aquarium game!"
+			   data-hashtags="AquiSim">Tweet</a>
 			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 		</div>
-		<div class="small-4 columns">
-			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-			<input type="hidden" name="cmd" value="_s-xclick">
-			<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-			">
-			<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-			<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+		<div class="small-3 columns">
+			<div class="fb-share-button"
+				 data-href="http://rachelwigell.github.io/AquiSim/"
+				 data-layout="button_count">
+			</div>
+		</div>
+		<div class="small-3 columns">
+			<form action="https://www.paypal.com/cgi-bin/webscr"
+				  method="post"
+				  target="_blank">
+			<input type="hidden"
+				   name="cmd"
+				   value="_s-xclick">
+			<input type="hidden"
+					name="encrypted"
+					value="-----BEGIN PKCS7-----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-----END PKCS7-----">
+			<input type="image"
+				   src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
+				   border="0"
+				   name="submit"
+				   alt="PayPal - The safer, easier way to pay online!">
+			<img alt=""
+				 border="0"
+				 src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+				 width="1"
+				 height="1">
 			</form>
 		</div>
-		<div class="small-4 columns">
-			<a target="_blank" href="https://venmo.com/?txn=pay&recipients=rachelwigell%40alum.wpi.edu&amount=5.00&note=AquiSim!%20http%3A%2F%2Frachelwigell.github.io%2FAquiSim%2F&audience=public">Donate with Venmo</a>
+		<div class="small-3 columns">
+			<a target="_blank"
+			   href="https://venmo.com/?txn=pay&recipients=rachelwigell%40alum.wpi.edu&amount=5.00&note=AquiSim!%20http%3A%2F%2Frachelwigell.github.io%2FAquiSim%2F&audience=public">
+			   Donate with Venmo
+			</a>
 		</div>
 	</div>
 </center>
