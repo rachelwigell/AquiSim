@@ -211,6 +211,7 @@ public void mouseReleased(){
     else if(clickMode == "PLANT"){
       if(onBottom(x, y)){
           tank.plants.add(previewPlant);
+          console.log(tank.plants.get(0).encode());
           $('#cancel_plant_add').click();
       }
       else{

@@ -96,9 +96,8 @@ public class Plant {
   
   public String encode(){
     String code = "";
-    code += RGBcolor.x + "+" + RGBcolor.y + "+" + RGBcolor.z + "+";
-    code += position.x.toFixed(0) + "+" + position.y.toFixed(0) + "+" + position.z.toFixed(0) + "+";
-    code += numBranches + "-";
+    code += this.RGBcolor.x + "+" + this.RGBcolor.y + "+" + this.RGBcolor.z + "+";
+    code += this.position.x.toFixed(0) + "+" + this.position.y.toFixed(0) + "+" + this.position.z.toFixed(0) + "-";
     for(int i = 0; i < 3; i++){
       Plant s = (Plant) stack[i];
       code += s.dist.toFixed(0) + "+";
@@ -112,7 +111,11 @@ public class Plant {
   
   public String encodeStack(){
     String code = "";
-    
+    code += this.branchY.toFixed(0) + "+";
+    code += this.branchLength.toFixed(0) + "+";
+    code += this.xNorm.toFixed(0) + "+";
+    code += this.yNorm.toFixed(0) + "+";
+    code += this.zNorm.toFixed(0) + "-";
     if(level < 3){
       for(int i = 0; i < numBranches; i++){
         Plant branch = (Plant) branches[i];
