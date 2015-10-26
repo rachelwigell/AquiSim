@@ -57,7 +57,12 @@ public class Guppy extends Fish{
     this.dimensions = new Vector3D(80, 36, 15);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
-    this.position.y = random((-.5*fieldY*waterLevel+this.dimensions.y/2.0), (.5*fieldY*waterLevel-this.dimensions.y/2.0));
+    if(alive){
+      this.position.y = random((-.5*fieldY*waterLevel+this.dimensions.y/2.0), (.5*fieldY*waterLevel-this.dimensions.y/2.0));
+    }
+    else{
+      this.position.y = (-.5*fieldY*waterLevel);
+    }
     this.position.z = random((-.5*fieldZ+this.dimensions.x/2.0), (.5*fieldZ-this.dimensions.x/2.0));
     this.absolutePosition = this.position.addVector(new Vector3D(zero.x, zero.y, zero.z));
     this.velocity = new Vector3D(0, 0, 0);

@@ -472,6 +472,7 @@ public boolean handlePlantDeleteClick(int x, int y){
    if(p.RGBcolor.isEqual(clickedRGB)){
      tank.plants.remove(p);
      handle_delete_plant();
+     handle_add_plant();
      return true;
    }
  }
@@ -499,16 +500,16 @@ public boolean hasPlants(){
 public ArrayList cookieInfo(){
   cookieInfo = new ArrayList();
   String tankString = "tank=";
-  tankString += tank.pH + "/";
-  tankString += tank.temp + "/";
-  tankString += tank.hardness + "/";
-  tankString += tank.ammonia + "/";
-  tankString += tank.nitrite + "/";
-  tankString += tank.nitrate + "/";
-  tankString += tank.o2 + "/";
-  tankString += tank.co2 + "/";
-  tankString += tank.nitrosomonas + "/";
-  tankString += tank.nitrobacter + "/";
+  tankString += tank.pH.toFixed(2) + "/";
+  tankString += tank.temp.toFixed(2) + "/";
+  tankString += tank.hardness.toFixed(2) + "/";
+  tankString += tank.ammonia.toFixed(2) + "/";
+  tankString += tank.nitrite.toFixed(2) + "/";
+  tankString += tank.nitrate.toFixed(2) + "/";
+  tankString += tank.o2.toFixed(2) + "/";
+  tankString += tank.co2.toFixed(2) + "/";
+  tankString += tank.nitrosomonas.toFixed(2) + "/";
+  tankString += tank.nitrobacter.toFixed(2) + "/";
   tankString += tank.food.size() + "/";
   tankString += tank.poops.size() + ";";
   cookieInfo.add(tankString);
@@ -519,12 +520,12 @@ public ArrayList cookieInfo(){
    fishString += f.name + "/";
    fishString += f.health + "/";
    fishString += f.fullness + "/";
-   fishString += f.minTemp + "/";
-   fishString += f.maxTemp + "/";
-   fishString += f.minHard + "/";
-   fishString += f.maxHard + "/";
-   fishString += f.minPH + "/";
-   fishString += f.maxPH + ";";
+   fishString += f.minTemp.toFixed(2) + "/";
+   fishString += f.maxTemp.toFixed(2) + "/";
+   fishString += f.minHard.toFixed(2) + "/";
+   fishString += f.maxHard.toFixed(2) + "/";
+   fishString += f.minPH.toFixed(2) + "/";
+   fishString += f.maxPH.toFixed(2) + ";";
    cookieInfo.add(fishString);
   }
   for(int i = tank.fish.size(); i < 20; i++){
@@ -541,4 +542,8 @@ public ArrayList cookieInfo(){
 
 public boolean hasMaxFish(){
   return tank.fish.size() >= 20;
+}
+
+public boolean hasMaxPlants(){
+  return tank.plants.size() >= 6;
 }

@@ -91,6 +91,7 @@ public class Tank{
         String[] fishStats = splitTokens(cookie, "/");
         if(fishStats[0] == "Guppy"){
           this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
+          this.waste += 5;
         }
       }
     }

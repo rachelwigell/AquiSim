@@ -127,6 +127,16 @@ function handle_delete_plant(){
 	}
 }
 
+function handle_add_plant(){
+	var processing = Processing.getInstanceById('processing');
+	if(processing.hasMaxPlants()){
+		$('#add_plant').attr('hidden', true);
+	}
+	else{
+		$('#add_plant').attr('hidden', false);
+	}
+}
+
 $('#fish_list').change(function(){
 	selected_fish = $('#fish_list').find(':selected').val();
 	update_fish_stats();
@@ -209,7 +219,7 @@ $('#new_plant').click(function(){
 })
 
 $('#cancel_plant_add').click(function(){
-	$('#add_plant').attr('hidden', false);
+	handle_add_plant();
 	$('#new_plant').attr('hidden', true);
 	handle_delete_plant();
 	$('#cancel_plant_add').attr('hidden', true);
@@ -231,7 +241,7 @@ $('#delete_plant').click(function(){
 })
 
 $('#cancel_plant_delete').click(function(){
-	$('#add_plant').attr('hidden', false);
+	handle_add_plant();
 	$('#new_plant').attr('hidden', true);
 	handle_delete_plant();
 	$('#cancel_plant_add').attr('hidden', true);
