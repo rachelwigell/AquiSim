@@ -96,7 +96,7 @@ function update_species_stats(){
 
 function write_cookie(){
 	var processing = Processing.getInstanceById('processing');
-	var cookie_string = processing.cookieString();
+	var cookie_string = processing.cookieInfo();
 	for(var i = 0; i < cookie_string.size(); i++){
 		document.cookie = cookie_string.get(i) + "expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
 	}
@@ -174,7 +174,12 @@ $('#add_fish').click(function(){
 	var processing = Processing.getInstanceById('processing');
 	var nickname = $('#nickname_entry').val();
 	var species = $('#species_list').find(':selected').val();
-	if(processing.haveFishWithName(nickname)){
+	if(processing.hasMaxFish()){
+		$('#nickname_entry').val('');
+		update_button_text('add_fish', "Sorry, you can't have more than 20 fish.");
+		setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
+	}
+	else if(processing.haveFishWithName(nickname)){
 		$('#nickname_entry').val('');
 		update_button_text('add_fish', 'Please select a unique nickname.');
 		setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');

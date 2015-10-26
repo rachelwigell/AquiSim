@@ -28,58 +28,65 @@ public class Tank{
   public Tank(){  
     this.cmFish = 0;
     this.plants = new ArrayList();
-    String cookie = get_cookie("tank_pH");
-    if(cookie == "") this.pH = 8;
-    else this.pH = float(cookie);
-    cookie = get_cookie("tank_temp");
-    if(cookie == "") this.temp = 24;
-    else this.temp = float(cookie);
+    this.pH=8;
+    this.temp = 24;
     this.roomTemp = 22;
-    cookie = get_cookie("tank_hard");
-    if(cookie == "") this.hardness = 8;
-    else this.hardness = float(cookie);
-    cookie = get_cookie("tank_o2");
-    if(cookie == "") this.o2 = 3;
-    else this.o2 = float(cookie);
-    cookie = get_cookie("tank_co2");
-    if(cookie == "") this.co2 = 3;
-    else this.co2 = float(cookie);
-    cookie = get_cookie("tank_ammonia");
-    if(cookie == "") this.ammonia = 0;
-    else this.ammonia = float(cookie);
-    cookie = get_cookie("tank_nitrite");
-    if(cookie == "") this.nitrite = 0;
-    else this.nitrite = float(cookie);
-    cookie = get_cookie("tank_nitrate");
-    if(cookie == "") this.nitrate = 0;
-    else this.nitrate = float(cookie);
-    cookie = get_cookie("tank_nitrosomonas");
-    if(cookie == "") this.nitrosomonas = 1;
-    else this.nitrosomonas = float(cookie);
-    cookie = get_cookie("tank_nitrobacter");
-    if(cookie == "") this.nitrobacter = 1;
-    else this.nitrobacter = float(cookie);
+    this.hardness = 8;
+    this.o2 = 3; //temp/2
+    this.co2 = 3; //temp/2
+    this.ammonia = 0;
+    this.nitrite = 0;
+    this.nitrate = 0;
+    this.nitrosomonas = 1;
+    this.nitrobacter = 1;
     this.waste = 0;
     this.time = getTime();
     this.fish = new ArrayList();
     this.poops = new ArrayList();
-    cookie = get_cookie("tank_poops");
-    if(cookie != ""){
-      for(int i; i < int(cookie); i++){
-        this.poops.add(new Poop());
-        this.waste++;
+    this.food = new ArrayList();
+    this.deadFish = new ArrayList();
+    this.name = "";
+  }
+  
+  public Tank(String cookieString){ 
+    String[] stats = splitTokens(cookieString, "/");
+    this.cmFish = 0;
+    this.plants = new ArrayList();
+    this.pH = float(stats[0]);
+    this.temp = float(stats[1]);
+    this.roomTemp = 22;
+    this.hardness = float(stats[2]);
+    this.o2 = float(stats[6]);
+    this.co2 = float(stats[7]);
+    this.ammonia = float(stats[3]);
+    this.nitrite = float(stats[4]);
+    this.nitrate = float(stats[5]);
+    this.nitrosomonas = float(stats[8]);
+    this.nitrobacter = float(stats[9]);
+    this.waste = 0;
+    this.time = getTime();
+    this.fish = new ArrayList();
+    for(int i = 0; i < 20; i++){
+      cookie = get_cookie("fish_" + i);
+      if(cookie != ""){
+        String[] fishStats = splitTokens(cookie, "/");
+        if(fishStats[0] == "Guppy"){
+          this.fish.add(new Guppy(fishStats, true)); 
+        }
       }
     }
+    this.poops = new ArrayList();
+    for(int i = 0; i < float(stats[11]); i++){
+      this.poops.add(new Poop());
+      this.waste++;
+    }
     this.food = new ArrayList();
-    cookie = get_cookie("tank_food");
-    if(cookie != ""){
-      for(int i; i < int(cookie); i++){
-        this.food.add(new Food());
-      }
+    for(int i = 0; i < float(stats[10]); i++){
+      this.food.add(new Food());
     }
     this.deadFish = new ArrayList();
   }
-  
+    
   public int getTime(){
     Date date = new Date();
     return 60 * date.getHours() + date.getMinutes();

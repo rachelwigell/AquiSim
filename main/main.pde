@@ -34,14 +34,20 @@ void setup(){
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
-  tank = new Tank();
+  cookie = get_cookie("tank");
+  if(cookie == ""){
+    tank = new Tank();
+  }
+  else{
+    tank = new Tank(cookie);
+  }
   
   populateSpeciesList();
   populateSpeciesStats();
   
   determineBounds();
   
-  addFishToTank("Guppy", "Swimmy");
+  //addFishToTank("Guppy", "Swimmy");
 }
 
 void draw(){
@@ -490,22 +496,40 @@ public boolean hasPlants(){
   return tank.plants.size() > 0;
 }
 
-public ArrayList cookieString(){
-  cookieString = new ArrayList();
-  cookieString.add("tank_pH=" + tank.pH + ";");
-  cookieString.add("tank_temp=" + tank.temp + ";");
-  cookieString.add("tank_hard=" + tank.hardness + ";");
-  cookieString.add("tank_ammonia=" + tank.ammonia + ";");
-  cookieString.add("tank_nitrite=" + tank.nitrite + ";");
-  cookieString.add("tank_nitrate=" + tank.nitrate + ";");
-  cookieString.add("tank_o2=" + tank.o2 + ";");
-  cookieString.add("tank_co2=" + tank.co2 + ";");
-  cookieString.add("tank_nitrosomonas=" + tank.nitrosomonas + ";");
-  cookieString.add("tank_nitrobacter=" + tank.nitrobacter + ";");
-  cookieString.add("tank_food=" + tank.food.size() + ";");
-  cookieString.add("tank_poops=" + tank.poops.size() + ";");
-  //for(int i = 0; i < fish.size(); i++){
-    
-  //}
-  return cookieString;
+public ArrayList cookieInfo(){
+  cookieInfo = new ArrayList();
+  tankString = "tank=";
+  tankString += tank.pH + "/";
+  tankString += tank.temp + "/";
+  tankString += tank.hardness + "/";
+  tankString += tank.ammonia + "/";
+  tankString += tank.nitrite + "/";
+  tankString += tank.nitrate + "/";
+  tankString += tank.o2 + "/";
+  tankString += tank.co2 + "/";
+  tankString += tank.nitrosomonas + "/";
+  tankString += tank.nitrobacter + "/";
+  tankString += tank.food.size() + "/";
+  tankString += tank.poops.size() + ";";
+  cookieInfo.add(tankString);
+  for(int i = 0; i < tank.fish.size(); i++){
+   Fish f = (Fish) tank.fish.get(i);
+   fishString = "fish_" + i + "=";
+   fishString += f.species + "/";
+   fishString += f.name + "/";
+   fishString += f.health + "/";
+   fishString += f.fullness + "/";
+   fishString += f.minTemp + "/";
+   fishString += f.maxTemp + "/";
+   fishString += f.minHard + "/";
+   fishString += f.maxHard + "/";
+   fishString += f.minPH + "/";
+   fishString += f.maxPH + ";";
+   cookieInfo.add(fishString);
+  }
+  return cookieInfo;
+}
+
+public boolean hasMaxFish(){
+  return tank.fish.size() >= 20;
 }
