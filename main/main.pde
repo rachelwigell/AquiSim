@@ -160,7 +160,7 @@ public void drawStack(Plant plant){
   strokeWeight(5-plant.level);
   line(plant.path.start.x, plant.path.start.y, plant.path.start.z,
     plant.path.end.x, plant.path.end.y, plant.path.end.z);
-  if(plant.level < plant.endLevel){
+  if(plant.level < 3){
     for(int i = 0; i < plant.numBranches; i++){
       Plant b = (Plant) plant.branches[i];
       drawStack(b);
@@ -424,7 +424,7 @@ public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNorma
 
 public void createPlantPreview(){
   clickMode = "PLANT";
-  previewPlant = new Plant(0, 0, 7, 3);
+  previewPlant = new Plant();
 }
 
 public void cancelPlant(){
