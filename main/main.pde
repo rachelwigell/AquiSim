@@ -506,43 +506,48 @@ public boolean hasPlants(){
 
 public ArrayList cookieInfo(){
   cookieInfo = new ArrayList();
-  String tankString = "tank=";
-  tankString += tank.pH.toFixed(2) + "/";
-  tankString += tank.temp.toFixed(2) + "/";
-  tankString += tank.hardness.toFixed(2) + "/";
-  tankString += tank.ammonia.toFixed(2) + "/";
-  tankString += tank.nitrite.toFixed(2) + "/";
-  tankString += tank.nitrate.toFixed(2) + "/";
-  tankString += tank.o2.toFixed(2) + "/";
-  tankString += tank.co2.toFixed(2) + "/";
-  tankString += tank.nitrosomonas.toFixed(2) + "/";
-  tankString += tank.nitrobacter.toFixed(2) + "/";
-  tankString += tank.food.size() + "/";
-  tankString += tank.poops.size() + ";";
-  cookieInfo.add(tankString);
+  String tankStringPrefix = "tank=";
+  String tankString = "";
+  tankString += tank.pH.toFixed(2) + "+";
+  tankString += tank.temp.toFixed(2) + "+";
+  tankString += tank.hardness.toFixed(2) + "+";
+  tankString += tank.ammonia.toFixed(2) + "+";
+  tankString += tank.nitrite.toFixed(2) + "+";
+  tankString += tank.nitrate.toFixed(2) + "+";
+  tankString += tank.o2.toFixed(2) + "+";
+  tankString += tank.co2.toFixed(2) + "+";
+  tankString += tank.nitrosomonas.toFixed(2) + "+";
+  tankString += tank.nitrobacter.toFixed(2) + "+";
+  tankString += tank.food.size() + "+";
+  tankString += tank.poops.size();
+  tankString = LZString.compressToUTF16(tankString) + ";";
+  cookieInfo.add(tankStringPrefix + tankString);
   for(int i = 0; i < tank.fish.size(); i++){
    Fish f = (Fish) tank.fish.get(i);
-   String fishString = "f_" + i + "=";
-   fishString += f.species + "/";
-   fishString += f.name + "/";
-   fishString += f.health + "/";
-   fishString += f.fullness + "/";
-   fishString += f.minTemp.toFixed(2) + "/";
-   fishString += f.maxTemp.toFixed(2) + "/";
-   fishString += f.minHard.toFixed(2) + "/";
-   fishString += f.maxHard.toFixed(2) + "/";
-   fishString += f.minPH.toFixed(2) + "/";
-   fishString += f.maxPH.toFixed(2) + ";";
-   cookieInfo.add(fishString);
+   String fishStringPrefix = "f" + i + "=";
+   String fishString = "";
+   fishString += f.species + "+";
+   fishString += f.name + "+";
+   fishString += f.health + "+";
+   fishString += f.fullness + "+";
+   fishString += f.minTemp.toFixed(2) + "+";
+   fishString += f.maxTemp.toFixed(2) + "+";
+   fishString += f.minHard.toFixed(2) + "+";
+   fishString += f.maxHard.toFixed(2) + "+";
+   fishString += f.minPH.toFixed(2) + "+";
+   fishString += f.maxPH.toFixed(2);
+   fishString = LZString.compressToUTF16(fishString) + ";";
+   cookieInfo.add(fishStringPrefix + fishString);
   }
   for(int i = tank.fish.size(); i < 20; i++){
-    cookieInfo.add("f_" + i + "='';");
+    cookieInfo.add("f" + i + "='';");
   }
   for(int i = 0; i < tank.deadFish.size(); i++){
    DeadFish f = (DeadFish) tank.deadFish.get(i);
-   String fishString = "d_" + i + "=";
-   fishString += f.sprite.species + ";";
-   cookieInfo.add(fishString);
+   String fishStringPrefix = "d" + i + "=";
+   String fishString = f.sprite.species;
+   fishString = LZString.compressToUTF16(fishString) + ";";
+   cookieInfo.add(fishStringPrefix + fishString);
   }
   return cookieInfo;
 }

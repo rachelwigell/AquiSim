@@ -49,7 +49,8 @@ public class Tank{
   }
   
   public Tank(String cookieString){ 
-    String[] stats = splitTokens(cookieString, "/");
+    cookieString = LZString.decompressFromUTF16(cookieString);
+    String[] stats = splitTokens(cookieString, "+");
     this.cmFish = 0;
     this.plants = new ArrayList();
     this.pH = float(stats[0]);
@@ -67,9 +68,9 @@ public class Tank{
     this.time = getTime();
     this.fish = new ArrayList();
     for(int i = 0; i < 20; i++){
-      cookie = get_cookie("f_" + i);
+      cookie = get_cookie("f" + i);
       if(cookie != ""){
-        String[] fishStats = splitTokens(cookie, "/");
+        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
         if(fishStats[0] == "Guppy"){
           this.fish.add(new Guppy(fishStats, true)); 
         }
@@ -86,9 +87,9 @@ public class Tank{
     }
     this.deadFish = new ArrayList();
     for(int i = 0; i < 20; i++){
-      cookie = get_cookie("d_" + i);
+      cookie = get_cookie("d" + i);
       if(cookie != ""){
-        String[] fishStats = splitTokens(cookie, "/");
+        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
         if(fishStats[0] == "Guppy"){
           this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
           this.waste += 5;
