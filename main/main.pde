@@ -44,6 +44,13 @@ void setup(){
   
   populateSpeciesList();
   populateSpeciesStats();
+  update_tank_stats();
+  update_fish_dropdown();
+  update_fish_stats();
+  update_species_dropdown();
+  update_species_stats();
+  handle_add_plant();
+  handle_delete_plant();
   
   determineBounds();
   
