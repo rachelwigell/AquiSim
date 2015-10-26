@@ -67,7 +67,7 @@ public class Tank{
     this.time = getTime();
     this.fish = new ArrayList();
     for(int i = 0; i < 20; i++){
-      cookie = get_cookie("fish_" + i);
+      cookie = get_cookie("f_" + i);
       if(cookie != ""){
         String[] fishStats = splitTokens(cookie, "/");
         if(fishStats[0] == "Guppy"){
@@ -85,6 +85,15 @@ public class Tank{
       this.food.add(new Food());
     }
     this.deadFish = new ArrayList();
+    for(int i = 0; i < 20; i++){
+      cookie = get_cookie("d_" + i);
+      if(cookie != ""){
+        String[] fishStats = splitTokens(cookie, "/");
+        if(fishStats[0] == "Guppy"){
+          this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
+        }
+      }
+    }
   }
     
   public int getTime(){

@@ -498,7 +498,7 @@ public boolean hasPlants(){
 
 public ArrayList cookieInfo(){
   cookieInfo = new ArrayList();
-  tankString = "tank=";
+  String tankString = "tank=";
   tankString += tank.pH + "/";
   tankString += tank.temp + "/";
   tankString += tank.hardness + "/";
@@ -514,7 +514,7 @@ public ArrayList cookieInfo(){
   cookieInfo.add(tankString);
   for(int i = 0; i < tank.fish.size(); i++){
    Fish f = (Fish) tank.fish.get(i);
-   fishString = "fish_" + i + "=";
+   String fishString = "f_" + i + "=";
    fishString += f.species + "/";
    fishString += f.name + "/";
    fishString += f.health + "/";
@@ -525,6 +525,15 @@ public ArrayList cookieInfo(){
    fishString += f.maxHard + "/";
    fishString += f.minPH + "/";
    fishString += f.maxPH + ";";
+   cookieInfo.add(fishString);
+  }
+  for(int i = tank.fish.size(); i < 20; i++){
+    cookieInfo.add("f_" + i + "='';");
+  }
+  for(int i = 0; i < tank.deadFish.size(); i++){
+   DeadFish f = (DeadFish) tank.deadFish.get(i);
+   String fishString = "d_" + i + "=";
+   fishString += f.sprite.species + ";";
    cookieInfo.add(fishString);
   }
   return cookieInfo;

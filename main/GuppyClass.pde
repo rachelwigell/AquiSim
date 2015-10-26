@@ -31,17 +31,19 @@ public class Guppy extends Fish{
   
   
   //constructor for load
-  public Guppy(String[] stats, boolean differentiate){
+  public Guppy(String[] stats, boolean alive){
     this.species = "Guppy";
-    this.name = stats[1];
-    this.health = float(stats[2]);
-    this.fullness = float(stats[3]);
-    this.minTemp = float(stats[4]);
-    this.maxTemp = float(stats[5]);
-    this.minHard = float(stats[6]);
-    this.maxHard = float(stats[7]);
-    this.minPH = float(stats[8]);
-    this.maxPH = float(stats[9]);
+    if(alive){
+      this.name = stats[1];
+      this.health = float(stats[2]);
+      this.fullness = float(stats[3]);
+      this.minTemp = float(stats[4]);
+      this.maxTemp = float(stats[5]);
+      this.minHard = float(stats[6]);
+      this.maxHard = float(stats[7]);
+      this.minPH = float(stats[8]);
+      this.maxPH = float(stats[9]);
+    }
     this.ease = 5;
     this.maxHealth = this.ease*24*60*5;
     this.status = "Happy.";
