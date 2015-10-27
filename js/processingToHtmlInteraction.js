@@ -143,7 +143,7 @@ $('#help_topics').change(function(){
 	if(selected_topic == 'fish'){
 		$('#help_text').text("Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!");
 	}
-	if(selected_topic = $('change')){
+	if(selected_topic == 'change'){
 		$('#help_text').text("Changing the water can help bring chemistry back to neutral values, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.");
 	}
 	else if(selected_topic == 'pH'){
