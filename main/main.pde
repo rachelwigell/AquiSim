@@ -210,9 +210,9 @@ public void mouseReleased(){
     }
     else if(clickMode == "PLANT"){
       if(onBottom(x, y)){
-          tank.plants.add(previewPlant);
-          console.log(tank.plants.get(0).encode());
-          $('#cancel_plant_add').click();
+        previewPlant.encoding = previewPlant.encode();
+        tank.plants.add(previewPlant);
+        $('#cancel_plant_add').click();
       }
       else{
         $('#cancel_plant_add').click();
@@ -519,11 +519,11 @@ public ArrayList cookieInfo(){
   tankString += tank.co2.toFixed(2) + "+";
   tankString += tank.nitrosomonas.toFixed(2) + "+";
   tankString += tank.nitrobacter.toFixed(2) + "+";
-  tankString += tank.food.size() + "+";
-  tankString += tank.poops.size();
+  tankString += min(tank.food.size(), 99) + "+";
+  tankString += min(tank.poops.size(), 99);
   tankString = LZString.compressToUTF16(tankString) + ";";
   cookieInfo.add(tankStringPrefix + tankString);
-  for(int i = 0; i < tank.fish.size(); i++){
+  for(int i = 0; i < min(tank.fish.size(), 15); i++){
    Fish f = (Fish) tank.fish.get(i);
    String fishStringPrefix = "f" + i + "=";
    String fishString = "";
@@ -540,23 +540,35 @@ public ArrayList cookieInfo(){
    fishString = LZString.compressToUTF16(fishString) + ";";
    cookieInfo.add(fishStringPrefix + fishString);
   }
-  for(int i = tank.fish.size(); i < 20; i++){
+  for(int i = min(tank.fish.size(), 15); i < 15; i++){
     cookieInfo.add("f" + i + "='';");
   }
-  for(int i = 0; i < tank.deadFish.size(); i++){
+  for(int i = 0; i < min(tank.deadFish.size(), 15); i++){
    DeadFish f = (DeadFish) tank.deadFish.get(i);
    String fishStringPrefix = "d" + i + "=";
    String fishString = f.sprite.species;
    fishString = LZString.compressToUTF16(fishString) + ";";
    cookieInfo.add(fishStringPrefix + fishString);
   }
+  for(int i = min(tank.deadFish.size(), 15); i < 15; i++){
+    cookieInfo.add("d" + i + "='';");
+  }
+  for(int i = 0; i < min(tank.plants.size(), 5); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    String plantStringPrefix = "p" + i + "=";
+    String plantString = p.encoding;
+    cookieInfo.add(plantStringPrefix + plantString);
+  }
+  for(int i = min(tank.plants.size(), 5); i < 5; i++){
+    cookieInfo.add("p" + i + "='';");
+  }
   return cookieInfo;
 }
 
 public boolean hasMaxFish(){
-  return tank.fish.size() >= 20;
+  return tank.fish.size() >= 15;
 }
 
 public boolean hasMaxPlants(){
-  return tank.plants.size() >= 6;
+  return tank.plants.size() >= 5;
 }

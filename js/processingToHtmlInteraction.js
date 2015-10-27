@@ -143,6 +143,9 @@ $('#help_topics').change(function(){
 	if(selected_topic == 'fish'){
 		$('#help_text').text("Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!");
 	}
+	if(selected_topic = $('change')){
+		$('#help_text').text("Changing the water can help bring chemistry back to neutral values, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.");
+	}
 	else if(selected_topic == 'pH'){
 		$('#help_text').text("pH refers to the acidity of the tank water. Each fish has a range of pH's in which it can survive. pH is lowered by the presence of waste and food in the water. If you need to raise it, perform a water change.");
 	}
@@ -241,4 +244,13 @@ $('#cancel_plant_delete').click(function(){
 	$('#plant_instructions').empty();
 	var processing = Processing.getInstanceById('processing');
 	processing.cancelPlant();
+})
+
+$(document).foundation({
+	slider: {
+	    on_change: function(){
+			var percent = $('#water_change_percentage').attr('data-slider');
+			$('#perform_water_change').text('Change ' + percent + '% of Water');
+		}
+	}
 })

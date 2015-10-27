@@ -67,7 +67,7 @@ public class Tank{
     this.waste = 0;
     this.time = getTime();
     this.fish = new ArrayList();
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < 15; i++){
       cookie = get_cookie("f" + i);
       if(cookie != ""){
         String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
@@ -86,7 +86,7 @@ public class Tank{
       this.food.add(new Food());
     }
     this.deadFish = new ArrayList();
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < 15; i++){
       cookie = get_cookie("d" + i);
       if(cookie != ""){
         String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
@@ -274,15 +274,15 @@ public class Tank{
     //tank operations
     float cmFish = this.changeFish();
     float pH = new Vector3D(.01, this.pH + timeScale * this.changePH(), 13.99).centermost();
-    float temp = this.temp + timeScale * this.changeTemp();
-    float hardness = max(this.hardness + timeScale * this.changeHard(), .01);
-    float o2 = new Vector3D(.01, this.o2 + timeScale * this.changeO2(), 1000000).centermost();
-    float co2 = new Vector3D(.01, this.co2 + timeScale * this.changeCO2(), 1000000).centermost();
-    float ammonia = new Vector3D(0, this.ammonia + timeScale * this.changeAmmonia(), 1000000).centermost();
-    float nitrite = new Vector3D(0, this.nitrite + timeScale * this.changeNitrite(), 1000000).centermost();
-    float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate(), 1000000).centermost();
-    float nitrosomonas = new Vector3D(1, this.nitrosomonas + timeScale * this.changeNitrosomonas(), 1000000).centermost();
-    float nitrobacter = new Vector3D(1, this.nitrobacter + timeScale * this.changeNitrobacter(), 1000000).centermost();
+    float temp = new Vector3D(19, this.temp + timeScale * this.changeTemp(), 25).centermost();
+    float hardness = new Vector3D(.01, this.hardness + timeScale * this.changeHard(), 99).centermost();
+    float o2 = new Vector3D(.01, this.o2 + timeScale * this.changeO2(), 99).centermost();
+    float co2 = new Vector3D(.01, this.co2 + timeScale * this.changeCO2(), 99).centermost();
+    float ammonia = new Vector3D(0, this.ammonia + timeScale * this.changeAmmonia(), 99).centermost();
+    float nitrite = new Vector3D(0, this.nitrite + timeScale * this.changeNitrite(), 99).centermost();
+    float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate(), 99).centermost();
+    float nitrosomonas = new Vector3D(1, this.nitrosomonas + timeScale * this.changeNitrosomonas(), 9999).centermost();
+    float nitrobacter = new Vector3D(1, this.nitrobacter + timeScale * this.changeNitrobacter(), 9999).centermost();
     int waste = this.waste + this.changeWaste();
     int time = this.getTime();
 
