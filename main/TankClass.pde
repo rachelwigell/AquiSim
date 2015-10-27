@@ -52,7 +52,6 @@ public class Tank{
     cookieString = LZString.decompressFromUTF16(cookieString);
     String[] stats = splitTokens(cookieString, "+");
     this.cmFish = 0;
-    this.plants = new ArrayList();
     this.pH = float(stats[0]);
     this.temp = float(stats[1]);
     this.roomTemp = 22;
@@ -94,6 +93,14 @@ public class Tank{
           this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
           this.waste += 5;
         }
+      }
+    }
+    this.plants = new ArrayList();
+    for(int i = 0; i < 5; i++){
+      cookie = get_cookie("p" + i);
+      if(cookie != ""){
+        encodingString = cookie;
+        this.plants.add(new Plant(true, true));
       }
     }
   }

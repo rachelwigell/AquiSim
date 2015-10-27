@@ -169,8 +169,8 @@ public void drawStack(Plant plant){
 }
 
 public void drawPlant(Plant plant){
+  stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
   for(int j = 0; j < 3; j++){
-    stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
     pushMatrix();
     translate(center.x, center.y, center.z);
     translate(plant.position.x, plant.position.y, plant.position.z);
@@ -223,10 +223,10 @@ public void mouseReleased(){
          $('#cancel_plant_add').click();
       }
     }
-    if(mouseButton == RIGHT){
-     console.log("skipping ahead 1 hour");
-     skipAhead(60);
-    }
+    //if(mouseButton == RIGHT){
+    // console.log("skipping ahead 1 hour");
+    // skipAhead(60);
+    //}
 }
 
 /**************************************************
@@ -541,7 +541,7 @@ public ArrayList cookieInfo(){
    cookieInfo.add(fishStringPrefix + fishString);
   }
   for(int i = min(tank.fish.size(), 15); i < 15; i++){
-    cookieInfo.add("f" + i + "='';");
+    cookieInfo.add("f" + i + "=;");
   }
   for(int i = 0; i < min(tank.deadFish.size(), 15); i++){
    DeadFish f = (DeadFish) tank.deadFish.get(i);
@@ -551,16 +551,16 @@ public ArrayList cookieInfo(){
    cookieInfo.add(fishStringPrefix + fishString);
   }
   for(int i = min(tank.deadFish.size(), 15); i < 15; i++){
-    cookieInfo.add("d" + i + "='';");
+    cookieInfo.add("d" + i + "=;");
   }
   for(int i = 0; i < min(tank.plants.size(), 5); i++){
     Plant p = (Plant) tank.plants.get(i);
     String plantStringPrefix = "p" + i + "=";
     String plantString = p.encoding;
-    cookieInfo.add(plantStringPrefix + plantString);
+    cookieInfo.add(plantStringPrefix + plantString + ";");
   }
   for(int i = min(tank.plants.size(), 5); i < 5; i++){
-    cookieInfo.add("p" + i + "='';");
+    cookieInfo.add("p" + i + "=;");
   }
   return cookieInfo;
 }

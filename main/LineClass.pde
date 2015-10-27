@@ -4,8 +4,8 @@ public class Line {
   float length;
   
   public Line(Vector3D start, Vector3D end){
-    this.start = start;
-    this.end = end;
+    this.start = new Vector3D(start.x, start.y, start.z);
+    this.end = new Vector3D(end.x, end.y, end.z);
     this.length = end.distance(start);
   }
   
