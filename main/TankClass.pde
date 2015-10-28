@@ -65,6 +65,9 @@ public class Tank{
     this.nitrobacter = float(stats[9]);
     this.waste = 0;
     this.time = getTime();
+    var now = new Date();
+    var lastSave = new Date(int(stats[12])+2000, int(stats[13]), int(stats[14]), int(stats[15]), int(stats[16]), 0, 0);
+    int elapsedMinutes = int((now.getTime() - lastSave.getTime())/60000);
     this.fish = new ArrayList();
     for(int i = 0; i < 15; i++){
       cookie = get_cookie("f" + i);
@@ -103,6 +106,7 @@ public class Tank{
         this.plants.add(new Plant(true, true));
       }
     }
+    this.skipAhead(elapsedMinutes);
   }
     
   public int getTime(){
@@ -365,6 +369,40 @@ public class Tank{
   
   public void addDeadFish(VFish f){
     this.deadFish.add(new DeadFish(f));
+  }
+  
+  public boolean randomizedEating(Fish fish, Food food){
+    double percentChance = .005*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
+    float rand = random(0, 1);
+    if(rand < percentChance){
+      fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
+      return true;
+    }
+    return false;
+  }
+  
+  public void allRandomizedEat(){
+    ArrayList eaten = new ArrayList();
+    for(int i = 0; i < this.fish.size(); i++){
+      Fish fish = (Fish) this.fish.get(i);
+      for(int j = 0; j < this.food.size(); j++){
+        Food food = (Food) this.food.get(i);
+        if(this.randomizedEating(fish, food)){
+          eaten.add(food);
+        }
+      }
+    }
+    for(int i = 0; i < eaten.size(); i++){
+      Food food = (Food) eaten.get(i);
+      this.food.remove(food);
+    }
+  }
+  
+  public void skipAhead(int minutes){
+    for(int i = 0; i < minutes*12; i++){
+      this.progress();
+      this.allRandomizedEat();
+    }
   }
 
 }

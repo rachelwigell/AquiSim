@@ -34,7 +34,7 @@ void setup(){
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
-  cookie = get_cookie("tank");
+  cookie = get_cookie("t");
   if(cookie == ""){
     tank = new Tank();
   }
@@ -224,8 +224,8 @@ public void mouseReleased(){
       }
     }
     //if(mouseButton == RIGHT){
-    // console.log("skipping ahead 1 hour");
-    // skipAhead(60);
+    //  console.log("skipping ahead 1 hour");
+    //  tank.skipAhead(60);
     //}
 }
 
@@ -406,14 +406,6 @@ public boolean raySphereIntersect(Vector3D rayOrigin, Vector3D rayNormal, Vector
   return determinant >= 0;
 }
 
-public void skipAhead(int minutes){
-  for(int i = 0; i < minutes*12; i++){
-    tank.progress();
-//    moveAllFish(visual);
-//    allRandomizedEat();
-  }
-}
-
 public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNormal){
   float width = abs((cos(d.sprite.orientation.y)*d.dimensions.x) + abs(sin(d.sprite.orientation.y)*d.dimensions.z));
   float height = d.dimensions.y;
@@ -507,7 +499,7 @@ public boolean hasPlants(){
 
 public ArrayList cookieInfo(){
   cookieInfo = new ArrayList();
-  String tankStringPrefix = "tank=";
+  String tankStringPrefix = "t=";
   String tankString = "";
   tankString += tank.pH.toFixed(2) + "+";
   tankString += tank.temp.toFixed(2) + "+";
@@ -520,7 +512,13 @@ public ArrayList cookieInfo(){
   tankString += tank.nitrosomonas.toFixed(2) + "+";
   tankString += tank.nitrobacter.toFixed(2) + "+";
   tankString += min(tank.food.size(), 99) + "+";
-  tankString += min(tank.poops.size(), 99);
+  tankString += min(tank.poops.size(), 99) + "+";
+  var date = new Date();
+  tankString += date.getFullYear()-2000 + "+";
+  tankString += date.getMonth() + "+";
+  tankString += date.getDate() + "+";
+  tankString += date.getHours() + "+";
+  tankString += date.getMinutes();
   tankString = LZString.compressToUTF16(tankString) + ";";
   cookieInfo.add(tankStringPrefix + tankString);
   for(int i = 0; i < min(tank.fish.size(), 15); i++){
