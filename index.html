@@ -42,83 +42,100 @@
 		main/Vector3DClass.pde
 		main/TankClass.pde
 		main/main.pde
-		"></canvas><br>
-	<div class="row"><h4><center>Tank Health</center></h4></div>
-	<div class="row">
-		<div class="small-6 columns">
-			<table id = "tank_stats_display"></table>
-		</div>
-		<div class="small-6 columns" id="water_change">
-				<div class="range-slider round" id="water_change_percentage" align="left" data-slider>
-					  <span class="range-slider-handle" role="slider" tabindex="0"></span>
-					  <span class="range-slider-active-segment"></span>
-					  <input type="hidden">
+		"></canvas><br><br>
+
+	<ul class="accordion" data-accordion>
+  		<li class="accordion-navigation">
+    		<a href="#tank_health_menu">Tank Health</a>
+    		<div id="tank_health_menu" class="content inactive">
+				<div class="small-6 columns">
+					<table id = "tank_stats_display"></table>
 				</div>
-				<button class="button round" id="perform_water_change">Change 50% of Water</button>
-		</div>
-	</div>
-	<div class="row"><h4>Fish Health</h4></div>
-	<div class="row">
-		<div class="small-4 columns">
-			<select id="fish_list" type="select"></select>
-		</div>
-		<div class="small-8 columns">
-			<table id="fish_stats_display"></table>
-		</div>
-	</div>
-	<div class="row"><h4>Add Fish</h4></div>
-	<div class="row">
-		<div class="small-6 columns">
-			<select id="species_list" type="select"></select>
-		</div>
-		<div class="small-6 columns">
-			<table id="species_stats_display"></table>
-			<div class="small-6 columns">
-        		<input type="text" placeholder="Swimmy" id="nickname_entry" maxlength=20 hidden=true />
-        	</div>
-        	<div class="small-6 columns">
-      			<button class="button round" id="add_fish" hidden=true></button>
-      		</div>
-		</div>
-	</div>
-	<div class="row"><h4>Manage Plants</h4></div>
-	<div class="row">
-		<div class="small-3 columns">
-			<p></p>
-			<button class="button round" id="add_plant">Add a Plant</button>
-			<button class="button round" id="new_plant" hidden=true>Generate New Plant</button>
-		</div>
-		<div class="small-3 columns">
-			<p></p>
-			<button class="button round" id="delete_plant" hidden=true>Delete a Plant</button>
-			<button class="button round" id="cancel_plant_add" hidden=true>Cancel Add</button>
-			<button class="button round" id="cancel_plant_delete" hidden=true>Cancel Delete</button>
-		</div>
-		<div class="small-6 columns">
-			<p align="left" id="plant_instructions"></p>
-		</div>
-	</div>
-	<div class="row"><h4>Help</h4></div>
-	<div class="row">
-		<div class="small-6 columns">
-			<b>What would you like to know more about?</b>
-			<select id="help_topics" type="select">
-				<option value="fish">Fish</option>
-				<option value="change">Water Change</option>
-				<option value="pH">pH</option>
-				<option value="temperature">Temperature</option>
-				<option value="hardness">Hardness</option>
-				<option value="cycle">Nitrogen Cycle</option>
-				<option value="bacteria">Bacteria</option>
-				<option value="gases">Gases</option>
-			</select>
-		</div>
-		<div class="small-6 columns">
-			<p align="left" id="help_text">
-				Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!
-			</p>
-		</div>
-	</div>
+				<div class="small-6 columns" id="water_change">
+						<div class="range-slider round" id="water_change_percentage" align="left" data-slider>
+							  <span class="range-slider-handle" role="slider" tabindex="0"></span>
+							  <span class="range-slider-active-segment"></span>
+							  <input type="hidden">
+						</div>
+						<button class="button round" id="perform_water_change">Change 50% of Water</button>
+				</div>
+			</div>
+		</li>
+		<div class="row"></div>
+		<li class="accordion-navigation">
+    		<a href="#fish_health_menu">Fish Health</a>
+    		<div id="fish_health_menu" class="content inactive">
+				<div class="small-4 columns">
+					<select id="fish_list" type="select"></select>
+				</div>
+				<div class="small-8 columns">
+					<table id="fish_stats_display"></table>
+				</div>
+			</div>
+		</li>
+		<div class="row"></div>
+		<li class="accordion-navigation">
+    		<a href="#add_fish_menu">Add Fish</a>
+    		<div id="add_fish_menu" class="content active">
+				<div class="small-6 columns">
+					<select id="species_list" type="select"></select>
+				</div>
+				<div class="small-6 columns">
+					<table id="species_stats_display"></table>
+					<div class="small-6 columns">
+		        		<input type="text" placeholder="" id="nickname_entry" maxlength=20 hidden=true />
+		        	</div>
+		        	<div class="small-6 columns">
+		      			<button class="button round" id="add_fish" hidden=true></button>
+		      		</div>
+				</div>
+			</div>
+		</li>
+		<div class="row"></div>
+		<li class="accordion-navigation">
+    		<a href="#manage_plants_menu">Manage Plants</a>
+    		<div id="manage_plants_menu" class="content inactive">
+				<div class="small-3 columns">
+					<p></p>
+					<button class="button round" id="add_plant">Add a Plant</button>
+					<button class="button round" id="new_plant" hidden=true>Generate New Plant</button>
+				</div>
+				<div class="small-3 columns">
+					<p></p>
+					<button class="button round" id="delete_plant" hidden=true>Delete a Plant</button>
+					<button class="button round" id="cancel_plant_add" hidden=true>Cancel Add</button>
+					<button class="button round" id="cancel_plant_delete" hidden=true>Cancel Delete</button>
+				</div>
+				<div class="small-6 columns">
+					<p align="left" id="plant_instructions"></p>
+				</div>
+			</div>
+		</li>
+		<div class="row"></div>
+		<li class="accordion-navigation">
+    		<a href="#help_menu">Help</a>
+    		<div id="help_menu" class="content active">
+				<div class="small-6 columns">
+					<b>What would you like to know more about?</b>
+					<select id="help_topics" type="select">
+						<option value="fish">Fish</option>
+						<option value="change">Water Change</option>
+						<option value="pH">pH</option>
+						<option value="temperature">Temperature</option>
+						<option value="hardness">Hardness</option>
+						<option value="cycle">Nitrogen Cycle</option>
+						<option value="bacteria">Bacteria</option>
+						<option value="gases">Gases</option>
+					</select>
+				</div>
+				<div class="small-6 columns">
+					<p align="left" id="help_text">
+						Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!
+					</p>
+				</div>
+			</div>
+		</li>
+	</ul>
 
 	<div class="row">
 		<div class="small-3 columns">

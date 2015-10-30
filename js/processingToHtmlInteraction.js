@@ -129,6 +129,23 @@ function handle_add_plant(){
 	}
 }
 
+function accordion_defaults(new_user){
+	if(new_user){
+		$('#tank_health_menu').removeClass('active');
+		$('#fish_health_menu').removeClass('active');
+		$('#add_fish_menu').addClass('active');
+		$('#manage_plants_menu').removeClass('active');
+		$('#help_menu').addClass('active');
+	}
+	else{
+		$('#tank_health_menu').addClass('active');
+		$('#fish_health_menu').addClass('active');
+		$('#add_fish_menu').addClass('active');
+		$('#manage_plants_menu').addClass('active');
+		$('#help_menu').removeClass('active');
+	}
+}
+
 $('#fish_list').change(function(){
 	selected_fish = $('#fish_list').find(':selected').val();
 	update_fish_stats();
@@ -246,11 +263,20 @@ $('#cancel_plant_delete').click(function(){
 	processing.cancelPlant();
 })
 
-$(document).foundation({
-	slider: {
-	    on_change: function(){
-			var percent = $('#water_change_percentage').attr('data-slider');
-			$('#perform_water_change').text('Change ' + percent + '% of Water');
+
+$(document).ready(function() {
+	$(document).foundation({
+		slider: {
+		    on_change: function(){
+				var percent = $('#water_change_percentage').attr('data-slider');
+				$('#perform_water_change').text('Change ' + percent + '% of Water');
+			}
+		},
+		accordion: {
+			multi_expand: true,
+			callback : function (accordion) {
+                $(document).foundation('reflow');
+            }
 		}
-	}
-})
+	});
+});

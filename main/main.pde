@@ -37,9 +37,11 @@ void setup(){
   cookie = get_cookie("t");
   if(cookie == ""){
     tank = new Tank();
+    accordion_defaults(true);
   }
   else{
     tank = new Tank(cookie);
+    accordion_defaults(false);
   }
   
   populateSpeciesList();
