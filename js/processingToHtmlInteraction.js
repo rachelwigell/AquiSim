@@ -119,6 +119,16 @@ function handle_delete_plant(){
 	}
 }
 
+function handle_move_plant(){
+	var processing = Processing.getInstanceById('processing');
+	if(processing.hasPlants()){
+		$('#move_plant').attr('hidden', false);
+	}
+	else{
+		$('#move_plant').attr('hidden', true);
+	}
+}
+
 function handle_add_plant(){
 	var processing = Processing.getInstanceById('processing');
 	if(processing.hasMaxPlants()){
@@ -218,8 +228,8 @@ $('#add_plant').click(function(){
 	$('#add_plant').attr('hidden', true);
 	$('#new_plant').attr('hidden', false);
 	$('#delete_plant').attr('hidden', true);
+	$('#move_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', false);
-	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one")
 	var processing = Processing.getInstanceById('processing');
 	processing.createPlantPreview();
@@ -232,10 +242,10 @@ $('#new_plant').click(function(){
 
 $('#cancel_plant_add').click(function(){
 	handle_add_plant();
-	$('#new_plant').attr('hidden', true);
 	handle_delete_plant();
+	handle_move_plant();
+	$('#new_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', true);
-	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').empty();
 	var processing = Processing.getInstanceById('processing');
 	processing.cancelPlant();
@@ -243,9 +253,9 @@ $('#cancel_plant_add').click(function(){
 
 $('#delete_plant').click(function(){
 	$('#add_plant').attr('hidden', true);
+	$('#move_plant').attr('hidden', true);
 	$('#new_plant').attr('hidden', true);
 	$('#delete_plant').attr('hidden', true);
-	$('#cancel_plant_add').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', false);
 	$('#plant_instructions').text("Click a plant to delete it.");
 	var processing = Processing.getInstanceById('processing');
@@ -254,13 +264,31 @@ $('#delete_plant').click(function(){
 
 $('#cancel_plant_delete').click(function(){
 	handle_add_plant();
-	$('#new_plant').attr('hidden', true);
 	handle_delete_plant();
-	$('#cancel_plant_add').attr('hidden', true);
+	handle_move_plant();
 	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').empty();
 	var processing = Processing.getInstanceById('processing');
 	processing.cancelPlant();
+})
+
+$('#move_plant').click(function(){
+	$('#add_plant').attr('hidden', true);
+	$('#new_plant').attr('hidden', true);
+	$('#move_plant').attr('hidden', true);
+	$('#delete_plant').attr('hidden', true);
+	$('#cancel_plant_move').attr('hidden', false);
+	$('#plant_instructions').text("Click a plant to move. Then click on a new spot in the floor to place it again.");
+	var processing = Processing.getInstanceById('processing');
+	processing.moveMode();
+})
+
+$('#cancel_plant_move').click(function(){
+	handle_add_plant();
+	handle_delete_plant();
+	handle_move_plant();
+	$('#cancel_plant_move').attr('hidden', true);
+	$('#plant_instructions').empty();
 })
 
 

@@ -52,6 +52,7 @@ void setup(){
   update_species_dropdown();
   update_species_stats();
   handle_add_plant();
+  handle_move_plant();
   handle_delete_plant();
   
   determineBounds();
@@ -222,7 +223,13 @@ public void mouseReleased(){
     }
     else if(clickMode == "DELETE"){
       if(handlePlantDeleteClick(x, y)){
-         $('#cancel_plant_add').click();
+         $('#cancel_plant_delete').click();
+      }
+    }
+    else if(clickMode == "MOVE"){
+      if(handlePlantMoveClick(x, y)){
+         clickMode = "PLANT";
+         $('#cancel_plant_move').click();
       }
     }
     //if(mouseButton == RIGHT){
@@ -473,8 +480,20 @@ public boolean handlePlantDeleteClick(int x, int y){
    Plant p = (Plant) tank.plants.get(i);
    if(p.RGBcolor.isEqual(clickedRGB)){
      tank.plants.remove(p);
-     handle_delete_plant();
-     handle_add_plant();
+     return true;
+   }
+ }
+ return false;
+}
+
+public boolean handlePlantMoveClick(int x, int y){
+ clickedColor = get(x, fieldY-y);
+ Vector3D clickedRGB = new Vector3D(red(clickedColor), green(clickedColor), blue(clickedColor));
+ for(int i = 0; i < tank.plants.size(); i++){
+   Plant p = (Plant) tank.plants.get(i);
+   if(p.RGBcolor.isEqual(clickedRGB)){
+     previewPlant = p;
+     tank.plants.remove(p);
      return true;
    }
  }
@@ -483,6 +502,10 @@ public boolean handlePlantDeleteClick(int x, int y){
 
 public void deleteMode(){
   clickMode = "DELETE";
+}
+
+public void moveMode(){
+  clickMode = "MOVE";
 }
 
 public boolean haveFishWithName(String name){
