@@ -2,3 +2,6 @@
 * Add a guide to the user interface to the help menu
 * More species, troubleshoot obj loader
 * Add achievements
+* troubleshoot 3D model loading
+	* make better fish models
+	* add tank decorations
