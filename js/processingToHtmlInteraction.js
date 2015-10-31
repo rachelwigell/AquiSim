@@ -11,9 +11,14 @@ function update_tank_stats(){
 	var processing = Processing.getInstanceById('processing');
 	processing.updateTankStats();
 	$('#tank_stats_display').empty();
-	for(var name in tank_stats){
-		stat = tank_stats[name];
-		$('#tank_stats_display').append('<tr><td><b>' + name + ':</b></td><td> ' + stat + '</td></tr>');
+	for(var i = 0; i < 6; i++){
+		name1 = Object.keys(tank_stats)[i];
+		stat1 = tank_stats[name1];
+		name2 = Object.keys(tank_stats)[i+6];
+		stat2 = tank_stats[name2];
+		$('#tank_stats_display').append('<tr><td><b>' + name1 + ':</b></td><td> ' + stat1 + '</td>' +
+										'<td><b>' + name2 + ':</b></td><td> ' + stat2 + '</td></tr>');
+
 	}
 }
 
@@ -199,7 +204,7 @@ $('#perform_water_change').click(function(){
 	processing.waterChange(percent);
 	update_button_text('perform_water_change', 'Changed ' + percent + '%')
 	update_tank_stats();
-	setTimeout(update_button_text, 1500, 'perform_water_change', 'Change Water')
+	setTimeout(update_button_text, 1500, 'perform_water_change', 'Change ' + percent + '% of Water')
 })
 
 $('#add_fish').click(function(){

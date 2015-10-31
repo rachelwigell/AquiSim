@@ -266,8 +266,8 @@ public void updateTankStats(){
   tank_stats.ammonia = tank.ammonia.toFixed(2) + ' ppm';
   tank_stats.nitrite = tank.nitrite.toFixed(2) + ' ppm';
   tank_stats.nitrate = tank.nitrate.toFixed(2) + ' ppm';
-  tank_stats.o2 = tank.o2.toFixed(1) + ' ppm';
-  tank_stats.co2 = tank.co2.toFixed(1) + ' ppm';
+  tank_stats["O₂ "] = tank.o2.toFixed(1) + ' ppm';
+  tank_stats["CO₂ "] = tank.co2.toFixed(1) + ' ppm';
   tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(2) + 'M bacteria';
   tank_stats.nitrobacter = tank.nitrobacter.toFixed(2) + 'M bacteria';
   tank_stats.food = tank.food.size() + ' noms';
