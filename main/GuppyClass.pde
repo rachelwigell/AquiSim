@@ -18,7 +18,7 @@ public class Guppy extends Fish{
     this.ammonia = 1;
     this.nitrite = 5;
     this.nitrate = 60;
-    this.scaleVal = 10;
+    this.scaleVal = 8;
     this.rotate = new Vector3D(0, PI, 0);
     this.model = loadShape("guppy.obj");
     this.sprite = "graphics/guppy.PNG";
@@ -55,7 +55,7 @@ public class Guppy extends Fish{
     this.nitrite = 5;
     this.nitrate = 60;
     this.model = loadShape("guppy.obj");
-    this.scaleVal = 10;
+    this.scaleVal = 8;
     this.rotate = new Vector3D(0, PI, 0);
     this.sprite = "graphics/guppy.PNG";
     this.dimensions = new Vector3D(80, 36, 15);
