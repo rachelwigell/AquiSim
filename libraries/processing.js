@@ -3084,10 +3084,15 @@
                for(var i = 0; i < test.length; i++){
                  var matName = test[i].split(/\n/)[0];
 
-                 var texName = '' + test[i].match(/map_Kd\s+.*\n*/);
+                 var texName = '' + test[i].match(/Kd\s+.*\n*/);
 
-                 texName = texName.replace(/map_Kd\s+/, '');
+                 texName = texName.replace(/Kd\s+/, '');
                  texName = texName.replace(/\n/,'');
+                 texName = texName.split(" ");
+                 texName = texName.map(function (x) { 
+                   return parseFloat(x, 10); 
+                 });
+                 texName.push(1);
 
                  matLibXHR.mat[matName] = texName;
                }
@@ -3528,6 +3533,9 @@
               if(lightCount === 0){
                 uniformf('color_3d', programObject3D, 'uColor', [1,1,1,1]);
               }
+            }
+            else if(texObj){
+              uniformf("color3d", programObject3D, "uColor", texObj);
             }
             else{
               uniformi('usingTexture3d', programObject3D, 'uUsingTexture', false);
