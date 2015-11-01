@@ -18,14 +18,16 @@ public class Guppy extends Fish{
     this.ammonia = 1;
     this.nitrite = 5;
     this.nitrate = 60;
-    this.model = setModel();
+    this.scaleVal = 10;
+    this.rotate = new Vector3D(0, PI, 0);
+    this.model = loadShape("guppy.obj");
     this.sprite = "graphics/guppy.PNG";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.dimensions = new Vector3D(80, 36, 15);
+    this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scalVal);
     this.setDangerRatings();
   }
   
@@ -52,7 +54,9 @@ public class Guppy extends Fish{
     this.ammonia = 1;
     this.nitrite = 5;
     this.nitrate = 60;
-    this.model = setModel();
+    this.model = loadShape("guppy.obj");
+    this.scaleVal = 10;
+    this.rotate = new Vector3D(0, PI, 0);
     this.sprite = "graphics/guppy.PNG";
     this.dimensions = new Vector3D(80, 36, 15);
     this.position = new Vector3D(0, 0, 0);
@@ -69,33 +73,5 @@ public class Guppy extends Fish{
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
     this.setDangerRatings();
-  }
-  
-  public ArrayList setModel(){
-    ArrayList model = new ArrayList();
-    model.add(new Vector3D(0, 250, 154));
-    model.add(new Vector3D(0, 250, 154));
-    model.add(new Vector3D(255, 140, 0));
-    model.add(new Vector3D(255, 140, 0));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(72, 61, 139));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    model.add(new Vector3D(186, 185, 162));
-    return model;
   }
 }
