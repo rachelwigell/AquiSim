@@ -22,7 +22,7 @@ public class Plant {
   float[] yDistVals = {fieldY/8.0, fieldY/6.0, 5*fieldY/24.0, fieldY/4.0, 7*fieldY/24.0,
                        fieldY/3.0, 3*fieldY/8.0, 5*fieldY/12.0, 11*fieldY/24.0, fieldY/2.0};
   float[] angleVals = {-50, -39, -28, -17, -6, 5, 16, 27, 38, 49};
-  float[] branchYVals = {0, .1, .2, .3, .4, .5, .6, .7, .8, .9};
+  float[] branchYVals = {.1, .2, .3, .4, .5, .6, .7, .8, .9, 1};
   float[] normVals = {-.9, -.7, -.5, -.3, -.1, .1, .3, .5, .7, .9};
   
   HashMap yDistEncoding;
@@ -112,18 +112,26 @@ public class Plant {
     this.stack[2] = top;
   }
   
+  public int sizeOfArray(Plant[] array){
+    for(int i = 0; i < array.length(); i++){
+      if(array[i] == null) return i;
+    }
+    return array.length();
+  }
+  
   // 1 arg
   public Plant(Plant root){
     this.level = root.level+1;
     this.numBranches = root.numBranches-1;
     this.RGBcolor = root.RGBcolor;
-    this.branchYRand = closest(random(0, .9), branchYVals);
+    int branchCount = sizeOfArray(root.branches);
+    this.branchYRand = branchCount/10;
     float branchY = root.path.end.y - this.branchYRand*(root.path.end.y-root.path.start.y);
     Vector3D branchStart = root.path.getPointWithThisY(branchY);
     float branchLength = root.path.length/1.7;
     float yNorm = -.35;
-    this.xNorm = closest(random(-.9, .9), normVals);
-    this.zNorm = closest(random(-.9, .9), normVals);
+    this.xNorm = root.zAngle/100 + pow(-1, (branchCount%2))*branchCount/8;
+    this.zNorm = root.xAngle/100 + pow(-1, (branchCount%2))*branchCount/8;
     Vector3D branchEnd = branchStart.addVector(new Vector3D(xNorm, yNorm, zNorm).multiplyScalar(branchLength));
     this.path = new Line(branchStart, branchEnd);
     if(this.level < 3){
@@ -166,24 +174,8 @@ public class Plant {
       code += this.yDistEncoding.get(s.yDistRand);
       code += this.angleEncoding.get(s.xAngle);
       code += this.angleEncoding.get(s.zAngle);
-      code += s.encodeStack();
     }
     return LZString.compressToUTF16(code);
-  }
-  
-  public String encodeStack(){
-    initializeEncodingHashes();
-    String code = "";
-    if(level < 3){
-      for(int i = 0; i < numBranches; i++){
-        Plant branch = (Plant) branches[i];
-        code += this.branchYEncoding.get(branch.branchYRand);
-        code += this.normEncoding.get(branch.xNorm);
-        code += this.normEncoding.get(branch.zNorm);
-        code += branch.encodeStack();
-      }
-    }
-    return code;
   }
   
   // 2 args
@@ -242,37 +234,7 @@ public class Plant {
     this.path = new Line(startPoint, endPoint);
     this.branches = new Plant[this.numBranches];
     for(int i = 0; i < this.numBranches; i++){
-     branches[i] = new Plant(this, true, true, true);
-    }
-  }
-  
-  // 4 args
-  public Plant(Plant root, boolean diff1, boolean diff2, boolean diff3){
-    this.branchYDecoding = root.branchYDecoding;
-    this.normDecoding = root.normDecoding;
-    this.level = root.level+1;
-    this.numBranches = root.numBranches-1;
-    this.RGBcolor = root.RGBcolor;
-    pop = stringPop(encodingString);
-    this.branchYRand = this.branchYDecoding.get(pop[0]);
-    encodingString = pop[1];
-    float branchY = root.path.end.y - this.branchYRand*(root.path.end.y-root.path.start.y);
-    Vector3D branchStart = root.path.getPointWithThisY(branchY);
-    float branchLength = root.path.length/1.7;
-    float yNorm = -.35;
-    pop = stringPop(encodingString);
-    this.xNorm = this.normDecoding.get(pop[0]);
-    encodingString = pop[1];
-    pop = stringPop(encodingString);
-    this.zNorm = this.normDecoding.get(pop[0]);
-    encodingString = pop[1];
-    Vector3D branchEnd = branchStart.addVector(new Vector3D(xNorm, yNorm, zNorm).multiplyScalar(branchLength));
-    this.path = new Line(branchStart, branchEnd);
-    if(this.level < 3){
-      this.branches = new Plant[this.numBranches];
-      for(int i = 0; i < this.numBranches; i++){
-        branches[i] = new Plant(this, encodingString, true, true);
-      }
+     branches[i] = new Plant(this);
     }
   }
 }  
