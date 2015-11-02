@@ -1,5 +1,3 @@
-String encodingString;
-
 public class Plant {
   Plant root;
   Line path;
@@ -10,69 +8,7 @@ public class Plant {
   Vector3D RGBcolor;
   Vector3D position;
   Vector3D absolutePosition;
-  String encoding;
-  
-  float yDistRand;
-  int xAngle;
-  int zAngle;
-  float branchYRand;
-  float xNorm;
-  float zNorm;
-  
-  float[] yDistVals = {fieldY/8.0, fieldY/6.0, 5*fieldY/24.0, fieldY/4.0, 7*fieldY/24.0,
-                       fieldY/3.0, 3*fieldY/8.0, 5*fieldY/12.0, 11*fieldY/24.0, fieldY/2.0};
-  float[] angleVals = {-50, -39, -28, -17, -6, 5, 16, 27, 38, 49};
-  float[] branchYVals = {.1, .2, .3, .4, .5, .6, .7, .8, .9, 1};
-  float[] normVals = {-.9, -.7, -.5, -.3, -.1, .1, .3, .5, .7, .9};
-  
-  HashMap yDistEncoding;
-  HashMap angleEncoding;
-  HashMap branchYEncoding;
-  HashMap normEncoding;
-  
-  HashMap yDistDecoding;
-  HashMap angleDecoding;
-  HashMap branchYDecoding;
-  HashMap normDecoding;
-  
-  public void initializeEncodingHashes(){
-    this.yDistEncoding = new HashMap();
-    this.angleEncoding = new HashMap();
-    this.branchYEncoding = new HashMap();
-    this.normEncoding = new HashMap();
-    for(int i = 0; i < 10; i++){
-      this.yDistEncoding.put(yDistVals[i], i);
-      this.angleEncoding.put(angleVals[i], i);
-      this.branchYEncoding.put(branchYVals[i], i);
-      this.normEncoding.put(normVals[i], i);
-    }
-  }
-  
-  public void initializeDecodingHashes(){
-    this.yDistDecoding = new HashMap();
-    this.angleDecoding = new HashMap();
-    this.branchYDecoding = new HashMap();
-    this.normDecoding = new HashMap();
-    for(int i = 0; i < 10; i++){
-      this.yDistDecoding.put(i, yDistVals[i]);
-      this.angleDecoding.put(i, angleVals[i]);
-      this.branchYDecoding.put(i, branchYVals[i]);
-      this.normDecoding.put(i, normVals[i]);
-    }
-  }
-  
-  public float closest(float val, float[] floats){
-    float difference = MAX_FLOAT;
-    float closest = 0;
-    for(int i = 0; i < floats.length; i++){
-      float diff = abs(floats[i] - val);
-      if(diff < difference){
-        closest = floats[i];
-        difference = diff;
-      }
-    }
-    return closest;
-  }
+  long seed;
   
   // 3 args
   public Plant(Vector3D start, Vector3D RGBcolor, int stack){
@@ -81,10 +17,10 @@ public class Plant {
     this.level = 1;
     this.RGBcolor = RGBcolor;
     Vector3D startPoint = start;
-    this.yDistRand = closest(random(fieldY/8.0, fieldY/2.0), yDistVals);
-    float yDist = this.yDistRand/(stack+1);
-    this.xAngle = closest(random(-50, 49), angleVals);
-    this.zAngle = closest(random(-50, 49), angleVals);
+    float yDistRand = random(fieldY/8.0, fieldY/2.0);
+    float yDist = yDistRand/(stack+1);
+    float xAngle = random(-50, 50);
+    float zAngle = random(-50, 50);
     Vector3D endPoint = startPoint.addVector(new Vector3D(xAngle, -yDist, zAngle));
     this.path = new Line(startPoint, endPoint);
     this.branches = new Plant[this.numBranches];
@@ -100,6 +36,8 @@ public class Plant {
      RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
     }
     this.RGBcolor = RGBcolor;
+    this.seed = random(0, 10);
+    randomSeed(this.seed);
     this.numBranches = 7;
     this.position = new Vector3D(0, fieldY/2, 0);
     this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
@@ -112,26 +50,18 @@ public class Plant {
     this.stack[2] = top;
   }
   
-  public int sizeOfArray(Plant[] array){
-    for(int i = 0; i < array.length(); i++){
-      if(array[i] == null) return i;
-    }
-    return array.length();
-  }
-  
   // 1 arg
   public Plant(Plant root){
     this.level = root.level+1;
     this.numBranches = root.numBranches-1;
     this.RGBcolor = root.RGBcolor;
-    int branchCount = sizeOfArray(root.branches);
-    this.branchYRand = branchCount/10;
-    float branchY = root.path.end.y - this.branchYRand*(root.path.end.y-root.path.start.y);
+    float branchYRand = random(0, .9);
+    float branchY = root.path.end.y - branchYRand*(root.path.end.y-root.path.start.y);
     Vector3D branchStart = root.path.getPointWithThisY(branchY);
     float branchLength = root.path.length/1.7;
     float yNorm = -.35;
-    this.xNorm = root.zAngle/100 + pow(-1, (branchCount%2))*branchCount/8;
-    this.zNorm = root.xAngle/100 + pow(-1, (branchCount%2))*branchCount/8;
+    float xNorm = random(-.9, .9);
+    float zNorm = random(-.9, .9);
     Vector3D branchEnd = branchStart.addVector(new Vector3D(xNorm, yNorm, zNorm).multiplyScalar(branchLength));
     this.path = new Line(branchStart, branchEnd);
     if(this.level < 3){
@@ -164,77 +94,28 @@ public class Plant {
    return true;
   }
   
-  public String encode(){
-    initializeEncodingHashes();
-    String code = "";
-    code += int(this.RGBcolor.x) + "+" + int(this.RGBcolor.y) + "+" + int(this.RGBcolor.z) + "+";
-    code += int(this.position.x) + "+" + int(this.position.y) + "+" + int(this.position.z) + "+";
-    for(int i = 0; i < 3; i++){
-      Plant s = (Plant) stack[i];
-      code += this.yDistEncoding.get(s.yDistRand);
-      code += this.angleEncoding.get(s.xAngle);
-      code += this.angleEncoding.get(s.zAngle);
-    }
-    return LZString.compressToUTF16(code);
-  }
-  
-  // 2 args
-  public Plant(boolean diff1, boolean diff2){
-    this.encoding = encodingString;
-    String[] strings = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-    this.RGBcolor = new Vector3D(int(strings[0]), int(strings[1]), int(strings[2]));
-    this.position = new Vector3D(0, 0, 0);
-    this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
+  // 4 args (for loading)
+  public Plant(long seed, Vector3D RGBcolor, Vector3D position, boolean diff){
+    this.RGBcolor = RGBcolor;
+    this.seed = seed;
+    randomSeed(this.seed);
     this.numBranches = 7;
+    this.position = position;
+    this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
     this.stack = new Plant[3];
-    encodingString = strings[6];
-    initializeDecodingHashes();
-    Plant bottom = new Plant(this.yDistDecoding, this.angleDecoding, this.branchYDecoding, this.normDecoding,
-                             this.position, this.RGBcolor, 0);
-    Plant middle = new Plant(this.yDistDecoding, this.angleDecoding, this.branchYDecoding, this.normDecoding,
-                             bottom.path.end, this.colorRGB, 1);
-    Plant top = new Plant(this.yDistDecoding, this.angleDecoding, this.branchYDecoding, this.normDecoding,
-                          middle.path.end, this.colorRGB, 2);
+    Plant bottom = new Plant(new Vector3D(0, 0, 0), this.colorRGB, 0);
+    Plant middle = new Plant(bottom.path.end, this.colorRGB, 1);
+    Plant top = new Plant(middle.path.end, this.colorRGB, 2);
     this.stack[0] = bottom;
     this.stack[1] = middle;
     this.stack[2] = top;
-    this.position.x = float(strings[3]);
-    this.position.y = float(strings[4]);
-    this.position.z = float(strings[5]);
   }
   
-  public String[] stringPop(String start){
-    String[] result = {int("" + start.charAt(0)), start.substring(1, start.length)};
-    return result;
-  }
-  
-  // 7 args
-  public Plant(HashMap yDistDecoding, HashMap angleDecoding, HashMap branchYDecoding, HashMap normDecoding,
-               Vector3D start, Vector3D RGBcolor, int stack){
-    this.yDistDecoding = yDistDecoding;
-    this.angleDecoding = angleDecoding;
-    this.branchYDecoding = branchYDecoding;
-    this.normDecoding = normDecoding;
-    this.position = start;
-    this.numBranches = 7-stack;
-    this.level = 1;
-    this.RGBcolor = RGBcolor;
-    Vector3D startPoint = start;
-    String[] pop = stringPop(encodingString);
-    this.yDistRand = yDistDecoding.get(pop[0]);
-    encodingString = pop[1];
-    float yDist = this.yDistRand/(stack+1);
-    pop = stringPop(encodingString);
-    this.xAngle = angleDecoding.get(pop[0]);
-    encodingString = pop[1];
-    pop = stringPop(encodingString);
-    this.zAngle = angleDecoding.get(pop[0]);
-    encodingString = pop[1];
-    Vector3D endPoint = startPoint.addVector(new Vector3D(xAngle, -yDist, zAngle));
-    this.path = new Line(startPoint, endPoint);
-    this.branches = new Plant[this.numBranches];
-    for(int i = 0; i < this.numBranches; i++){
-     branches[i] = new Plant(this);
-    }
+  public String encode(){
+    String code = "";
+    code += int(this.RGBcolor.x) + "+" + int(this.RGBcolor.y) + "+" + int(this.RGBcolor.z) + "+";
+    code += int(this.position.x) + "+" + int(this.position.y) + "+" + int(this.position.z) + "+";
+    code += this.seed;
+    return LZString.compressToUTF16(code);
   }
 }  

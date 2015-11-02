@@ -579,7 +579,7 @@ public ArrayList cookieInfo(){
   for(int i = 0; i < min(tank.plants.size(), 5); i++){
     Plant p = (Plant) tank.plants.get(i);
     String plantStringPrefix = "p" + i + "=";
-    String plantString = p.encoding;
+    String plantString = p.encode();
     cookieInfo.add(plantStringPrefix + plantString + ";");
   }
   for(int i = min(tank.plants.size(), 5); i < 5; i++){

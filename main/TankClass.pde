@@ -102,8 +102,9 @@ public class Tank{
     for(int i = 0; i < 5; i++){
       cookie = get_cookie("p" + i);
       if(cookie != ""){
-        encodingString = cookie;
-        this.plants.add(new Plant(true, true));
+        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+        this.plants.add(new Plant(plantStats[6], new Vector3D(plantStats[0], plantStats[1], plantStats[2]),
+                                  new Vector3D(plantStats[3], plantStats[4], plantStats[5]), true));
       }
     }
     this.skipAhead(elapsedMinutes);
