@@ -27,6 +27,8 @@ public abstract class Fish {
   public Vector3D dimensions;
   public Vector3D velocity;
   public Vector3D acceleration;
+  public Vector3D eyePosition;
+  public Vector3D offset;
   public HashMap dangerRatings;
 
   public void setDangerRatings() {
@@ -217,6 +219,7 @@ public abstract class Fish {
     pushMatrix();
     translate(zero.x, zero.y, zero.z);
     translate(this.position.x, this.position.y, this.position.z);
+    translate(this.offset.x, this.offset.y, this.offset.z);
     scale(this.scaleVal, this.scaleVal, this.scaleVal);
     rotateX(this.orientation.x);
     rotateY(this.orientation.y);
@@ -225,6 +228,14 @@ public abstract class Fish {
     rotateY(this.rotate.y);
     rotateZ(this.rotate.z);
     shape(this.model);
+    //draw eyes
+    fill(0);
+    scale(1/this.scaleVal, 1/this.scaleVal, 1/this.scaleVal);
+    translate(-this.offset.x, -this.offset.y, -this.offset.z);
+    translate(this.dimensions.x*this.eyePosition.x, this.dimensions.y*this.eyePosition.y, this.dimensions.z*this.eyePosition.z);
+    sphere(2.5);
+    translate(0, 0, -2*this.dimensions.z*this.eyePosition.z);
+    sphere(2.5);
     popMatrix();
   }
 }

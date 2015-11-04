@@ -79,6 +79,7 @@ void draw(){
 
 public void populateSpeciesList(){
   speciesList.add(new Guppy("Swimmy"));
+  speciesList.add(new NeonTetra("Swimmy"));
 }
 
 public void determineBounds(){
@@ -319,6 +320,9 @@ public Fish addFishToTank(String speciesName, String nickname){
   Fish toAdd = null;
   if(speciesName == "Guppy"){
     toAdd = new Guppy(nickname);
+  }
+  else if(speciesName == "Neon Tetra"){
+    toAdd = new NeonTetra(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);

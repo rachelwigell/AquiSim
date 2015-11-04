@@ -76,6 +76,9 @@ public class Tank{
         if(fishStats[0] == "Guppy"){
           this.fish.add(new Guppy(fishStats, true)); 
         }
+        else if(fishStats[0] == "Neon Tetra"){
+          this.fish.add(new NeonTetra(fishStats, true));
+        }
       }
     }
     this.poops = new ArrayList();

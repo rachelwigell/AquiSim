@@ -1,42 +1,42 @@
-public class Guppy extends Fish{
-  public Guppy(String name){
-    this.species = "Guppy";
+public class NeonTetra extends Fish{
+  public NeonTetra(String name){
+    this.species = "Neon Tetra";
     this.name = name;
-    this.ease = 5;
+    this.ease = 4;
     this.maxHealth = this.ease*24*60*5;
     this.health = this.maxHealth;
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.fullness = this.maxFullness;
-    this.size = 5;
-    this.minPH = 7;
-    this.maxPH = 8.5;
+    this.size = 4;
+    this.minPH = 5;
+    this.maxPH = 7.5;
     this.minTemp = 20;
-    this.maxTemp = 29;
-    this.minHard = 8;
-    this.maxHard = 20;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
+    this.maxTemp = 26;
+    this.minHard = 1;
+    this.maxHard = 12;
+    this.ammonia = 0.1;
+    this.nitrite = 0.1;
+    this.nitrate = 25;
     this.scaleVal = 8;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("guppy.obj");
-    this.sprite = "graphics/guppy.PNG";
+    this.model = loadShape("neontetra.obj");
+    this.sprite = "graphics/neontetra.PNG";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scaleVal);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
-    this.offset = new Vector3D(0, 0, 0);
+    this.dimensions = new Vector3D(9.5*this.scaleVal, 3.8*this.scaleVal, 1.4*this.scaleVal);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.4);
+    this.offset = new Vector3D(0, 0, 1);
     this.setDangerRatings();
   }
   
   
   //constructor for load
-  public Guppy(String[] stats, boolean alive){
-    this.species = "Guppy";
+  public NeonTetra(String[] stats, boolean alive){
+    this.species = "Neon Tetra";
     if(alive){
       this.name = stats[1];
       this.health = float(stats[2]);
@@ -48,19 +48,19 @@ public class Guppy extends Fish{
       this.minPH = float(stats[8]);
       this.maxPH = float(stats[9]);
     }
-    this.ease = 5;
+    this.ease = 4;
     this.maxHealth = this.ease*24*60*5;
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.size = 5;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
-    this.model = loadShape("guppy.obj");
+    this.ammonia = 0.1;
+    this.nitrite = 0.1;
+    this.nitrate = 25;
+    this.model = loadShape("neontetra.obj");
     this.scaleVal = 8;
     this.rotate = new Vector3D(0, PI, 0);
-    this.sprite = "graphics/guppy.PNG";
-    this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scaleVal);
+    this.sprite = "graphics/neontetra.PNG";
+    this.dimensions = new Vector3D(9.5*this.scaleVal, 3.8*this.scaleVal, 1.4*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
     if(alive){
@@ -74,8 +74,8 @@ public class Guppy extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
-    this.offset = new Vector3D(0, 0, 0);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.4);
+    this.offset = new Vector3D(0, 0, 1);
     this.setDangerRatings();
   }
 }

@@ -3523,18 +3523,7 @@
             texObj = this.materials[texObj];
 
             // Texture
-            if(currSeg.texcVBO && texObj && typeof(texObj) === 'object'){
-              uniformi('usingTexture3d', programObject3D, 'uUsingTexture', true);
-              curContext.bindTexture(curContext.TEXTURE_2D, texObj);
-              vertexAttribPointer('aTexture3d', programObject3D, 'aTexture', 2, currSeg.texcVBO);
-
-              // if there is a texture, but there are no lights on, we need to use
-              // all the tex coords
-              if(lightCount === 0){
-                uniformf('color_3d', programObject3D, 'uColor', [1,1,1,1]);
-              }
-            }
-            else if(texObj){
+            if(texObj){
               uniformf("color3d", programObject3D, "uColor", texObj);
             }
             else{
