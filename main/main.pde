@@ -56,8 +56,6 @@ void setup(){
   handle_delete_plant();
   
   determineBounds();
-  
-  //addFishToTank("Guppy", "Swimmy");
 }
 
 void draw(){
@@ -80,6 +78,7 @@ void draw(){
 public void populateSpeciesList(){
   speciesList.add(new Guppy("Swimmy"));
   speciesList.add(new NeonTetra("Swimmy"));
+  speciesList.add(new CherryBarb("Swimmy"));
 }
 
 public void determineBounds(){
@@ -323,6 +322,9 @@ public Fish addFishToTank(String speciesName, String nickname){
   }
   else if(speciesName == "Neon Tetra"){
     toAdd = new NeonTetra(nickname);
+  }
+  else if(speciesName == "Cherry Barb"){
+    toAdd = new CherryBarb(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);

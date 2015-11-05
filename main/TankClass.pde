@@ -70,45 +70,56 @@ public class Tank{
     int elapsedMinutes = int((now.getTime() - lastSave.getTime())/60000);
     this.fish = new ArrayList();
     for(int i = 0; i < 15; i++){
-      cookie = get_cookie("f" + i);
-      if(cookie != ""){
-        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-        if(fishStats[0] == "Guppy"){
-          this.fish.add(new Guppy(fishStats, true)); 
-        }
-        else if(fishStats[0] == "Neon Tetra"){
-          this.fish.add(new NeonTetra(fishStats, true));
-        }
-      }
+     cookie = get_cookie("f" + i);
+     if(cookie != ""){
+       String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+       if(fishStats[0] == "Guppy"){
+         this.fish.add(new Guppy(fishStats, true)); 
+       }
+       else if(fishStats[0] == "Neon Tetra"){
+         this.fish.add(new NeonTetra(fishStats, true));
+       }
+       else if(fishStats[0] == "Cherry Barb"){
+         this.fish.add(new CherryBarb(fishStats, true));
+       }
+     }
     }
     this.poops = new ArrayList();
     for(int i = 0; i < float(stats[11]); i++){
-      this.poops.add(new Poop());
-      this.waste++;
+     this.poops.add(new Poop());
+     this.waste++;
     }
     this.food = new ArrayList();
     for(int i = 0; i < float(stats[10]); i++){
-      this.food.add(new Food());
+     this.food.add(new Food());
     }
     this.deadFish = new ArrayList();
     for(int i = 0; i < 15; i++){
-      cookie = get_cookie("d" + i);
-      if(cookie != ""){
-        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-        if(fishStats[0] == "Guppy"){
-          this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
-          this.waste += 5;
-        }
-      }
+     cookie = get_cookie("d" + i);
+     if(cookie != ""){
+       String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+       if(fishStats[0] == "Guppy"){
+         this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
+         this.waste += 5;
+       }
+       else if(fishStats[0] == "Neon Tetra"){
+         this.deadFish.add(new DeadFish(new NeonTetra(fishStats, false))); 
+         this.waste += 4;
+       }
+       else if(fishStats[0] == "Cherry Barb"){
+         this.deadFish.add(new DeadFish(new CherryBarb(fishStats, false))); 
+         this.waste += 5;
+       }
+     }
     }
     this.plants = new ArrayList();
     for(int i = 0; i < 5; i++){
-      cookie = get_cookie("p" + i);
-      if(cookie != ""){
-        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-        this.plants.add(new Plant(plantStats[6], new Vector3D(plantStats[0], plantStats[1], plantStats[2]),
-                                  new Vector3D(plantStats[3], plantStats[4], plantStats[5]), true));
-      }
+     cookie = get_cookie("p" + i);
+     if(cookie != ""){
+       String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+       this.plants.add(new Plant(plantStats[6], new Vector3D(plantStats[0], plantStats[1], plantStats[2]),
+                                 new Vector3D(plantStats[3], plantStats[4], plantStats[5]), true));
+     }
     }
     this.skipAhead(elapsedMinutes);
   }
