@@ -21,7 +21,7 @@ public class CherryBarb extends Fish{
     this.scaleVal = 8;
     this.rotate = new Vector3D(0, PI, 0);
     this.model = loadShape("cherrybarb.obj");
-    this.sprite = "graphics/cherrybarb.PNG";
+    this.sprite = "graphics/cherrybarb.png";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
@@ -59,7 +59,7 @@ public class CherryBarb extends Fish{
     this.model = loadShape("cherrybarb.obj");
     this.scaleVal = 8;
     this.rotate = new Vector3D(0, PI, 0);
-    this.sprite = "graphics/cherrybarb.PNG";
+    this.sprite = "graphics/cherrybarb.png";
     this.dimensions = new Vector3D(10.5*this.scaleVal, 5*this.scaleVal, 1.35*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
