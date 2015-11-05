@@ -17,6 +17,8 @@ public int rightMaxX = null;
 public int sidesMaxY = null;
 public int updateCount = 0;
 public float waterLevel = .8;
+public int maxFish = 20;
+public int maxPlants = 6;
 
 tank_stats =  {};
 fish_stats = {};
@@ -558,7 +560,7 @@ public ArrayList cookieInfo(){
   tankString += date.getMinutes();
   tankString = LZString.compressToUTF16(tankString) + ";";
   cookieInfo.add(tankStringPrefix + tankString);
-  for(int i = 0; i < min(tank.fish.size(), 15); i++){
+  for(int i = 0; i < min(tank.fish.size(), maxFish); i++){
    Fish f = (Fish) tank.fish.get(i);
    String fishStringPrefix = "f" + i + "=";
    String fishString = "";
@@ -575,35 +577,35 @@ public ArrayList cookieInfo(){
    fishString = LZString.compressToUTF16(fishString) + ";";
    cookieInfo.add(fishStringPrefix + fishString);
   }
-  for(int i = min(tank.fish.size(), 15); i < 15; i++){
+  for(int i = min(tank.fish.size(), maxFish); i < maxFish; i++){
     cookieInfo.add("f" + i + "=;");
   }
-  for(int i = 0; i < min(tank.deadFish.size(), 15); i++){
+  for(int i = 0; i < min(tank.deadFish.size(), maxFish); i++){
    DeadFish f = (DeadFish) tank.deadFish.get(i);
    String fishStringPrefix = "d" + i + "=";
    String fishString = f.sprite.species;
    fishString = LZString.compressToUTF16(fishString) + ";";
    cookieInfo.add(fishStringPrefix + fishString);
   }
-  for(int i = min(tank.deadFish.size(), 15); i < 15; i++){
+  for(int i = min(tank.deadFish.size(), maxFish); i < maxFish; i++){
     cookieInfo.add("d" + i + "=;");
   }
-  for(int i = 0; i < min(tank.plants.size(), 5); i++){
+  for(int i = 0; i < min(tank.plants.size(), maxPlants); i++){
     Plant p = (Plant) tank.plants.get(i);
     String plantStringPrefix = "p" + i + "=";
     String plantString = p.encode();
     cookieInfo.add(plantStringPrefix + plantString + ";");
   }
-  for(int i = min(tank.plants.size(), 5); i < 5; i++){
+  for(int i = min(tank.plants.size(), maxPlants); i < maxPlants; i++){
     cookieInfo.add("p" + i + "=;");
   }
   return cookieInfo;
 }
 
 public boolean hasMaxFish(){
-  return tank.fish.size() >= 15;
+  return tank.fish.size() >= maxFish;
 }
 
 public boolean hasMaxPlants(){
-  return tank.plants.size() >= 5;
+  return tank.plants.size() >= maxPlants;
 }

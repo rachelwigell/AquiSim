@@ -66,7 +66,7 @@ public class Tank{
     this.waste = 0;
     this.time = getTime();
     this.fish = new ArrayList();
-    for(int i = 0; i < 15; i++){
+    for(int i = 0; i < maxFish; i++){
      cookie = get_cookie("f" + i);
      if(cookie != ""){
        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
@@ -91,7 +91,7 @@ public class Tank{
      this.food.add(new Food());
     }
     this.deadFish = new ArrayList();
-    for(int i = 0; i < 15; i++){
+    for(int i = 0; i < maxFish; i++){
      cookie = get_cookie("d" + i);
      if(cookie != ""){
        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
@@ -110,7 +110,7 @@ public class Tank{
      }
     }
     this.plants = new ArrayList();
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < maxPlants; i++){
      cookie = get_cookie("p" + i);
      if(cookie != ""){
        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
