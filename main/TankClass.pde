@@ -65,9 +65,6 @@ public class Tank{
     this.nitrobacter = float(stats[9]);
     this.waste = 0;
     this.time = getTime();
-    var now = new Date();
-    var lastSave = new Date(int(stats[12])+2000, int(stats[13]), int(stats[14]), int(stats[15]), int(stats[16]), 0, 0);
-    int elapsedMinutes = int((now.getTime() - lastSave.getTime())/60000);
     this.fish = new ArrayList();
     for(int i = 0; i < 15; i++){
      cookie = get_cookie("f" + i);
@@ -121,7 +118,6 @@ public class Tank{
                                  new Vector3D(plantStats[3], plantStats[4], plantStats[5]), true));
      }
     }
-    this.skipAhead(elapsedMinutes);
   }
     
   public int getTime(){
@@ -289,7 +285,8 @@ public class Tank{
   
   public void progress(){
     //per fish operations
-    for(Fish f: this.fish){
+    for(int i = 0; i < this.fish.size(); i++){
+      Fish f = (Fish) this.fish.get(i);
       f.changeHunger(); //update fish's hunger level 
       this.fishHappiness(f); //update fish's happiness status
       f.setHealth(); //update fish's health

@@ -1,4 +1,5 @@
 * A user reported compatibility issue with IE11 - troubleshoot
+* issue with neon tetra model causing WebGL errors, though seemingly not breaking anything
 * Add a guide to the user interface to the help menu
 * More species
 * Add achievements

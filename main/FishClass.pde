@@ -85,21 +85,21 @@ public abstract class Fish {
       this.health = max(0, this.health-2);
     }
     else {
-      String problemElement = "";
-      Iterator i = this.dangerRatings.entrySet().iterator();
-      while (i.hasNext()) {
-       Map.Entry danger = (Map.Entry) i.next();
-       String dangerKey = (String) danger.getKey();
-       if (this.status.contains(dangerKey)) {
-         problemElement = dangerKey;
-         break;
-       }
+     String problemElement = "";
+     Iterator i = this.dangerRatings.entrySet().iterator();
+     while (i.hasNext()) {
+      Map.Entry danger = (Map.Entry) i.next();
+      String dangerKey = (String) danger.getKey();
+      if (this.status.contains(dangerKey)) {
+        problemElement = dangerKey;
+        break;
       }
-      boolean problemDirection = status.contains("high");
-      float dist = 0;
-      dist = abs(tank.getParameter(problemElement) - this.getParameter(problemElement, problemDirection));
-      float reduction = max(1, dist*this.dangerRatings.get(problemElement));
-      this.health = max(0, this.health-reduction);
+     }
+     boolean problemDirection = status.contains("high");
+     float dist = 0;
+     dist = abs(tank.getParameter(problemElement) - this.getParameter(problemElement, problemDirection));
+     float reduction = max(1, dist*this.dangerRatings.get(problemElement));
+     this.health = max(0, this.health-reduction);
     }
     return this.health;
   }

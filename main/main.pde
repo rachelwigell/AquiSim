@@ -34,7 +34,7 @@ void setup(){
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
-  cookie = get_cookie("t");
+  String cookie = get_cookie("t");
   if(cookie == ""){
     tank = new Tank();
     accordion_defaults(true);
@@ -42,6 +42,12 @@ void setup(){
   else{
     tank = new Tank(cookie);
     accordion_defaults(false);
+    cookie = LZString.decompressFromUTF16(cookie);
+    String[] stats = splitTokens(cookie, "+");
+    var now = new Date();
+    var lastSave = new Date(int(stats[12])+2000, int(stats[13]), int(stats[14]), int(stats[15]), int(stats[16]), 0, 0);
+    int elapsedMinutes = int((now.getTime() - lastSave.getTime())/60000);
+    tank.skipAhead(elapsedMinutes);
   }
   
   populateSpeciesList();
