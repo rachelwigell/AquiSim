@@ -370,7 +370,7 @@ public class Tank{
   }
   
   public boolean eat(Fish fish, Food food){
-    if(fish.absolutePosition.distance(food.absolutePosition) < food.dimensions.x*8){
+    if(fish.absolutePosition.distance(food.absolutePosition) < 40){
       fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
       return true;
     }
@@ -381,8 +381,8 @@ public class Tank{
     for(int i = 0; i < this.fish.size(); i++){
       Fish aFish = (Fish) this.fish.get(i);
       ArrayList eaten = new ArrayList();
-      for(int j = 0; j < this.sinkingFood.size(); j++){
-        Food aFood = (Food) this.sinkingFood.get(j);
+      for(int j = 0; j < this.food.size(); j++){
+        Food aFood = (Food) this.food.get(j);
         if(this.eat(aFish, aFood)){
           eaten.add(aFood);
         }
@@ -436,7 +436,7 @@ public class Tank{
     }
     for(int i = 0; i < eaten.size(); i++){
       Food food = (Food) eaten.get(i);
-      this.removeFood(aFood);
+      this.removeFood(food);
     }
   }
   

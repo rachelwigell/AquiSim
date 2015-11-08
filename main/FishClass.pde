@@ -166,9 +166,6 @@ public abstract class Fish {
       this.acceleration.x = -1;
     }
     this.velocity.x = new Vector3D(-2, this.velocity.x + this.acceleration.x, 2).centermost();
-    if(this.position.y == (-.5*fieldY*waterLevel+this.dimensions.y/2.0)){
-     this.acceleration.y = 1;
-    }
     //let them hit the floor, in case they're going towards food that's there.
     this.velocity.y = new Vector3D(-2, this.velocity.y + this.acceleration.y, 2).centermost();
     if(this.position.z == (-.5*fieldZ+this.dimensions.x/2.0)){

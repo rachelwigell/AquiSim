@@ -238,10 +238,10 @@ public void mouseReleased(){
          $('#cancel_plant_move').click();
       }
     }
-    //if(mouseButton == RIGHT){
-    //  console.log("skipping ahead 1 hour");
-    //  tank.skipAhead(60);
-    //}
+    if(mouseButton == RIGHT){
+     console.log("skipping ahead 1 hour");
+     tank.skipAhead(60);
+    }
 }
 
 /**************************************************
@@ -448,30 +448,25 @@ public boolean rayTriangleIntersect(Vector3D rayOrigin, Vector3D rayNormal, Floa
   Vector3D h = rayNormal.crossProduct(e2);
   float a = e1.dotProduct(h);
 
-  console.log("a", a);
-  if (a > -0.001 && a < 0.001)
+  if (a > -0.00001 && a < 0.00001)
     return(false);
 
   float f = 1/a;
   Vector3D s = rayOrigin.addVector(v0.multiplyScalar(-1));
   float u = f * s.dotProduct(h);
   
-  console.log("u", u);
   if (u < -0.2 || u > 1.2)
     return(false);
 
   Vector3D q = s.crossProduct(e1);
   float v = f * rayNormal.dotProduct(q);
 
-  console.log("v", v);
   if (v < -0.2 || u + v > 1.2)
     return(false);
   t = f * e2.dotProduct(q);
 
-  console.log("t", t);
   if (t > -.2) // ray intersection
     return(true);
-
   else // this means that there is a line intersection but not a ray intersection
      return (false);
 }
