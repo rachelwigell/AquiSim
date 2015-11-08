@@ -16,5 +16,6 @@ public abstract class Waste {
   public void removeFromTank(Tank t) {}
   
   public void updateVelocity(){}
+  
+  public void drawWaste(){}
 }
-

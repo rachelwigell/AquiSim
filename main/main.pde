@@ -150,12 +150,12 @@ void drawAllFish(){
 public void drawAllWaste(){
   for(int i = 0; i < tank.poops.size(); i++){
     Poop p = (Poop) tank.poops.get(i);
-    drawWaste(p);
+    p.drawWaste();
     p.updatePosition();
   }
   for(int i = 0; i < tank.food.size(); i++){
     Food f = (Food) tank.food.get(i);
-    drawWaste(f);
+    f.drawWaste();
     f.updatePosition();
   }
   for(int i = 0; i < tank.deadFish.size(); i++){
@@ -163,16 +163,6 @@ public void drawAllWaste(){
     d.sprite.drawFish();
     d.updatePosition();
   }
-}
-  
-public void drawWaste(Waste s){
-  noStroke();
-  pushMatrix();
-  translate(fieldX/2, fieldY/2, -fieldZ);
-  translate(s.position.x, s.position.y, s.position.z);
-  fill(s.RGBcolor.x, s.RGBcolor.y, s.RGBcolor.z);
-  sphere(s.dimensions.x);
-  popMatrix();    
 }
 
 public void drawStack(Plant plant){
@@ -248,13 +238,10 @@ public void mouseReleased(){
          $('#cancel_plant_move').click();
       }
     }
-    if(mouseButton == RIGHT){
+    //if(mouseButton == RIGHT){
     //  console.log("skipping ahead 1 hour");
     //  tank.skipAhead(60);
-    console.log('floating', tank.floatingFood.size());
-    console.log('sinking', tank.sinkingFood.size());
-    console.log('total', tank.food.size());
-    }
+    //}
 }
 
 /**************************************************
@@ -417,9 +404,18 @@ public Waste removeWaste(Vector3D start, Vector3D end){
       } 
     }
   }
-  for(int i = 0; i < tank.food.size(); i++){
-    Food f = (Food) tank.food.get(i);
+  for(int i = 0; i < tank.sinkingFood.size(); i++){
+    SinkingFood f = (SinkingFood) tank.sinkingFood.get(i);
     if(raySphereIntersect(start, normal, f.absolutePosition, f.dimensions.x*2)){
+      if(f.absolutePosition.z > z){
+        z = f.absolutePosition.z;
+        closest = f;
+      }
+    }
+  }
+  for(int i = 0; i < tank.floatingFood.size(); i++){
+    FloatingFood f = (FloatingFood) tank.floatingFood.get(i);
+    if(rayTriangleIntersect(start, normal, f)){
       if(f.absolutePosition.z > z){
         z = f.absolutePosition.z;
         closest = f;
@@ -441,6 +437,43 @@ public Waste removeWaste(Vector3D start, Vector3D end){
 public boolean raySphereIntersect(Vector3D rayOrigin, Vector3D rayNormal, Vector3D sphereCenter, float sphereRadius){
   double determinant = Math.pow(rayNormal.dotProduct(rayOrigin.addVector(sphereCenter.multiplyScalar(-1))), 2) - Math.pow(rayOrigin.addVector(sphereCenter.multiplyScalar(-1)).magnitude(), 2) + Math.pow(sphereRadius, 2);
   return determinant >= 0;
+}
+
+public boolean rayTriangleIntersect(Vector3D rayOrigin, Vector3D rayNormal, FloatingFood f){
+  Vector3D v0 = (Vector3D) f.points.get(0).addVector(f.absolutePosition);
+  Vector3D v1 = (Vector3D) f.points.get(1).addVector(f.absolutePosition);
+  Vector3D v2 = (Vector3D) f.points.get(2).addVector(f.absolutePosition);
+  Vector3D e1 = v1.addVector(v0.multiplyScalar(-1));
+  Vector3D e2 = v2.addVector(v0.multiplyScalar(-1));
+  Vector3D h = rayNormal.crossProduct(e2);
+  float a = e1.dotProduct(h);
+
+  console.log("a", a);
+  if (a > -0.001 && a < 0.001)
+    return(false);
+
+  float f = 1/a;
+  Vector3D s = rayOrigin.addVector(v0.multiplyScalar(-1));
+  float u = f * s.dotProduct(h);
+  
+  console.log("u", u);
+  if (u < -0.2 || u > 1.2)
+    return(false);
+
+  Vector3D q = s.crossProduct(e1);
+  float v = f * rayNormal.dotProduct(q);
+
+  console.log("v", v);
+  if (v < -0.2 || u + v > 1.2)
+    return(false);
+  t = f * e2.dotProduct(q);
+
+  console.log("t", t);
+  if (t > -.2) // ray intersection
+    return(true);
+
+  else // this means that there is a line intersection but not a ray intersection
+     return (false);
 }
 
 public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNormal){

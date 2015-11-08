@@ -36,4 +36,14 @@ public class Poop extends Waste{
       this.velocity.y = 0;
     }
   }
+  
+  public void drawWaste(){
+    noStroke();
+    pushMatrix();
+    translate(fieldX/2, fieldY/2, -fieldZ);
+    translate(this.position.x, this.position.y, this.position.z);
+    fill(this.RGBcolor.x, this.RGBcolor.y, this.RGBcolor.z);
+    sphere(this.dimensions.x);
+    popMatrix();    
+  }
 }

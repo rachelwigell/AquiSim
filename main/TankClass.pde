@@ -381,8 +381,8 @@ public class Tank{
     for(int i = 0; i < this.fish.size(); i++){
       Fish aFish = (Fish) this.fish.get(i);
       ArrayList eaten = new ArrayList();
-      for(int j = 0; j < this.food.size(); j++){
-        Food aFood = (Food) this.food.get(j);
+      for(int j = 0; j < this.sinkingFood.size(); j++){
+        Food aFood = (Food) this.sinkingFood.get(j);
         if(this.eat(aFish, aFood)){
           eaten.add(aFood);
         }
