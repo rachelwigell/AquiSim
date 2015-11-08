@@ -18,6 +18,8 @@ public class Tank{
   public ArrayList fish;
   public ArrayList poops;
   public ArrayList food;
+  public ArrayList floatingFood;
+  public ArrayList sinkingFood;
   public ArrayList deadFish;
   public ArrayList plants;
   public String name;
@@ -48,6 +50,8 @@ public class Tank{
     this.fish = new ArrayList();
     this.poops = new ArrayList();
     this.food = new ArrayList();
+    this.sinkingFood = new ArrayList();
+    this.floatingFood = new ArrayList();
     this.deadFish = new ArrayList();
     this.name = "";
   }
@@ -68,8 +72,6 @@ public class Tank{
     this.nitrosomonas = float(stats[8]);
     this.nitrobacter = float(stats[9]);
     this.waste = 0;
-    this.floatingFood = 0;
-    this.sinkingFood = 0;
     this.time = getTime();
     this.fish = new ArrayList();
     for(int i = 0; i < maxFish; i++){
@@ -96,13 +98,17 @@ public class Tank{
      this.waste++;
     }
     this.food = new ArrayList();
+    this.sinkingFood = new ArrayList();
+    this.floatingFood = new ArrayList();
     for(int i = 0; i < float(stats[10]); i++){
-     this.food.add(new SinkingFood());
-     this.sinkingFood++;
+      Food f = new SinkingFood();
+      this.food.add(f);
+      this.sinkingFood.add(f);
     }
     for(int i = 0; i < float(stats[11]); i++){
-      this.food.add(new FloatingFood());
-      this.floatingFood++;
+      Food f = new FloatingFood();
+      this.food.add(f);
+      this.floatingFood.add(f);
     }
     this.deadFish = new ArrayList();
     for(int i = 0; i < maxFish; i++){
@@ -213,6 +219,12 @@ public class Tank{
   
   public void addFood(Food food){
     this.food.add(food);
+    food.addToAppropriateList(this);
+  }
+  
+  public void removeFood(Food food){
+    this.food.remove(food);
+    food.removeFromAppropriateList(this);
   }
 
   public int changeWaste(){
@@ -377,7 +389,7 @@ public class Tank{
       }
       for(int k = 0; k < eaten.size(); k++){
         Food aFood = (Food) eaten.get(k);
-        this.food.remove(aFood);
+        this.removeFood(aFood);
       }
     }
   }
@@ -424,7 +436,7 @@ public class Tank{
     }
     for(int i = 0; i < eaten.size(); i++){
       Food food = (Food) eaten.get(i);
-      this.food.remove(food);
+      this.removeFood(aFood);
     }
   }
   

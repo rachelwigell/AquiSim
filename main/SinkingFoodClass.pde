@@ -42,4 +42,12 @@ public class SinkingFood extends Food{
       this.velocity.y = 0;
     }
   }
+  
+  public void addToAppropriateList(tank t){
+    t.sinkingFood.add(this);
+  }
+  
+  public void removeFromAppropriateList(tank t){
+    t.sinkingFood.remove(this);
+  }
 }

@@ -19,7 +19,7 @@ public class FloatingFood extends Food{
   public FloatingFood(){
     this.absolutePosition = new Vector3D(0, 0, 0);
     this.absolutePosition.z = random(-1.5*fieldZ+30, -.5*fieldZ-30);
-    this.absolutePosition.y = fieldY*(.5-waterLevel);
+    this.absolutePosition.y = fieldY*(.5-waterLevel)+center.y;
     this.absolutePosition.x = random(.025*fieldX+30, .975*fieldX-30);
     this.position = absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
     this.speedChangeLocation = new Vector3D(0, fieldY*(.5-waterLevel), 0);
@@ -41,5 +41,13 @@ public class FloatingFood extends Food{
     if(this.position.y <= this.restingPosition.y && this.velocity.y == -1){
       this.velocity.y = 0;
     }
+  }
+  
+  public void addToAppropriateList(tank t){
+    t.floatingFood.add(this);
+  }
+  
+  public void removeFromAppropriateList(tank t){
+    t.floatingFood.remove(this);
   }
 }

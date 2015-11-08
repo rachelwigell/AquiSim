@@ -248,10 +248,13 @@ public void mouseReleased(){
          $('#cancel_plant_move').click();
       }
     }
-    //if(mouseButton == RIGHT){
+    if(mouseButton == RIGHT){
     //  console.log("skipping ahead 1 hour");
     //  tank.skipAhead(60);
-    //}
+    console.log('floating', tank.floatingFood.size());
+    console.log('sinking', tank.sinkingFood.size());
+    console.log('total', tank.food.size());
+    }
 }
 
 /**************************************************
@@ -476,14 +479,11 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     float z = new Vector3D(-1.5*fieldZ+30, -1.5*fieldZ + percent*fieldZ, -.5*fieldZ-30).centermost();
     float factor = (z-start.z)/normal.z;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-    console.log(floatingFood);
     if(floatingFood){
       tank.addFood(new FloatingFood(absolutePosition));
-      tank.floatingFood++;
     }
     else{
       tank.addFood(new SinkingFood(absolutePosition));
-      tank.sinkingFood++;
     }
   }
   // clicked side of tank - place food
@@ -496,11 +496,9 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
     if(floatingFood){
       tank.addFood(new FloatingFood(absolutePosition));
-      tank.floatingFood++;
     }
     else{
       tank.addFood(new SinkingFood(absolutePosition));
-      tank.sinkingFood++;
     }
   }
   // clicked bottom of tank - place food
@@ -583,8 +581,8 @@ public ArrayList cookieInfo(){
   tankString += tank.co2.toFixed(2) + "+";
   tankString += tank.nitrosomonas.toFixed(2) + "+";
   tankString += tank.nitrobacter.toFixed(2) + "+";
-  tankString += min(tank.sinkingFood, 99) + "+";
-  tankString += min(tank.floatingFood, 99) + "+";
+  tankString += min(tank.sinkingFood.size(), 99) + "+";
+  tankString += min(tank.floatingFood.size(), 99) + "+";
   tankString += min(tank.poops.size(), 99) + "+";
   var date = new Date();
   tankString += date.getFullYear()-2000 + "+";
