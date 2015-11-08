@@ -91,7 +91,7 @@ public class Tank{
     }
     this.food = new ArrayList();
     for(int i = 0; i < float(stats[10]); i++){
-     this.food.add(new Food());
+     this.food.add(new SinkingFood());
     }
     this.deadFish = new ArrayList();
     for(int i = 0; i < maxFish; i++){

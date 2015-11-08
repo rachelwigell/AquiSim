@@ -296,6 +296,11 @@ $('#cancel_plant_move').click(function(){
 	$('#plant_instructions').empty();
 })
 
+$('#food_type').change(function(){
+	var processing = Processing.getInstanceById('processing');
+	var boolValue = !$('#food_type').is(":checked");
+	processing.setFloatingFood(boolValue);
+})
 
 $(document).ready(function() {
 	$(document).foundation({

@@ -28,8 +28,14 @@ String clickMode = "DEFAULT";
 Plant previewPlant = null;
 Vector3D zero = null;
 Vector3D center = null;
+boolean floatingFood = false;
 
 void setup(){
+  if(fieldY > fieldX){
+    int temp = fieldY;
+    fieldY = fieldX;
+    fieldX = temp;
+  }
   size(fieldX, fieldY, P3D);
   frameRate(30); //causes draw() to be called 30 times per second
   picker = new Selection_in_P3D_OPENGL_A3D();
@@ -62,6 +68,8 @@ void setup(){
   handle_add_plant();
   handle_move_plant();
   handle_delete_plant();
+  floatingFood = !$('#food_type').is(":checked");
+  
   
   determineBounds();
 }
@@ -469,7 +477,13 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     float z = new Vector3D(-1.5*fieldZ+30, -1.5*fieldZ + percent*fieldZ, -.5*fieldZ-30).centermost();
     float factor = (z-start.z)/normal.z;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-    tank.addFood(new Food(absolutePosition));
+    console.log(floatingFood);
+    if(floatingFood){
+      tank.addFood(new FloatingFood(absolutePosition));
+    }
+    else{
+      tank.addFood(new SinkingFood(absolutePosition));
+    }
   }
   // clicked side of tank - place food
   else if((side = onSide(xCoord, yCoord)) != "No"){
@@ -479,7 +493,12 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     else x = .975*fieldX-30;
     float factor = (x-start.x)/normal.x;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-    tank.addFood(new Food(absolutePosition));
+    if(floatingFood){
+      tank.addFood(new FloatingFood(absolutePosition));
+    }
+    else{
+      tank.addFood(new SinkingFood(absolutePosition));
+    }
   }
   // clicked bottom of tank - place food
   else if(onBottom(xCoord, yCoord)){
@@ -487,7 +506,12 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     float y = fieldY;
     float factor = (y-start.y)/normal.y;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-    tank.addFood(new Food(absolutePosition));
+    if(floatingFood){
+      tank.addFood(new FloatingFood(absolutePosition));
+    }
+    else{
+      tank.addFood(new SinkingFood(absolutePosition));
+    }
   }
 }
 
@@ -612,4 +636,9 @@ public boolean hasMaxFish(){
 
 public boolean hasMaxPlants(){
   return tank.plants.size() >= maxPlants;
+}
+
+public boolean setFloatingFood(boolean floating){
+  floatingFood = floating;
+  return floatingFood;
 }
