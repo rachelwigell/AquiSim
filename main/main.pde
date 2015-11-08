@@ -87,6 +87,7 @@ public void populateSpeciesList(){
   speciesList.add(new Guppy("Swimmy"));
   speciesList.add(new NeonTetra("Swimmy"));
   speciesList.add(new CherryBarb("Swimmy"));
+  speciesList.add(new WhiteCloudMountainMinnow("Swimmy"));
 }
 
 public void determineBounds(){
@@ -333,6 +334,9 @@ public Fish addFishToTank(String speciesName, String nickname){
   }
   else if(speciesName == "Cherry Barb"){
     toAdd = new CherryBarb(nickname);
+  }
+  else if(speciesName == "White Cloud Mountain Minnow"){
+    toAdd = new WhiteCloudMountainMinnow(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);
