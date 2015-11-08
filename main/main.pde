@@ -537,11 +537,9 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
     if(floatingFood){
       tank.addFood(new FloatingFood(absolutePosition));
-      tank.floatingFood++;
     }
     else{
       tank.addFood(new SinkingFood(absolutePosition));
-      tank.sinkingFood++;
     }
   }
 }
