@@ -3,13 +3,14 @@ public class FloatingFood extends Food{
   
   public FloatingFood(Vector3D absolutePosition){
     this.absolutePosition = absolutePosition;
+    this.absolutePosition.y = min(this.absolutePosition.y, fieldY/2+center.y-2);
     this.position = absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
     this.speedChangeLocation = new Vector3D(0, fieldY*(.5-waterLevel), 0);
-    if(this.position.y < speedChangeLocation.y){
+    if(this.position.y <= speedChangeLocation.y){
       this.velocity = new Vector3D(0, 8, 0);
     }
     else{
-      this.velocity = new Vector3D(0, -.5, 0);
+      this.velocity = new Vector3D(0, 1, 0);
     }
     this.points = new ArrayList();
     Vector3D first = new Vector3D(0, 0, 0);
@@ -22,7 +23,7 @@ public class FloatingFood extends Food{
     points.add(second);
     points.add(third);
     this.RGBcolor = new Vector3D(200, 120, 0);
-    this.restingPosition = new Vector3D(0, fieldY*(.5-waterLevel), 0);
+    this.restingPosition = new Vector3D(0, fieldY/2-2, 0);
   }
   
   //randomizes positions for save/load
@@ -33,11 +34,11 @@ public class FloatingFood extends Food{
     this.absolutePosition.x = random(.025*fieldX+30, .975*fieldX-30);
     this.position = absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
     this.speedChangeLocation = new Vector3D(0, fieldY*(.5-waterLevel), 0);
-    if(this.position.y < speedChangeLocation.y){
+    if(this.position.y <= speedChangeLocation.y){
       this.velocity = new Vector3D(0, 8, 0);
     }
     else{
-      this.velocity = new Vector3D(0, -.5, 0);
+      this.velocity = new Vector3D(0, 1, 0);
     }
     this.points = new ArrayList();
     Vector3D first = new Vector3D(0, 0, 0);
@@ -50,14 +51,17 @@ public class FloatingFood extends Food{
     points.add(second);
     points.add(third);
     this.RGBcolor = new Vector3D(200, 120, 0);
-    this.restingPosition = new Vector3D(0, fieldY*(.5-waterLevel), 0);
+    this.restingPosition = new Vector3D(0, fieldY/2-2, 0);
   }
   
   public void updateVelocity(){
     if(this.position.y >= this.speedChangeLocation.y && this.velocity.y == 8){
       this.velocity.y = -.5;
     }
-    if(this.position.y <= this.restingPosition.y && this.velocity.y == -.5){
+    else if(this.position.y <= this.speedChangeLocation.y && this.velocity.y == -.5){
+      this.velocity.y = 0;
+    }
+    else if(this.position.y >= this.restingPosition.y && this.velocity.y > 0){
       this.velocity.y = 0;
     }
   }
