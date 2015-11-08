@@ -21,7 +21,7 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.scaleVal = 6;
     this.rotate = new Vector3D(0, 0, 0);
     this.model = loadShape("whitecloudmountainminnow.obj");
-    this.sprite = "graphics/whitecloudmountainminnow.PNG";
+    this.sprite = "graphics/whitecloudmountainminnow.png";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
@@ -59,7 +59,7 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.model = loadShape("whitecloudmountainminnow.obj");
     this.scaleVal = 6;
     this.rotate = new Vector3D(0, 0, 0);
-    this.sprite = "graphics/whitecloudmountainminnow.PNG";
+    this.sprite = "graphics/whitecloudmountainminnow.png";
     this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
