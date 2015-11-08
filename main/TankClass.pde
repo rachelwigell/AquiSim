@@ -12,6 +12,8 @@ public class Tank{
   public float nitrosomonas; //bacteria
   public float nitrobacter; //bacteria
   public int waste; //poops
+  public int sinkingFood; //noms
+  public int floatingFood; //noms
   public int time; //min
   public ArrayList fish;
   public ArrayList poops;
@@ -40,6 +42,8 @@ public class Tank{
     this.nitrosomonas = 1;
     this.nitrobacter = 1;
     this.waste = 0;
+    this.floatingFood = 0;
+    this.sinkingFood = 0;
     this.time = getTime();
     this.fish = new ArrayList();
     this.poops = new ArrayList();
@@ -64,6 +68,8 @@ public class Tank{
     this.nitrosomonas = float(stats[8]);
     this.nitrobacter = float(stats[9]);
     this.waste = 0;
+    this.floatingFood = 0;
+    this.sinkingFood = 0;
     this.time = getTime();
     this.fish = new ArrayList();
     for(int i = 0; i < maxFish; i++){
@@ -85,13 +91,18 @@ public class Tank{
      }
     }
     this.poops = new ArrayList();
-    for(int i = 0; i < float(stats[11]); i++){
+    for(int i = 0; i < float(stats[12]); i++){
      this.poops.add(new Poop());
      this.waste++;
     }
     this.food = new ArrayList();
     for(int i = 0; i < float(stats[10]); i++){
      this.food.add(new SinkingFood());
+     this.sinkingFood++;
+    }
+    for(int i = 0; i < float(stats[11]); i++){
+      this.food.add(new FloatingFood());
+      this.floatingFood++;
     }
     this.deadFish = new ArrayList();
     for(int i = 0; i < maxFish; i++){

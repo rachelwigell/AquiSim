@@ -53,7 +53,7 @@ void setup(){
     cookie = LZString.decompressFromUTF16(cookie);
     String[] stats = splitTokens(cookie, "+");
     var now = new Date();
-    var lastSave = new Date(int(stats[12])+2000, int(stats[13]), int(stats[14]), int(stats[15]), int(stats[16]), 0, 0);
+    var lastSave = new Date(int(stats[13])+2000, int(stats[14]), int(stats[15]), int(stats[16]), int(stats[17]), 0, 0);
     int elapsedMinutes = int((now.getTime() - lastSave.getTime())/60000);
     tank.skipAhead(elapsedMinutes);
   }
@@ -69,7 +69,6 @@ void setup(){
   handle_move_plant();
   handle_delete_plant();
   floatingFood = !$('#food_type').is(":checked");
-  
   
   determineBounds();
 }
@@ -480,9 +479,11 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     console.log(floatingFood);
     if(floatingFood){
       tank.addFood(new FloatingFood(absolutePosition));
+      tank.floatingFood++;
     }
     else{
       tank.addFood(new SinkingFood(absolutePosition));
+      tank.sinkingFood++;
     }
   }
   // clicked side of tank - place food
@@ -495,9 +496,11 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
     if(floatingFood){
       tank.addFood(new FloatingFood(absolutePosition));
+      tank.floatingFood++;
     }
     else{
       tank.addFood(new SinkingFood(absolutePosition));
+      tank.sinkingFood++;
     }
   }
   // clicked bottom of tank - place food
@@ -508,9 +511,11 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
     if(floatingFood){
       tank.addFood(new FloatingFood(absolutePosition));
+      tank.floatingFood++;
     }
     else{
       tank.addFood(new SinkingFood(absolutePosition));
+      tank.sinkingFood++;
     }
   }
 }
@@ -578,7 +583,8 @@ public ArrayList cookieInfo(){
   tankString += tank.co2.toFixed(2) + "+";
   tankString += tank.nitrosomonas.toFixed(2) + "+";
   tankString += tank.nitrobacter.toFixed(2) + "+";
-  tankString += min(tank.food.size(), 99) + "+";
+  tankString += min(tank.sinkingFood, 99) + "+";
+  tankString += min(tank.floatingFood, 99) + "+";
   tankString += min(tank.poops.size(), 99) + "+";
   var date = new Date();
   tankString += date.getFullYear()-2000 + "+";
