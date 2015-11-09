@@ -20,6 +20,8 @@ public abstract class Fish {
   public PShape model;
   public String sprite;
   public int scaleVal;
+  public int activity;
+  public boolean swimming;
   public Vector3D rotate;
   public Vector3D position;
   public Vector3D absolutePosition;
@@ -153,9 +155,26 @@ public abstract class Fish {
   }
 
   public void updateAcceleration() {
-    this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
-    this.acceleration.y = new Vector3D(-1, this.acceleration.y+random(-.25, .25), 1).centermost();
-    this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
+    if(swimming){
+      if(random(0, 20-this.activity*4) > 1){
+        swimming = false;
+      }
+    }
+    else{
+      if(random(0, 20-this.activity*4) > 1){
+        swimming = true;
+      }
+    }
+    if(swimming){
+      this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
+      this.acceleration.y = new Vector3D(-1, this.acceleration.y+random(-.25, .25), 1).centermost();
+      this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
+    }
+    else{
+      this.acceleration.x = new Vector3D(-1, -.1*this.velocity.x, 1).centermost();
+      this.acceleration.y = new Vector3D(-1, -.1*this.velocity.y, 1).centermost();
+      this.acceleration.z = new Vector3D(-1, -.1*this.velocity.z, 1).centermost();
+    }
   }
 
   public void updateVelocity() {
@@ -175,7 +194,6 @@ public abstract class Fish {
      this.acceleration.z = -1;
     }
     this.velocity.z = new Vector3D(-2, this.velocity.z + this.acceleration.z, 2).centermost();
-    //this.velocity = this.velocity.addVector(this.centerPull());
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();

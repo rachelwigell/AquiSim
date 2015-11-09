@@ -19,6 +19,8 @@ public class NeonTetra extends Fish{
     this.nitrite = 0.1;
     this.nitrate = 25;
     this.scaleVal = 8;
+    this.activity = 5;
+    this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.model = loadShape("neontetra.obj");
     this.sprite = "graphics/neontetra.PNG";
@@ -58,6 +60,8 @@ public class NeonTetra extends Fish{
     this.nitrate = 25;
     this.model = loadShape("neontetra.obj");
     this.scaleVal = 8;
+    this.activity = 5;
+    this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.sprite = "graphics/neontetra.PNG";
     this.dimensions = new Vector3D(9.5*this.scaleVal, 3.8*this.scaleVal, 1.4*this.scaleVal);

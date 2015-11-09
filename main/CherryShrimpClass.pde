@@ -19,6 +19,8 @@ public class CherryShrimp extends Fish{
     this.nitrite = 1;
     this.nitrate = 25;
     this.scaleVal = 25;
+    this.activity = 3;
+    this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.model = loadShape("cherryshrimp.obj");
     this.sprite = "graphics/cherryshrimp.png";
@@ -58,6 +60,8 @@ public class CherryShrimp extends Fish{
     this.nitrate = 25;
     this.model = loadShape("cherryshrimp.obj");
     this.scaleVal = 25;
+    this.activity = 3;
+    this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.sprite = "graphics/cherryshrimp.png";
     this.dimensions = new Vector3D(3.3*this.scaleVal, .6*this.scaleVal, 1.4*this.scaleVal);
@@ -80,9 +84,26 @@ public class CherryShrimp extends Fish{
   }
   
   public void updateAcceleration() {
-    this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
-    this.acceleration.y = 0;
-    this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
+    if(swimming){
+      if(random(0, 20-this.activity*4) < 1){
+        swimming = false;
+      }
+    }
+    else{
+      if(random(0, 20-this.activity*4) < 1){
+        swimming = true;
+      }
+    }
+    if(swimming){
+      this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.1, .1), 1).centermost();
+      this.acceleration.y = 0;
+      this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.1, .1), 1).centermost();
+    }
+    else{
+      this.acceleration.x = new Vector3D(-1, -.1*this.velocity.x, 1).centermost();
+      this.acceleration.y = 0;
+      this.acceleration.z = new Vector3D(-1, -.1*this.velocity.z, 1).centermost();
+    }
   }
 
   public void updateVelocity() {

@@ -19,6 +19,8 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.nitrite = 5;
     this.nitrate = 60;
     this.scaleVal = 7;
+    this.activity = 5;
+    this.swimming = true;
     this.rotate = new Vector3D(0, 0, 0);
     this.model = loadShape("whitecloudmountainminnow.obj");
     this.sprite = "graphics/whitecloudmountainminnow.png";
@@ -58,6 +60,8 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.nitrate = 60;
     this.model = loadShape("whitecloudmountainminnow.obj");
     this.scaleVal = 7;
+    this.activity = 5;
+    this.swimming = true;
     this.rotate = new Vector3D(0, 0, 0);
     this.sprite = "graphics/whitecloudmountainminnow.png";
     this.dimensions = new Vector3D(9*this.scaleVal, 4*this.scaleVal, 1.5*this.scaleVal);

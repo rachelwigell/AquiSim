@@ -19,6 +19,8 @@ public class CherryBarb extends Fish{
     this.nitrite = 5;
     this.nitrate = 60;
     this.scaleVal = 8;
+    this.activity = 5;
+    this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.model = loadShape("cherrybarb.obj");
     this.sprite = "graphics/cherrybarb.png";
@@ -58,6 +60,8 @@ public class CherryBarb extends Fish{
     this.nitrate = 60;
     this.model = loadShape("cherrybarb.obj");
     this.scaleVal = 8;
+    this.activity = 5;
+    this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.sprite = "graphics/cherrybarb.png";
     this.dimensions = new Vector3D(10.5*this.scaleVal, 5*this.scaleVal, 1.35*this.scaleVal);
