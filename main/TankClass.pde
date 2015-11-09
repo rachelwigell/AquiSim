@@ -138,8 +138,8 @@ public class Tank{
      cookie = get_cookie("p" + i);
      if(cookie != ""){
        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-       this.plants.add(new Plant(plantStats[6], new Vector3D(plantStats[0], plantStats[1], plantStats[2]),
-                                 new Vector3D(plantStats[3], plantStats[4], plantStats[5]), true));
+       this.plants.add(new Plant(plantStats[6], new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                                 new Vector3D(float(plantStats[3]), float(plantStats[4]), float(plantStats[5])), true));
      }
     }
   }

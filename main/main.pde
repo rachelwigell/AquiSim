@@ -178,12 +178,45 @@ public void drawStack(Plant plant){
 }
 
 public void drawPlant(Plant plant){
-  stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
   for(int j = 0; j < 3; j++){
+    stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
     pushMatrix();
     translate(center.x, center.y, center.z);
     translate(plant.position.x, plant.position.y, plant.position.z);
     drawStack(plant.stack[j]);
+    if(clickMode == "DELETE"){
+      pushMatrix();
+      noStroke();
+      scale(1, .1, 1);
+      fill(100, 100, 100);
+      sphere(30);
+      popMatrix();
+      stroke(230, 10, 20);
+      strokeWeight(5);
+      line(-20, -2, 20, 20, -2, -20);
+      line(20, -2, 20, -20, -2, -20);
+    }
+    else if(clickMode == "MOVE"){
+      pushMatrix();
+      noStroke();
+      scale(1, .1, 1);
+      fill(100, 100, 100);
+      sphere(30);
+      stroke(230, 10, 20);
+      popMatrix();
+      line(-30, -1, 0, -50, -1, 0);
+      line(-50, -1, 0, -40, -1, 10);
+      line(-50, -1, 0, -40, -1, -10);
+      line(30, -1, 0, 50, -1, 0);
+      line(50, -1, 0, 40, -1, 10);
+      line(50, -1, 0, 40, -1, -10);
+      line(0, -1, 30, 0, -1, 50);
+      line(0, -1, 50, 10, -1, 40);
+      line(0, -1, 50, -10, -1, 40);
+      line(0, -1, -30, 0, -1, -50);
+      line(0, -1, -50, 10, -1, -40);
+      line(0, -1, -50, -10, -1, -40);
+    }
     popMatrix();
   }
 }
@@ -228,15 +261,18 @@ public void mouseReleased(){
       }
     }
     else if(clickMode == "DELETE"){
-      if(handlePlantDeleteClick(x, y)){
-         $('#cancel_plant_delete').click();
-      }
+      handlePlantDeleteClick(x, y, start, end);
+      $('#cancel_plant_delete').click();
+      clickMode = "DEFAULT";
     }
     else if(clickMode == "MOVE"){
-      if(handlePlantMoveClick(x, y)){
+      if(handlePlantMoveClick(x, y, start, end)){
          clickMode = "PLANT";
-         $('#cancel_plant_move').click();
       }
+      else{
+        clickMode = "DEFAULT";
+      }
+      $('#cancel_plant_move').click();
     }
     //if(mouseButton == RIGHT){
     // console.log("skipping ahead 1 hour");
@@ -544,30 +580,34 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
   }
 }
 
-public boolean handlePlantDeleteClick(int x, int y){
- clickedColor = get(x, fieldY-y);
- Vector3D clickedRGB = new Vector3D(red(clickedColor), green(clickedColor), blue(clickedColor));
- for(int i = 0; i < tank.plants.size(); i++){
-   Plant p = (Plant) tank.plants.get(i);
-   if(p.RGBcolor.isEqual(clickedRGB)){
-     tank.plants.remove(p);
-     return true;
-   }
- }
- return false;
+public boolean handlePlantDeleteClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    if(absolutePosition.distance(p.absolutePosition) < 40){
+      tank.plants.remove(p);
+      return true;
+    }
+  }
+  return false;
 }
 
-public boolean handlePlantMoveClick(int x, int y){
- clickedColor = get(x, fieldY-y);
- Vector3D clickedRGB = new Vector3D(red(clickedColor), green(clickedColor), blue(clickedColor));
- for(int i = 0; i < tank.plants.size(); i++){
-   Plant p = (Plant) tank.plants.get(i);
-   if(p.RGBcolor.isEqual(clickedRGB)){
-     previewPlant = p;
-     tank.plants.remove(p);
-     return true;
+public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    if(absolutePosition.distance(p.absolutePosition) < 40){
+       previewPlant = p;
+       tank.plants.remove(p);
+       return true;
+     }
    }
- }
  return false;
 }
 

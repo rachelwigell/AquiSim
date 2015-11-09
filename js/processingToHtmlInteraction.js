@@ -262,7 +262,7 @@ $('#delete_plant').click(function(){
 	$('#new_plant').attr('hidden', true);
 	$('#delete_plant').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', false);
-	$('#plant_instructions').text("Click a plant to delete it.");
+	$('#plant_instructions').text("Click the X at the base of a plant to delete it.");
 	var processing = Processing.getInstanceById('processing');
 	processing.deleteMode();
 })
@@ -283,7 +283,7 @@ $('#move_plant').click(function(){
 	$('#move_plant').attr('hidden', true);
 	$('#delete_plant').attr('hidden', true);
 	$('#cancel_plant_move').attr('hidden', false);
-	$('#plant_instructions').text("Click a plant to move. Then click on a new spot in the floor to place it again.");
+	$('#plant_instructions').text("Click the grip at the base of a plant to move it.");
 	var processing = Processing.getInstanceById('processing');
 	processing.moveMode();
 })

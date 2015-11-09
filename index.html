@@ -36,6 +36,14 @@
 		.switch.large input:checked + label:after {
     		left: 47.5%;
     	}
+    	#water_change_label {
+    		color: white;
+    		font-size: 10px;
+    		font-weight: bold;
+    		left: 20%;
+    		top: 10%;
+    		position: absolute;
+    	}
 	</style>
 	<title>AquiSim</title>
 </head>
@@ -90,14 +98,16 @@
 					<table id = "tank_stats_display"></table>
 				</div>
 				<div class="small-3 columns" id="water_change">
-						<div class="range-slider round" id="water_change_percentage" align="left" data-slider>
-							  <span class="range-slider-handle" role="slider" tabindex="0"></span>
+						<div class="range-slider round" id="water_change_percentage" align="left" data-slider=50>
+							  <span class="range-slider-handle" role="slider" tabindex="0">
+							  	<!-- <p id="water_change_label">50%<p> -->
+							  </span>
 							  <span class="range-slider-active-segment"></span>
 							  <input type="hidden">
 						</div>
 				</div>
 				<div class="small-3 columns">
-					<button class="button round" id="perform_water_change">Change 50% of Water</button>
+					<button class="button round" id="perform_water_change">Change Water</button>
 				</div>
 			</div>
 		</li>
