@@ -18,7 +18,7 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.ammonia = 1;
     this.nitrite = 5;
     this.nitrate = 60;
-    this.scaleVal = 6;
+    this.scaleVal = 7;
     this.rotate = new Vector3D(0, 0, 0);
     this.model = loadShape("whitecloudmountainminnow.obj");
     this.sprite = "graphics/whitecloudmountainminnow.png";
@@ -27,9 +27,9 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scaleVal);
-    this.eyePosition = new Vector3D(-1/3.0, 0, 1/2.5);
-    this.offset = new Vector3D(0, 0, 0);
+    this.dimensions = new Vector3D(9*this.scaleVal, 4*this.scaleVal, 1.5*this.scaleVal);
+    this.eyePosition = new Vector3D(-1/2.2, 0, 1/2.5);
+    this.offset = new Vector3D(0, 0, -1);
     this.setDangerRatings();
   }
   
@@ -57,10 +57,10 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.nitrite = 5;
     this.nitrate = 60;
     this.model = loadShape("whitecloudmountainminnow.obj");
-    this.scaleVal = 6;
+    this.scaleVal = 7;
     this.rotate = new Vector3D(0, 0, 0);
     this.sprite = "graphics/whitecloudmountainminnow.png";
-    this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scaleVal);
+    this.dimensions = new Vector3D(9*this.scaleVal, 4*this.scaleVal, 1.5*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
     if(alive){
@@ -74,8 +74,8 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(-1/3.0, 0, 1/2.5);
-    this.offset = new Vector3D(0, 0, 0);
+    this.eyePosition = new Vector3D(-1/2.2, 0, 1/2.5);
+    this.offset = new Vector3D(0, 0, -1);
     this.setDangerRatings();
   }
 }

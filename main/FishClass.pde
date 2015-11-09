@@ -216,14 +216,15 @@ public abstract class Fish {
     pushMatrix();
     translate(zero.x, zero.y, zero.z);
     translate(this.position.x, this.position.y, this.position.z);
-    translate(this.offset.x, this.offset.y, this.offset.z);
-    scale(this.scaleVal, this.scaleVal, this.scaleVal);
+
     rotateX(this.orientation.x);
     rotateY(this.orientation.y);
     rotateZ(this.orientation.z);
     rotateX(this.rotate.x);
     rotateY(this.rotate.y);
     rotateZ(this.rotate.z);
+    translate(this.offset.x, this.offset.y, this.offset.z);
+    scale(this.scaleVal, this.scaleVal, this.scaleVal);
     shape(this.model);
     //draw eyes
     fill(0);
