@@ -226,7 +226,7 @@ public void drawAllPlants(){
     Plant plant = (Plant) tank.plants.get(i);
     drawPlant(plant);
   }
-  if(previewPlant != null){
+  if(previewPlant != null && mouseY > 2*fieldY/3){
     picker.captureViewMatrix(fieldX, fieldY);
     picker.calculatePickPoints(mouseX,height-mouseY);
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
@@ -251,9 +251,14 @@ public void mouseReleased(){
       }
     }
     else if(clickMode == "PLANT"){
-      previewPlant.encoding = previewPlant.encode();
-      tank.plants.add(previewPlant);
-      $('#cancel_plant_add').click();
+      if(mouseY > 2*fieldY/3){
+        previewPlant.encoding = previewPlant.encode();
+        tank.plants.add(previewPlant);
+        $('#cancel_plant_add').click();
+      }
+      else{
+        $('#cancel_plant_add').click();
+      }
     }
     else if(clickMode == "DELETE"){
       handlePlantDeleteClick(x, y, start, end);
