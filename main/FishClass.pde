@@ -156,12 +156,12 @@ public abstract class Fish {
 
   public void updateAcceleration() {
     if(swimming){
-      if(random(0, 20-this.activity*4) > 1){
+      if(random(0, this.activity*20) < 1){
         swimming = false;
       }
     }
     else{
-      if(random(0, 20-this.activity*4) > 1){
+      if(random(0, 100-this.activity*20) < 1){
         swimming = true;
       }
     }
