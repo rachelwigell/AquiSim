@@ -151,6 +151,7 @@ function accordion_defaults(new_user){
 		$('#add_fish_menu').addClass('active');
 		$('#manage_plants_menu').removeClass('active');
 		$('#help_menu').addClass('active');
+		$('#feedback_menu').removeClass('active');
 	}
 	else{
 		$('#tank_health_menu').addClass('active');
@@ -158,6 +159,7 @@ function accordion_defaults(new_user){
 		$('#add_fish_menu').addClass('active');
 		$('#manage_plants_menu').addClass('active');
 		$('#help_menu').removeClass('active');
+		$('#feedback_menu').addClass('active');
 	}
 }
 
