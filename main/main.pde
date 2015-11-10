@@ -78,6 +78,7 @@ void draw(){
   background(bcolor.x, bcolor.y, bcolor.z);
   int spotColor = spotlightColor();
   ambientLight(spotColor, spotColor, spotColor);
+  spotLight(spotColor/3, spotColor/3, spotColor/3, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
   drawTank();
   drawAllFish();
   drawAllWaste();
@@ -96,6 +97,7 @@ public void populateSpeciesList(){
   speciesList.add(new CherryBarb("Swimmy"));
   speciesList.add(new WhiteCloudMountainMinnow("Swimmy"));
   speciesList.add(new CherryShrimp("Swimmy"));
+  speciesList.add(new MysterySnail("Swimmy"));
 }
 
 public void determineBounds(){
@@ -374,6 +376,9 @@ public Fish addFishToTank(String speciesName, String nickname){
   }
   else if(speciesName == "Cherry Shrimp"){
     toAdd = new CherryShrimp(nickname);
+  }
+  else if(speciesName == "Mystery Snail"){
+    toAdd = new MysterySnail(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);

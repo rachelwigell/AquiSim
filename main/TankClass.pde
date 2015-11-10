@@ -93,6 +93,9 @@ public class Tank{
        else if(fishStats[0] == "Cherry Shrimp"){
          this.fish.add(new CherryShrimp(fishStats, true));
        }
+       else if(fishStats[0] == "Mystery Snail"){
+         this.fish.add(new MysterySnail(fishStats, true));
+       }
      }
     }
     this.poops = new ArrayList();
@@ -130,13 +133,17 @@ public class Tank{
          this.deadFish.add(new DeadFish(new CherryBarb(fishStats, false))); 
          this.waste += 5;
        }
-       else if(fishStats[0] == "WhiteCloudMountainMinnow"){
+       else if(fishStats[0] == "White Cloud Mountain Minnow"){
          this.deadFish.add(new DeadFish(new WhiteCloudMountainMinnow(fishStats, false))); 
          this.waste += 4;
        }
        else if(fishStats[0] == "Cherry Shrimp"){
          this.deadFish.add(new DeadFish(new CherryShrimp(fishStats, false))); 
          this.waste += 3;
+       }
+       else if(fishStats[0] == "Mystery Snail"){
+         this.deadFish.add(new DeadFish(new MysterySnail(fishStats, false))); 
+         this.waste += 5;
        }
      }
     }

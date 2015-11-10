@@ -1,6 +1,6 @@
-public class CherryShrimp extends Fish{
-  public CherryShrimp(String name){
-    this.species = "Cherry Shrimp";
+public class MysterySnail extends Fish{
+  public MysterySnail(String name){
+    this.species = "Mystery Snail";
     this.name = name;
     this.ease = 5;
     this.maxHealth = this.ease*24*60*5;
@@ -8,37 +8,37 @@ public class CherryShrimp extends Fish{
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.fullness = this.maxFullness;
-    this.size = 3;
+    this.size = 5;
     this.minPH = 7;
-    this.maxPH = 8;
-    this.minTemp = 15;
-    this.maxTemp = 28;
-    this.minHard = 3;
-    this.maxHard = 15;
+    this.maxPH = 8.5;
+    this.minTemp = 18;
+    this.maxTemp = 27;
+    this.minHard = 5;
+    this.maxHard = 20;
     this.ammonia = 1;
-    this.nitrite = 1;
-    this.nitrate = 25;
-    this.scaleVal = 25;
-    this.activity = 3;
+    this.nitrite = 5;
+    this.nitrate = 60;
+    this.scaleVal = 8;
+    this.activity = 1;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("cherryshrimp.obj");
-    this.sprite = "graphics/cherryshrimp.png";
+    this.model = loadShape("mysterysnail.obj");
+    this.sprite = "graphics/mysterysnail.png";
     this.position = new Vector3D(0, fieldY/2, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.dimensions = new Vector3D(3.3*this.scaleVal, .6*this.scaleVal, 1.4*this.scaleVal);
-    this.eyePosition = new Vector3D(1/9.0, -1/1.5, 1/8.0);
-    this.offset = new Vector3D(-50, 0, 3);
+    this.dimensions = new Vector3D(7.2*this.scaleVal, 5.8*this.scaleVal, 5.4*this.scaleVal);
+    this.eyePosition = new Vector3D(0, 0, 0);
+    this.offset = new Vector3D(0, 20, 0);
     this.setDangerRatings();
   }
   
   
   //constructor for load
-  public CherryShrimp(String[] stats, boolean alive){
-    this.species = "Cherry Shrimp";
+  public MysterySnail(String[] stats, boolean alive){
+    this.species = "Mystery Snail";
     if(alive){
       this.name = stats[1];
       this.health = float(stats[2]);
@@ -54,17 +54,17 @@ public class CherryShrimp extends Fish{
     this.maxHealth = this.ease*24*60*5;
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
-    this.size = 3;
+    this.size = 5;
     this.ammonia = 1;
-    this.nitrite = 1;
-    this.nitrate = 25;
-    this.model = loadShape("cherryshrimp.obj");
-    this.scaleVal = 25;
+    this.nitrite = 5;
+    this.nitrate = 60;
+    this.model = loadShape("mysterysnail.obj");
+    this.scaleVal = 8;
     this.activity = 3;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.sprite = "graphics/cherryshrimp.png";
-    this.dimensions = new Vector3D(3.3*this.scaleVal, .6*this.scaleVal, 1.4*this.scaleVal);
+    this.sprite = "graphics/mysterysnail.png";
+    this.dimensions = new Vector3D(7.2*this.scaleVal, 5.8*this.scaleVal, 5.4*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
     if(alive){
@@ -78,8 +78,8 @@ public class CherryShrimp extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(1/9.0, -1/1.5, 1/8.0);
-    this.offset = new Vector3D(-50, 0, 3);
+    this.eyePosition = new Vector3D(0, 0, 0);
+    this.offset = new Vector3D(0, 20, 0);
     this.setDangerRatings();
   }
   
