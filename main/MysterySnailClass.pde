@@ -18,7 +18,7 @@ public class MysterySnail extends Fish{
     this.ammonia = 1;
     this.nitrite = 5;
     this.nitrate = 60;
-    this.scaleVal = 8;
+    this.scaleVal = 10;
     this.activity = 1;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
@@ -59,7 +59,7 @@ public class MysterySnail extends Fish{
     this.nitrite = 5;
     this.nitrate = 60;
     this.model = loadShape("mysterysnail.obj");
-    this.scaleVal = 8;
+    this.scaleVal = 10;
     this.activity = 3;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
@@ -95,14 +95,14 @@ public class MysterySnail extends Fish{
       }
     }
     if(swimming){
-      this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
+      this.acceleration.x = new Vector3D(-.3, this.acceleration.x+random(-.1, .1), .3).centermost();
       this.acceleration.y = 0;
-      this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
+      this.acceleration.z = new Vector3D(-.3, this.acceleration.z+random(-.1, .1), .3).centermost();
     }
     else{
-      this.acceleration.x = new Vector3D(-1, -.1*this.velocity.x, 1).centermost();
+      this.acceleration.x = new Vector3D(-.3, -.1*this.velocity.x, .3).centermost();
       this.acceleration.y = 0;
-      this.acceleration.z = new Vector3D(-1, -.1*this.velocity.z, 1).centermost();
+      this.acceleration.z = new Vector3D(-.3, -.1*this.velocity.z, .3).centermost();
     }
   }
 
@@ -113,7 +113,7 @@ public class MysterySnail extends Fish{
     else if(this.position.x >= (.475*fieldX-this.dimensions.x/2.0)){
       this.acceleration.x = -1;
     }
-    this.velocity.x = new Vector3D(-1, this.velocity.x + this.acceleration.x, 1).centermost();
+    this.velocity.x = new Vector3D(-.4, this.velocity.x + this.acceleration.x, .4).centermost();
     
     if(this.position.z == (-.5*fieldZ+this.dimensions.x/2.0)){
      this.acceleration.z = 1;
@@ -121,7 +121,7 @@ public class MysterySnail extends Fish{
     else if(this.position.z == (.5*fieldZ-this.dimensions.x/2.0)){
      this.acceleration.z = -1;
     }
-    this.velocity.z = new Vector3D(-1, this.velocity.z + this.acceleration.z, 1).centermost();
+    this.velocity.z = new Vector3D(-.4, this.velocity.z + this.acceleration.z, .4).centermost();
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.velocity.y = 0;
     this.updateOrientationRelativeToVelocity();
