@@ -1,4 +1,6 @@
 public class MysterySnail extends Fish{
+  String location; //which wall is he on
+  
   public MysterySnail(String name){
     this.species = "Mystery Snail";
     this.name = name;
@@ -25,14 +27,13 @@ public class MysterySnail extends Fish{
     this.model = loadShape("mysterysnail.obj");
     this.sprite = "graphics/mysterysnail.png";
     this.position = new Vector3D(0, fieldY/2, 0);
-    this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
+    this.absolutePosition = new Vector3D(zero.x, zero.y+fieldY/2, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
     this.dimensions = new Vector3D(7.2*this.scaleVal, 5.8*this.scaleVal, 5.4*this.scaleVal);
-    this.eyePosition = new Vector3D(0, 0, 0);
-    this.offset = new Vector3D(0, 20, 0);
     this.setDangerRatings();
+    this.location = "FLOOR";
   }
   
   
@@ -66,21 +67,53 @@ public class MysterySnail extends Fish{
     this.sprite = "graphics/mysterysnail.png";
     this.dimensions = new Vector3D(7.2*this.scaleVal, 5.8*this.scaleVal, 5.4*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
-    this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
-    if(alive){
-      this.position.y = fieldY/2;
+    if(!alive){
+      this.position.y = (-.5*fieldY*waterLevel);
+      this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
+      this.position.z = random((-.5*fieldZ+this.dimensions.x/2.0), (.5*fieldZ-this.dimensions.x/2.0));
     }
     else{
-      this.position.y = (-.5*fieldY*waterLevel);
+      float whichWall = random(0, 4);
+      if(whichWall <= 1){
+        this.location = "FLOOR";
+        this.position.y = (.5*fieldY*waterLevel);
+        this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
+        this.position.z = random((-.5*fieldZ+this.dimensions.x/2.0), (.5*fieldZ-this.dimensions.x/2.0));
+      }
+      else if(whichWall <= 2){
+       this.location = "BACK";
+       this.position.z = -.5*fieldZ;
+       this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
+       this.position.y = random((-.5*fieldY*waterLevel+this.dimensions.x/2.0), (.5*fieldY*waterLevel-this.dimensions.x/2.0));
+      }
+      else if(whichWall <= 3){
+        this.location = "LEFT";
+        this.position.x = -.475*fieldX;
+        this.position.z = -.5*fieldZ;
+        this.position.y = random((-.5*fieldY*waterLevel+this.dimensions.x/2.0), (.5*fieldY*waterLevel-this.dimensions.x/2.0));
+        this.position.z = random((-.5*fieldZ+this.dimensions.x/2.0), (.5*fieldZ-this.dimensions.x/2.0));
+      }
+      else if(whichWall <= 4){
+        this.location = "RIGHT";
+        this.position.x = .475*fieldX;
+        this.position.z = -.5*fieldZ;
+        this.position.y = random((-.5*fieldY*waterLevel+this.dimensions.x/2.0), (.5*fieldY*waterLevel-this.dimensions.x/2.0));
+        this.position.z = random((-.5*fieldZ+this.dimensions.x/2.0), (.5*fieldZ-this.dimensions.x/2.0));
+      }
     }
-    this.position.z = random((-.5*fieldZ+this.dimensions.x/2.0), (.5*fieldZ-this.dimensions.x/2.0));
     this.absolutePosition = this.position.addVector(new Vector3D(zero.x, zero.y, zero.z));
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(0, 0, 0);
-    this.offset = new Vector3D(0, 20, 0);
     this.setDangerRatings();
+  }
+  
+  public void updatePosition() {
+    this.position.x = new Vector3D((-.475*fieldX), this.position.x+this.velocity.x, (.475*fieldX)).centermost();
+    this.position.y = new Vector3D((-.5*fieldY*waterLevel), this.position.y+this.velocity.y, (.5*fieldY*waterLevel)).centermost();
+    this.position.z = new Vector3D((-.5*fieldZ), this.position.z+this.velocity.z, (.5*fieldZ-this.dimensions.x/2.0)).centermost();
+    this.absolutePosition = this.position.addVector(new Vector3D(zero.x, zero.y, zero.z));
+    this.updateVelocity();
   }
   
   public void updateAcceleration() {
@@ -95,36 +128,192 @@ public class MysterySnail extends Fish{
       }
     }
     if(swimming){
-      this.acceleration.x = new Vector3D(-.3, this.acceleration.x+random(-.1, .1), .3).centermost();
-      this.acceleration.y = 0;
-      this.acceleration.z = new Vector3D(-.3, this.acceleration.z+random(-.1, .1), .3).centermost();
+      this.acceleration.x = new Vector3D(-.3, this.acceleration.x+random(-.05, .05), .3).centermost();
+      this.acceleration.y = new Vector3D(-.3, this.acceleration.y+random(-.05, .05), .3).centermost();
+      this.acceleration.z = new Vector3D(-.3, this.acceleration.z+random(-.05, .05), .3).centermost();
     }
     else{
       this.acceleration.x = new Vector3D(-.3, -.1*this.velocity.x, .3).centermost();
-      this.acceleration.y = 0;
+      this.acceleration.y = new Vector3D(-.3, -.1*this.velocity.y, .3).centermost();
       this.acceleration.z = new Vector3D(-.3, -.1*this.velocity.z, .3).centermost();
     }
   }
 
   public void updateVelocity() {
-    if(this.position.x <= (-.475*fieldX+this.dimensions.x/2.0)){
-      this.acceleration.x = 1;
+    if(this.location == "FLOOR"){
+      this.velocity.x = new Vector3D(-.4, this.velocity.x + this.acceleration.x, .4).centermost();
+      this.velocity.z = new Vector3D(-.4, this.velocity.z + this.acceleration.z, .4).centermost();
+      this.velocity = this.velocity.addVector(this.hungerContribution());
+      this.velocity.y = 0;
     }
-    else if(this.position.x >= (.475*fieldX-this.dimensions.x/2.0)){
-      this.acceleration.x = -1;
+    else if(this.location == "BACK"){
+      this.velocity.x = new Vector3D(-.4, this.velocity.x + this.acceleration.x, .4).centermost();
+      this.velocity.y = new Vector3D(-.4, this.velocity.y + this.acceleration.y, .4).centermost();
+      this.velocity = this.velocity.addVector(this.hungerContribution());
+      this.velocity.z = 0;
     }
-    this.velocity.x = new Vector3D(-.4, this.velocity.x + this.acceleration.x, .4).centermost();
-    
-    if(this.position.z == (-.5*fieldZ+this.dimensions.x/2.0)){
-     this.acceleration.z = 1;
+    else if(this.location == "LEFT" || this.location == "RIGHT"){
+      this.velocity.z = new Vector3D(-.4, this.velocity.z + this.acceleration.z, .4).centermost();
+      this.velocity.y = new Vector3D(-.4, this.velocity.y + this.acceleration.y, .4).centermost();
+      this.velocity = this.velocity.addVector(this.hungerContribution());
+      this.velocity.x = 0;
     }
-    else if(this.position.z == (.5*fieldZ-this.dimensions.x/2.0)){
-     this.acceleration.z = -1;
+    if(this.position.z >= (.5*fieldZ-this.dimensions.x/2.0)){
+     this.acceleration.z = -.3;
     }
-    this.velocity.z = new Vector3D(-.4, this.velocity.z + this.acceleration.z, .4).centermost();
-    this.velocity = this.velocity.addVector(this.hungerContribution());
-    this.velocity.y = 0;
+    if(this.position.y <= (-.5*fieldY*waterLevel+this.dimensions.y/2.0)){
+      this.acceleration.y = .3;
+    }
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
+    this.transitionWalls();
+  }
+  
+  public void updateOrientationRelativeToVelocity(){
+    if(this.location == "FLOOR"){
+      double angle = asin(abs(velocity.z)/velocity.magnitude());
+      this.orientation.z = 0;
+      this.orientation.x = 0;
+      if (velocity.x < 0 && velocity.z > 0) this.orientation.y = PI+angle;
+      else if (velocity.x > 0 && velocity.z > 0) this.orientation.y = (-angle);
+      else if (velocity.x > 0 && velocity.z < 0) this.orientation.y = (angle);
+      else if (velocity.x < 0 && velocity.z < 0) this.orientation.y = PI-angle;
+      else if (velocity.z == 0 && velocity.x < 0) this.orientation.y = PI;
+      else if (velocity.x == 0 && velocity.z > 0) this.orientation.y = (3*PI/2.0);
+      else if (velocity.z == 0 && velocity.x > 0) this.orientation.y = 0;
+      else if (velocity.x == 0 && velocity.z < 0) this.orientation.y = (PI/2.0);
+    }
+    else if(this.location == "RIGHT"){
+      angle = asin(abs(this.velocity.z)/this.velocity.magnitude());
+      this.orientation.z = -PI/2.0;
+      this.orientation.x = 0;
+      if(this.velocity.y > 0 && this.velocity.z > 0) this.orientation.y =  angle+PI;
+      else if(this.velocity.y < 0 && this.velocity.z > 0) this.orientation.y =  (-angle);
+      else if(this.velocity.y < 0 && this.velocity.z < 0) this.orientation.y =  (angle);
+      else if(this.velocity.y > 0 && this.velocity.z < 0) this.orientation.y =  PI-angle;
+      else if(this.velocity.z == 0 && this.velocity.y > 0) this.orientation.y = PI;
+      else if(this.velocity.y == 0 && this.velocity.z > 0) this.orientation.y =  (3*PI/2.0);
+      else if(this.velocity.z == 0 && this.velocity.y < 0) this.orientation.y =  0;
+      else if(this.velocity.y == 0 && this.velocity.z < 0) this.orientation.y =  (PI/2.0);
+    }
+    else if(this.location == "LEFT"){
+      angle = asin(abs(this.velocity.z)/this.velocity.magnitude());
+      this.orientation.z = PI/2.0;
+      this.orientation.x = 0;
+      if(this.velocity.y < 0 && this.velocity.z > 0) this.orientation.y =  angle+PI;
+      else if(this.velocity.y > 0 && this.velocity.z > 0) this.orientation.y =  (-angle);
+      else if(this.velocity.y > 0 && this.velocity.z < 0) this.orientation.y =  (angle);
+      else if(this.velocity.y < 0 && this.velocity.z < 0) this.orientation.y =  PI-angle;
+      else if(this.velocity.z == 0 && this.velocity.y < 0) this.orientation.y = PI;
+      else if(this.velocity.y == 0 && this.velocity.z > 0) this.orientation.y =  (3*PI/2.0);
+      else if(this.velocity.z == 0 && this.velocity.y > 0) this.orientation.y =  0;
+      else if(this.velocity.y == 0 && this.velocity.z < 0) this.orientation.y =  (PI/2.0);
+    }
+    else if(this.location == "BACK"){
+      angle = asin(abs(this.velocity.y)/this.velocity.magnitude());
+      this.orientation.z = 0;
+      this.orientation.x = -PI/2.0;
+      if(this.velocity.y < 0 && this.velocity.x < 0) this.orientation.y =  angle+PI/2;
+      else if(this.velocity.y > 0 && this.velocity.x < 0) this.orientation.y =  (-PI/2-angle);
+      else if(this.velocity.y > 0 && this.velocity.x > 0) this.orientation.y =  (-PI/2+angle);
+      else if(this.velocity.y < 0 && this.velocity.x > 0) this.orientation.y =  -angle+PI/2;
+      else if(this.velocity.x == 0 && this.velocity.y < 0) this.orientation.y = PI/2;
+      else if(this.velocity.y == 0 && this.velocity.x < 0) this.orientation.y =  (PI);
+      else if(this.velocity.x == 0 && this.velocity.y > 0) this.orientation.y =  0;
+      else if(this.velocity.y == 0 && this.velocity.x > 0) this.orientation.y =  0;
+    }
+  }
+  
+  void drawFish() {
+   pushMatrix();
+   translate(zero.x, zero.y, zero.z);
+   translate(this.position.x, this.position.y, this.position.z);
+   rotateZ(this.orientation.z);
+   rotateX(this.orientation.x);
+   rotateY(this.orientation.y);
+   scale(this.scaleVal, this.scaleVal, this.scaleVal);
+   shape(this.model);
+   popMatrix();
+  }
+  
+  public void transitionWalls(){
+    if(this.location == "FLOOR"){
+      if(this.position.x <= -.475*fieldX+this.dimensions.x/2.0
+      && this.velocity.x < 0){
+        this.position.x = -.475*fieldX;
+        this.velocity.y = -.4;
+        this.acceleration.y = -.3;
+        this.location = "LEFT";
+      }
+      else if(this.position.x >= .475*fieldX-this.dimensions.x/2.0
+          && this.velocity.x > 0){
+        this.position.x = .475*fieldX;
+        this.velocity.y = -.4;
+        this.acceleration.y = -.3;
+        this.location = "RIGHT";
+      }
+      else if(this.position.z <= -.5*fieldZ+this.dimensions.x/2.0
+          && this.velocity.z < 0){
+        this.position.z = -.5*fieldZ;
+        this.velocity.y = -.4;
+        this.acceleration.y = -.3;
+        this.location = "BACK";
+      }
+    }
+    else if(this.location == "RIGHT"){
+      if(this.position.y >= .5*fieldY*waterLevel-this.dimensions.x/2.0
+      && this.velocity.y > 0){
+        this.position.y = .5*fieldY*waterLevel;
+        this.velocity.x = -.4;
+        this.acceleration.x = -.3;
+        this.location = "FLOOR";
+      }
+      else if(this.position.z <= -.5*fieldZ+this.dimensions.x/2.0
+          && this.velocity.z < 0){
+        this.position.z = -.5*fieldZ;
+        this.velocity.x = -.4;
+        this.acceleration.x = -.3;
+        this.location = "BACK";
+      }
+    }
+    else if(this.location == "LEFT"){
+      if(this.position.y >= .5*fieldY*waterLevel-this.dimensions.x/2.0
+      && this.velocity.y > 0){
+        this.position.y = .5*fieldY*waterLevel;
+        this.velocity.x = .4;
+        this.acceleration.x = .3;
+        this.location = "FLOOR";
+      }
+      else if(this.position.z <= -.5*fieldZ+this.dimensions.x/2.0
+          && this.velocity.z < 0){
+        this.position.z = -.5*fieldZ;
+        this.velocity.x = .4;
+        this.acceleration.x = .3;
+        this.location = "BACK";
+      }
+    }
+    else if(location == "BACK"){
+      if(this.position.x <= -.475*fieldX+this.dimensions.x/2.0
+      && this.velocity.x < 0){
+        this.position.x = -.475*fieldX;
+        this.velocity.z = .4;
+        this.acceleration.z = .3;
+        this.location = "LEFT";
+      }
+      else if(this.position.x >= .475*fieldX-this.dimensions.x/2.0
+          && this.velocity.x > 0){
+        this.position.x = .475*fieldX;
+        this.velocity.z = .4;
+        this.acceleration.z = .3;
+        this.location = "RIGHT";
+      }
+      else if(this.position.y >= .5*fieldY*waterLevel-this.dimensions.x/2.0
+          && this.velocity.y > 0){
+        this.position.y = .5*fieldY*waterLevel;
+        this.velocity.z = .4;
+        this.acceleration.z = .3;
+        this.location = "FLOOR";
+      }
+    }
   }
 }

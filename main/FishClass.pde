@@ -217,7 +217,7 @@ public abstract class Fish {
 
   public void updateOrientationRelativeToVelocity() {
     Vector3D velocity = this.velocity;  
-    double angle = Math.asin(Math.abs(velocity.z)/velocity.magnitude());
+    double angle = asin(abs(velocity.z)/velocity.magnitude());
     if (velocity.x < 0 && velocity.z > 0) this.orientation.y = angle;
     else if (velocity.x > 0 && velocity.z > 0) this.orientation.y = (PI - angle);
     else if (velocity.x > 0 && velocity.z < 0) this.orientation.y = (PI + angle);

@@ -427,7 +427,7 @@ public class Tank{
     this.deadFish.add(new DeadFish(f));
   }
   
-  public boolean randomizedEating(Fish fish, Food food){
+  public boolean randomizedEating(Fish fish){
     double percentChance = .005*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
     float rand = random(0, 1);
     if(rand < percentChance){
@@ -438,19 +438,19 @@ public class Tank{
   }
   
   public void allRandomizedEat(){
-    ArrayList eaten = new ArrayList();
     for(int i = 0; i < this.fish.size(); i++){
+      ArrayList eaten = new ArrayList();
       Fish fish = (Fish) this.fish.get(i);
       for(int j = 0; j < this.food.size(); j++){
         Food food = (Food) this.food.get(i);
-        if(this.randomizedEating(fish, food)){
+        if(this.randomizedEating(fish)){
           eaten.add(food);
         }
       }
-    }
-    for(int i = 0; i < eaten.size(); i++){
-      Food food = (Food) eaten.get(i);
-      this.removeFood(food);
+      for(int j = 0; j < eaten.size(); j++){
+        Food food = (Food) eaten.get(j);
+        this.removeFood(food);
+      }
     }
   }
   
