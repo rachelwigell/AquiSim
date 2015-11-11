@@ -31,12 +31,8 @@ public class Plant {
   
   // 0 args
   public Plant(){
-    Vector3D RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
-    while(!isUnique(RGBcolor)){
-     RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
-    }
-    this.RGBcolor = RGBcolor;
-    this.seed = random(1, 99);
+    this.RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
+    this.seed = random(1, 99).toFixed(2);
     randomSeed(this.seed);
     this.numBranches = 7;
     this.position = new Vector3D(0, fieldY/2, 0);
@@ -82,16 +78,6 @@ public class Plant {
     this.absolutePosition.z = new Vector3D(int(-1.5*fieldZ), int(this.absolutePosition.z), int(-.5*fieldZ)).centermost();
     this.position = this.absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
     return this;
-  }
- 
-  public boolean isUnique(Vector3D RGBcolor){
-   for(int i = 0; i < tank.plants.size(); i++){
-     Plant p = (Plant) tank.plants.get(i);
-     if(p.RGBcolor.isEqual(RGBcolor)){
-       return false;
-     }
-   }
-   return true;
   }
   
   // 4 args (for loading)
