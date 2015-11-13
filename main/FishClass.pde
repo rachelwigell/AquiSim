@@ -32,6 +32,7 @@ public abstract class Fish {
   public Vector3D eyePosition;
   public Vector3D offset;
   public HashMap dangerRatings;
+  public float region;
 
   public void setDangerRatings() {
     this.dangerRatings = new HashMap();
@@ -194,6 +195,7 @@ public abstract class Fish {
      this.acceleration.z = -1;
     }
     this.velocity.z = new Vector3D(-2, this.velocity.z + this.acceleration.z, 2).centermost();
+    this.regionPull();
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
@@ -208,11 +210,9 @@ public abstract class Fish {
     return normal.multiplyScalar(percent);
   }
 
-  public Vector3D centerPull() {
-    Vector3D middle = new Vector3D(0, 0, 0);
-    float percent = 1.8*this.position.squareDistance(middle)/(pow(zero.x, 2) + pow(zero.y, 2) + pow(zero.z, 2));
-    Vector3D normal = middle.addVector(this.position.multiplyScalar(-1)).normalize();
-    return normal.multiplyScalar(percent);
+  public void regionPull() {
+    float pull = .001*random(0, 10)*abs(this.region) * (fieldY*waterLevel*this.region - this.position.y);
+    this.velocity.y += pull;
   }
 
   public void updateOrientationRelativeToVelocity() {

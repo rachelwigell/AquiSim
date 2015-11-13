@@ -33,6 +33,7 @@ public class CoryCatfish extends Fish{
     this.eyePosition = new Vector3D(-1/5.0, -1/5.0, 1/3.5);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
+    this.region = .7;
   }
   
   
@@ -81,5 +82,6 @@ public class CoryCatfish extends Fish{
     this.eyePosition = new Vector3D(-1/5.0, -1/5.0, 1/3.5);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
+    this.region = .7;
   }
 }

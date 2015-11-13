@@ -33,6 +33,7 @@ public class CherryBarb extends Fish{
     this.eyePosition = new Vector3D(1/3.0, 0, 1/2.5);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
+    this.region = -.1;
   }
   
   
@@ -81,5 +82,6 @@ public class CherryBarb extends Fish{
     this.eyePosition = new Vector3D(1/3.0, 0, 1/2.5);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
+    this.region = -.1;
   }
 }

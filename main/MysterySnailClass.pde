@@ -34,6 +34,7 @@ public class MysterySnail extends Fish{
     this.dimensions = new Vector3D(7.2*this.scaleVal, 5.8*this.scaleVal, 5.4*this.scaleVal);
     this.setDangerRatings();
     this.location = "FLOOR";
+    this.region = 0;
   }
   
   
@@ -106,6 +107,7 @@ public class MysterySnail extends Fish{
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
     this.setDangerRatings();
+    this.region = 0;
   }
   
   public void updatePosition() {

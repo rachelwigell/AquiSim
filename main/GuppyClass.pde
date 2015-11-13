@@ -33,6 +33,7 @@ public class Guppy extends Fish{
     this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
+    this.region = -.3;
   }
   
   
@@ -81,5 +82,6 @@ public class Guppy extends Fish{
     this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
+    this.region = -.3;
   }
 }

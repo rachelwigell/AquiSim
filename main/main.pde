@@ -78,7 +78,7 @@ void draw(){
   background(bcolor.x, bcolor.y, bcolor.z);
   int spotColor = spotlightColor();
   ambientLight(spotColor, spotColor, spotColor);
-  spotLight(spotColor/4, spotColor/4, spotColor/4, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
+  spotLight(spotColor/5, spotColor/5, spotColor/5, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
   drawTank();
   drawAllFish();
   drawAllWaste();

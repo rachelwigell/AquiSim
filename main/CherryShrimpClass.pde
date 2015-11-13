@@ -33,6 +33,7 @@ public class CherryShrimp extends Fish{
     this.eyePosition = new Vector3D(1/9.0, -1/1.5, 1/8.0);
     this.offset = new Vector3D(-50, 0, 3);
     this.setDangerRatings();
+    this.region = 0;
   }
   
   
@@ -81,6 +82,7 @@ public class CherryShrimp extends Fish{
     this.eyePosition = new Vector3D(1/9.0, -1/1.5, 1/8.0);
     this.offset = new Vector3D(-50, 0, 3);
     this.setDangerRatings();
+    this.region = 0;
   }
   
   public void updateAcceleration() {

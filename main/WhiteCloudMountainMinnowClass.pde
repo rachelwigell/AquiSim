@@ -33,6 +33,7 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.eyePosition = new Vector3D(-1/2.2, 0, 1/2.5);
     this.offset = new Vector3D(0, 0, -1);
     this.setDangerRatings();
+    this.region = -.1;
   }
   
   
@@ -81,5 +82,6 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.eyePosition = new Vector3D(-1/2.2, 0, 1/2.5);
     this.offset = new Vector3D(0, 0, -1);
     this.setDangerRatings();
+    this.region = -.1;
   }
 }
