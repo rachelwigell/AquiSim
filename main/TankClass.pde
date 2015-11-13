@@ -391,6 +391,9 @@ public class Tank{
   }
   
   public boolean eat(Fish fish, Food food){
+    if(fish.fullness >= fish.maxFullness){
+      return false;
+    }
     if(fish.absolutePosition.distance(food.absolutePosition) < 40){
       fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
       return true;
