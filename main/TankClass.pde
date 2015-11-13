@@ -243,9 +243,9 @@ public class Tank{
     food.addToAppropriateList(this);
   }
   
-  public void removeFood(Food food){
-    this.food.remove(food);
-    food.removeFromAppropriateList(this);
+  public void removeFood(Food f){
+    this.food.remove(f);
+    f.removeFromAppropriateList(this);
   }
 
   public int changeWaste(){
@@ -408,10 +408,10 @@ public class Tank{
           eaten.add(aFood);
         }
       }
-      for(int k = 0; k < eaten.size(); k++){
-        Food aFood = (Food) eaten.get(k);
-        this.removeFood(aFood);
-      }
+    }
+    for(int k = 0; k < eaten.size(); k++){
+      Food aFood = (Food) eaten.get(k);
+      this.removeFood(aFood);
     }
   }
   
