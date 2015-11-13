@@ -19,7 +19,7 @@ public class CoryCatfish extends Fish{
     this.nitrite = 5;
     this.nitrate = 60;
     this.scaleVal = 10;
-    this.activity = 4;
+    this.activity = 3;
     this.swimming = true;
     this.rotate = new Vector3D(0, 0, 0);
     this.model = loadShape("corycatfish.obj");
@@ -61,7 +61,7 @@ public class CoryCatfish extends Fish{
     this.nitrate = 60;
     this.model = loadShape("corycatfish.obj");
     this.scaleVal = 10;
-    this.activity = 4;
+    this.activity = 3;
     this.swimming = true;
     this.rotate = new Vector3D(0, 0, 0);
     this.sprite = "graphics/corycatfish.png";

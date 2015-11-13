@@ -170,6 +170,7 @@ public abstract class Fish {
       this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
       this.acceleration.y = new Vector3D(-1, this.acceleration.y+random(-.25, .25), 1).centermost();
       this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
+      this.regionPull();
     }
     else{
       this.acceleration.x = new Vector3D(-1, -.1*this.velocity.x, 1).centermost();
@@ -185,17 +186,16 @@ public abstract class Fish {
     else if(this.position.x >= (.475*fieldX-this.dimensions.x/2.0)){
       this.acceleration.x = -1;
     }
-    this.velocity.x = new Vector3D(-2, this.velocity.x + this.acceleration.x, 2).centermost();
+    this.velocity.x = new Vector3D(-1-.2*this.activity, this.velocity.x + this.acceleration.x, 1+.2*this.activity).centermost();
     //let them hit the floor, in case they're going towards food that's there.
-    this.velocity.y = new Vector3D(-2, this.velocity.y + this.acceleration.y, 2).centermost();
+    this.velocity.y = new Vector3D(-1-.2*this.activity, this.velocity.y + this.acceleration.y, 1+.2*this.activity).centermost();
     if(this.position.z == (-.5*fieldZ+this.dimensions.x/2.0)){
      this.acceleration.z = 1;
     }
     else if(this.position.z == (.5*fieldZ-this.dimensions.x/2.0)){
      this.acceleration.z = -1;
     }
-    this.velocity.z = new Vector3D(-2, this.velocity.z + this.acceleration.z, 2).centermost();
-    this.regionPull();
+    this.velocity.z = new Vector3D(-1-.2*this.activity, this.velocity.z + this.acceleration.z, 1+.2*this.activity).centermost();
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
@@ -212,7 +212,7 @@ public abstract class Fish {
 
   public void regionPull() {
     float pull = .001*random(0, 10)*abs(this.region) * (fieldY*waterLevel*this.region - this.position.y);
-    this.velocity.y += pull;
+    this.acceleration.y += pull;
   }
 
   public void updateOrientationRelativeToVelocity() {

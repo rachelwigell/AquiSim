@@ -33,7 +33,7 @@ public class NeonTetra extends Fish{
     this.eyePosition = new Vector3D(1/3.0, 0, 1/2.4);
     this.offset = new Vector3D(0, 0, 1);
     this.setDangerRatings();
-    this.region = 0;
+    this.region = .1;
   }
   
   
@@ -82,6 +82,6 @@ public class NeonTetra extends Fish{
     this.eyePosition = new Vector3D(1/3.0, 0, 1/2.4);
     this.offset = new Vector3D(0, 0, 1);
     this.setDangerRatings();
-    this.region = 0;
+    this.region = .1;
   }
 }

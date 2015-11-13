@@ -278,10 +278,10 @@ public void mouseReleased(){
       }
       $('#cancel_plant_move').click();
     }
-    if(mouseButton == RIGHT){
-      console.log("skipping ahead 1 hour");
-      tank.skipAhead(60);
-    }
+    //if(mouseButton == RIGHT){
+    //  console.log("skipping ahead 1 hour");
+    //  tank.skipAhead(60);
+    //}
 }
 
 /**************************************************
