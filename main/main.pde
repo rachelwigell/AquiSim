@@ -31,6 +31,8 @@ Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
 
+public PShape model = loadShape("greekarch.obj");
+
 void setup(){
   if(fieldY > fieldX){
     int temp = fieldY;
@@ -77,7 +79,7 @@ void draw(){
   background(bcolor.x, bcolor.y, bcolor.z);
   int spotColor = spotlightColor();
   ambientLight(spotColor, spotColor, spotColor);
-  spotLight(spotColor/5, spotColor/5, spotColor/5, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
+  spotLight(spotColor/4, spotColor/4, spotColor/4, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
   drawTank();
   drawAllFish();
   drawAllWaste();

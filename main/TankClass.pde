@@ -452,7 +452,7 @@ public class Tank{
       ArrayList eaten = new ArrayList();
       Fish fish = (Fish) this.fish.get(i);
       for(int j = 0; j < this.food.size(); j++){
-        Food food = (Food) this.food.get(i);
+        Food food = (Food) this.food.get(j);
         if(this.randomizedEating(fish)){
           eaten.add(food);
         }
