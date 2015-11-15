@@ -315,6 +315,11 @@ public void mouseReleased(){
       $('#cancel_plant_delete').click();
       clickMode = "DEFAULT";
     }
+    else{
+      if(!hasPlants()){
+        $('#cancel_plant_delete').click();
+      }
+    }
   }
   else if(clickMode == "MOVE"){
     if(handlePlantMoveClick(x, y, start, end)){
