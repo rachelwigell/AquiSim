@@ -8,6 +8,7 @@ public class Plant {
   Vector3D RGBcolor;
   Vector3D position;
   Vector3D absolutePosition;
+  int orientation;
   long seed;
   
   // 3 args
@@ -32,6 +33,7 @@ public class Plant {
   // 0 args
   public Plant(){
     this.RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
+    this.orientation = 0;
     this.seed = random(1, 99).toFixed(2);
     randomSeed(this.seed);
     this.numBranches = 7;
@@ -81,8 +83,9 @@ public class Plant {
   }
   
   // 4 args (for loading)
-  public Plant(long seed, Vector3D RGBcolor, Vector3D position, boolean diff){
+  public Plant(long seed, Vector3D RGBcolor, Vector3D position, int orientation){
     this.RGBcolor = RGBcolor;
+    this.orientation = orientation;
     this.seed = seed;
     randomSeed(this.seed);
     this.numBranches = 7;
@@ -101,6 +104,7 @@ public class Plant {
     String code = "";
     code += int(this.RGBcolor.x) + "+" + int(this.RGBcolor.y) + "+" + int(this.RGBcolor.z) + "+";
     code += int(this.position.x) + "+" + int(this.position.y) + "+" + int(this.position.z) + "+";
+    code += int(this.orientation) + "+";
     code += this.seed;
     return LZString.compressToUTF16(code);
   }

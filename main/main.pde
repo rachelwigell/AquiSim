@@ -26,6 +26,7 @@ species_stats = {};
 
 String clickMode = "DEFAULT";
 Plant previewPlant = null;
+Plant rotatePlant = null;
 Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
@@ -65,9 +66,7 @@ void setup(){
   update_fish_stats();
   update_species_dropdown();
   update_species_stats();
-  handle_add_plant();
-  handle_move_plant();
-  handle_delete_plant();
+  handle_plant_buttons();
   floatingFood = !$('#food_type').is(":checked");
   
   determineBounds();
@@ -187,26 +186,29 @@ public void drawPlant(Plant plant){
     pushMatrix();
     translate(center.x, center.y, center.z);
     translate(plant.position.x, plant.position.y, plant.position.z);
+    rotateY(plant.orientation);
     drawStack(plant.stack[j]);
+    rotateY(-plant.orientation);
     if(clickMode == "DELETE"){
       pushMatrix();
-      noStroke();
-      scale(1, .1, 1);
       fill(100, 100, 100);
-      sphere(30);
-      popMatrix();
       stroke(230, 10, 20);
-      strokeWeight(5);
+      strokeWeight(2);
+      translate(0, -1, 0);
+      rotateX(PI/2);
+      ellipse(0, 0, 60, 60);
+      popMatrix();
       line(-20, -2, 20, 20, -2, -20);
       line(20, -2, 20, -20, -2, -20);
     }
     else if(clickMode == "MOVE"){
       pushMatrix();
-      noStroke();
-      scale(1, .1, 1);
       fill(100, 100, 100);
-      sphere(30);
       stroke(230, 10, 20);
+      strokeWeight(2);
+      translate(0, -1, 0);
+      rotateX(PI/2);
+      ellipse(0, 0, 60, 60);
       popMatrix();
       line(-30, -1, 0, -50, -1, 0);
       line(-50, -1, 0, -40, -1, 10);
@@ -220,6 +222,24 @@ public void drawPlant(Plant plant){
       line(0, -1, -30, 0, -1, -50);
       line(0, -1, -50, 10, -1, -40);
       line(0, -1, -50, -10, -1, -40);
+    }
+    else if(clickMode == "ROTATE"){
+      pushMatrix();
+      fill(100, 100, 100);
+      stroke(230, 10, 20);
+      strokeWeight(2);
+      translate(0, -1, 0);
+      rotateX(PI/2);
+      ellipse(0, 0, 60, 60);
+      popMatrix();
+      line(-30, 0, 0, -40, 0, -10);
+      line(-30, 0, 0, -20, 0, -10);
+      line(30, 0, 0, 20, 0, 10);
+      line(30, 0, 0, 40, 0, 10);
+      line(0, 0, -30, 10, 0, -40);
+      line(0, 0, -30, 10, 0, -20);
+      line(0, 0, 30, -10, 0, 40);
+      line(0, 0, 30, -10, 0, 20);
     }
     popMatrix();
   }
@@ -238,50 +258,84 @@ public void drawAllPlants(){
     previewPlant.changePosition(start, end);
     drawPlant(previewPlant);
   }
+  if(clickMode == "ROTATE" && rotatePlant != null && mousePressed){
+    rotatePlant.orientation+=.05;
+  }
 }
 
-public void mouseReleased(){
+public void mousePressed(){
+  if(clickMode == "ROTATE"){
     int x = mouseX;
     int y = mouseY;
     picker.captureViewMatrix(fieldX, fieldY);
     picker.calculatePickPoints(x,height-y);
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
-    if(clickMode == "DEFAULT"){
-      // first check whether waste was clicked on; if so, remove it
-      wasteRemoved = handleWasteClick(start, end);
-      if(!wasteRemoved){
-        handleFoodClick(x, y, start, end);
-      }
+    handlePlantRotateClick(x, y, start, end);
+  }
+}
+
+public void mouseReleased(){
+  int x = mouseX;
+  int y = mouseY;
+  picker.captureViewMatrix(fieldX, fieldY);
+  picker.calculatePickPoints(x,height-y);
+  Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+  Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+  if(clickMode == "DEFAULT"){
+    // first check whether waste was clicked on; if so, remove it
+    wasteRemoved = handleWasteClick(start, end);
+    if(!wasteRemoved){
+      handleFoodClick(x, y, start, end);
     }
-    else if(clickMode == "PLANT"){
-      if(mouseY > 2*fieldY/3){
-        previewPlant.encoding = previewPlant.encode();
-        tank.plants.add(previewPlant);
-        $('#cancel_plant_add').click();
-      }
-      else{
-        $('#cancel_plant_add').click();
-      }
+  }
+  else if(clickMode == "PLANT"){
+    if(mouseY > 2*fieldY/3){
+      previewPlant.encoding = previewPlant.encode();
+      tank.plants.add(previewPlant);
+      $('#cancel_plant_add').click();
     }
-    else if(clickMode == "DELETE"){
-      handlePlantDeleteClick(x, y, start, end);
+    else{
+      $('#cancel_plant_add').click();
+    }
+  }
+  else if(clickMode == "MOVEPLANT"){
+    if(mouseY > 2*fieldY/3){
+      previewPlant.encoding = previewPlant.encode();
+      tank.plants.add(previewPlant);
+      previewPlant = null;
+      clickMode = "MOVE";
+    }
+    else{
+      $('#cancel_plant_move').click();
+    }
+  }
+  else if(clickMode == "DELETE"){
+    if(!handlePlantDeleteClick(x, y, start, end)){
       $('#cancel_plant_delete').click();
       clickMode = "DEFAULT";
     }
-    else if(clickMode == "MOVE"){
-      if(handlePlantMoveClick(x, y, start, end)){
-         clickMode = "PLANT";
-      }
-      else{
-        clickMode = "DEFAULT";
-      }
+  }
+  else if(clickMode == "MOVE"){
+    if(handlePlantMoveClick(x, y, start, end)){
+       clickMode = "MOVEPLANT";
+    }
+    else{
+      clickMode = "DEFAULT";
       $('#cancel_plant_move').click();
     }
-    //if(mouseButton == RIGHT){
-    //  console.log("skipping ahead 1 hour");
-    //  tank.skipAhead(60);
-    //}
+  }
+  else if(clickMode == "ROTATE"){
+    if(!handlePlantRotateClick(x, y, start, end)){
+      clickMode = "DEFAULT";
+      $('#cancel_plant_rotate').click();
+    }
+    rotatePlant = null;
+  }
+  //if(mouseButton == RIGHT){
+  //  console.log("skipping ahead 1 hour");
+  //  tank.skipAhead(60);
+  //}
 }
 
 /**************************************************
@@ -537,6 +591,7 @@ public void createPlantPreview(){
 public void cancelPlant(){
   clickMode = "DEFAULT";
   previewPlant = null;
+  rotatePlant = null;
 }
 
 public boolean handleWasteClick(Vector3D start, Vector3D end){
@@ -616,12 +671,27 @@ public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
   for(int i = 0; i < tank.plants.size(); i++){
     Plant p = (Plant) tank.plants.get(i);
     if(absolutePosition.distance(p.absolutePosition) < 40){
-       previewPlant = p;
-       tank.plants.remove(p);
-       return true;
-     }
-   }
- return false;
+      previewPlant = p;
+      tank.plants.remove(p);
+      return true;
+    }
+  }
+  return false;
+}
+
+public boolean handlePlantRotateClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    if(absolutePosition.distance(p.absolutePosition) < 40){
+      rotatePlant = p;
+      return true;
+    }
+  }
+  return false;
 }
 
 public void deleteMode(){
@@ -630,6 +700,10 @@ public void deleteMode(){
 
 public void moveMode(){
   clickMode = "MOVE";
+}
+
+public void rotateMode(){
+  clickMode = "ROTATE";
 }
 
 public boolean haveFishWithName(String name){

@@ -114,28 +114,18 @@ function update_button_text(button_name, text){
 	$('#'+button_name).text(text)
 }
 
-function handle_delete_plant(){
+function handle_plant_buttons(){
 	var processing = Processing.getInstanceById('processing');
 	if(processing.hasPlants()){
 		$('#delete_plant').attr('hidden', false);
+		$('#move_plant').attr('hidden', false);
+		$('#rotate_plant').attr('hidden', false);
 	}
 	else{
 		$('#delete_plant').attr('hidden', true);
-	}
-}
-
-function handle_move_plant(){
-	var processing = Processing.getInstanceById('processing');
-	if(processing.hasPlants()){
-		$('#move_plant').attr('hidden', false);
-	}
-	else{
 		$('#move_plant').attr('hidden', true);
+		$('#rotate_plant').attr('hidden', true);
 	}
-}
-
-function handle_add_plant(){
-	var processing = Processing.getInstanceById('processing');
 	if(processing.hasMaxPlants()){
 		$('#add_plant').attr('hidden', true);
 	}
@@ -236,6 +226,7 @@ $('#add_plant').click(function(){
 	$('#new_plant').attr('hidden', false);
 	$('#delete_plant').attr('hidden', true);
 	$('#move_plant').attr('hidden', true);
+	$('#rotate_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', false);
 	$('#plant_instructions').text("Click on the tank floor to place your new plant! Plant shapes and colors are randomly generated. If you don't like what you got, click 'Generate New Plant' to get a new one")
 	var processing = Processing.getInstanceById('processing');
@@ -248,9 +239,7 @@ $('#new_plant').click(function(){
 })
 
 $('#cancel_plant_add').click(function(){
-	handle_add_plant();
-	handle_delete_plant();
-	handle_move_plant();
+	handle_plant_buttons();
 	$('#new_plant').attr('hidden', true);
 	$('#cancel_plant_add').attr('hidden', true);
 	$('#plant_instructions').empty();
@@ -263,6 +252,7 @@ $('#delete_plant').click(function(){
 	$('#move_plant').attr('hidden', true);
 	$('#new_plant').attr('hidden', true);
 	$('#delete_plant').attr('hidden', true);
+	$('#rotate_plant').attr('hidden', true);
 	$('#cancel_plant_delete').attr('hidden', false);
 	$('#plant_instructions').text("Click the X at the base of a plant to delete it.");
 	var processing = Processing.getInstanceById('processing');
@@ -270,9 +260,7 @@ $('#delete_plant').click(function(){
 })
 
 $('#cancel_plant_delete').click(function(){
-	handle_add_plant();
-	handle_delete_plant();
-	handle_move_plant();
+	handle_plant_buttons();
 	$('#cancel_plant_delete').attr('hidden', true);
 	$('#plant_instructions').empty();
 	var processing = Processing.getInstanceById('processing');
@@ -283,6 +271,7 @@ $('#move_plant').click(function(){
 	$('#add_plant').attr('hidden', true);
 	$('#new_plant').attr('hidden', true);
 	$('#move_plant').attr('hidden', true);
+	$('#rotate_plant').attr('hidden', true);
 	$('#delete_plant').attr('hidden', true);
 	$('#cancel_plant_move').attr('hidden', false);
 	$('#plant_instructions').text("Click the grip at the base of a plant to move it.");
@@ -291,11 +280,32 @@ $('#move_plant').click(function(){
 })
 
 $('#cancel_plant_move').click(function(){
-	handle_add_plant();
-	handle_delete_plant();
-	handle_move_plant();
+	handle_plant_buttons();
 	$('#cancel_plant_move').attr('hidden', true);
 	$('#plant_instructions').empty();
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
+})
+
+$('#rotate_plant').click(function(){
+	$('#add_plant').attr('hidden', true);
+	$('#new_plant').attr('hidden', true);
+	$('#move_plant').attr('hidden', true);
+	$('#rotate_plant').attr('hidden', true);
+	$('#delete_plant').attr('hidden', true);
+	$('#cancel_plant_move').attr('hidden', true);
+	$('#cancel_plant_rotate').attr('hidden', false);
+	$('#plant_instructions').text("Click and hold the grip at the base of a plant to rotate it.");
+	var processing = Processing.getInstanceById('processing');
+	processing.rotateMode();
+})
+
+$('#cancel_plant_rotate').click(function(){
+	handle_plant_buttons();
+	$('#cancel_plant_rotate').attr('hidden', true);
+	$('#plant_instructions').empty();
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
 })
 
 $('#food_type').change(function(){
