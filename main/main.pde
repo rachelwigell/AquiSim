@@ -59,7 +59,12 @@ void setup(){
       long now = new Date().getTime();
       long lastSave = stats[13];
       int elapsedMinutes = int((now - lastSave)/60000);
-      tank.skipAhead(elapsedMinutes);
+      if(elapsedMinutes < 500000){
+        tank.skipAhead(elapsedMinutes);
+      }
+      else{
+        tank = new Tank();
+      }
     }
     catch(Exception e){
       tank = new Tank();
