@@ -51,14 +51,19 @@ void setup(){
     accordion_defaults(true);
   }
   else{
-    tank = new Tank(cookie);
-    accordion_defaults(false);
-    cookie = LZString.decompressFromUTF16(cookie);
-    String[] stats = splitTokens(cookie, "+");
-    long now = new Date().getTime();
-    long lastSave = stats[13];
-    int elapsedMinutes = int((now - lastSave)/60000);
-    tank.skipAhead(elapsedMinutes);
+    try{
+      tank = new Tank(cookie);
+      accordion_defaults(false);
+      cookie = LZString.decompressFromUTF16(cookie);
+      String[] stats = splitTokens(cookie, "+");
+      long now = new Date().getTime();
+      long lastSave = stats[13];
+      int elapsedMinutes = int((now - lastSave)/60000);
+      tank.skipAhead(elapsedMinutes);
+    }
+    catch(Exception e){
+      tank = new Tank();
+    }
   }
   
   populateSpeciesList();
