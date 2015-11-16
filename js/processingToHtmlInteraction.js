@@ -114,14 +114,14 @@ function update_achievements_stats(){
 		achievement_info = achievements_stats[selected_achievement];
 		var append_string = '<tr><td><img src="' + achievement_info['image url'] + '"></td>';
 		if(!achievement_info['earned']){
-			 append_string += '<td>' + achievement_info['description'] + ' To earn this achievement, you must keep <b>' + achievement_info['condition'] + '.</b></td></tr>';
+			 append_string += '<td>' + achievement_info['description'] + ' Earn this achievement by <b>' + achievement_info['condition'] + '.</b></td></tr>';
 			$('#add_reward').attr('hidden', true);
 			$('#move_reward').attr('hidden', true);
 			$('#rotate_reward').attr('hidden', true);
 			$('#delete_reward').attr('hidden', true);
 		}
 		else if(!achievement_info['used']){
-			append_string += '<td>Congratulations! You earned the ' + achievement_info['reward'] + ' by keeping ' + achievement_info['condition'] + '. You can add it to your tank now.</td></tr>';
+			append_string += '<td>Congratulations! You earned the ' + achievement_info['reward'] + ' by ' + achievement_info['condition'] + '. You can add it to your tank now.</td></tr>';
 			update_button_text('add_reward', 'Add ' + achievement_info['reward']);
 			$('#add_reward').attr('hidden', false);
 			$('#move_reward').attr('hidden', true);

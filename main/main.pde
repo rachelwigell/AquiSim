@@ -45,6 +45,8 @@ void setup(){
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
+  populateAchievementsList();
+  
   String cookie = get_cookie("t");
   if(cookie == ""){
     tank = new Tank();
@@ -73,7 +75,6 @@ void setup(){
   
   populateSpeciesList();
   populateSpeciesStats();
-  populateAchievementsList();
   populateAchievementsStats();
   update_tank_stats();
   update_fish_dropdown();
@@ -821,6 +822,24 @@ public ArrayList cookieInfo(){
   }
   for(int i = min(tank.plants.size(), maxPlants); i < maxPlants; i++){
     cookieInfo.add("p" + i + "=;");
+  }
+  for(int i = 0; i < achievementsList.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    String achievementStringPrefix = "a" + i + "=";
+    String achievementString = "";
+    if(!a.earned){
+      achievementString += "f+f";
+    }
+    else{
+      achievementString += "t+";
+      if(!a.used){
+        achievementString += "f";
+      }
+      else{
+        achievementString += "t+" + a.position.x + "+" + a.position.y + "+" + a.position.z + "+" + a.orientation + "";
+      }
+    }
+    cookieInfo.add(achievementStringPrefix + LZString.compressToUTF16(achievementString) + ";");
   }
   return cookieInfo;
 }

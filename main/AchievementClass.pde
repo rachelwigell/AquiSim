@@ -6,4 +6,9 @@ public abstract class Achievement {
   public String rewardName;
   public boolean earned;
   public boolean used;
+  public Vector3D position;
+  public float orientation;
+  public int scaleVal;
+  
+  public boolean checkFulfilled(){}
 }

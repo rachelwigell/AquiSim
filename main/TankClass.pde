@@ -24,6 +24,7 @@ public class Tank{
   public ArrayList plants;
   public String name;
   public long createdAt;
+  public ArrayList achievements;
 
   public final float pi = 3.14159;
   public final float timeScale = .01; //higher = harder
@@ -56,6 +57,11 @@ public class Tank{
     this.deadFish = new ArrayList();
     this.name = "";
     this.createdAt = new Date().getTime();
+    this.achievements = new ArrayList();
+    for(int i = 0; i < achievementsList.size(); i++){
+      Achievement a = (Achievement) achievementsList.get(i);
+      achievements.add(a);
+    }
   }
   
   public Tank(String cookieString){ 
@@ -165,6 +171,16 @@ public class Tank{
        this.plants.add(new Plant(plantStats[7], new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
                                  new Vector3D(float(plantStats[3]), float(plantStats[4]), float(plantStats[5])), float(plantStats[6])));
      }
+    }
+    this.achievements = new ArrayList();
+    for(int i = 0; i < achievementsList.size(); i++){
+      cookie = get_cookie("a" + i);
+      if(cookie != ""){
+        String[] achievementStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+        if(i == 0){
+          this.achievements.add(new ClamShell(achievementStats));
+        }
+      }
     }
   }
     
@@ -350,6 +366,13 @@ public class Tank{
     }
   }
   
+  public void checkAchievementsFulfilled(){
+    for(int i = 0; i < this.achievements.size(); i++){
+      Achievement a = (Achievement) this.achievements.get(i);
+      a.checkFulfilled();
+    }
+  }
+  
   public void progress(){
     //per fish operations
     for(int i = 0; i < this.fish.size(); i++){
@@ -360,6 +383,9 @@ public class Tank{
       f.adapt();
       this.handleDeceased(f); //check if fish is dead and perform necessary operations if so
     }
+    
+    //achievement operations
+    this.checkAchievementsFulfilled();
 
     //tank operations
     float cmFish = this.changeFish();
