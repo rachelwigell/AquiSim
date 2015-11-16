@@ -89,6 +89,7 @@
 		main/MysterySnailClass.pde
 		main/CoryCatfishClass.pde
 		main/AchievementClass.pde
+		main/ClamShellClass.pde
 		main/Vector3DClass.pde
 		main/TankClass.pde
 		main/main.pde
@@ -179,6 +180,28 @@
 				</div>
 				<div class="small-8 columns">
 					<p align="left" id="plant_instructions"></p>
+				</div>
+			</div>
+		</li>
+		<div class="row"></div>
+		<li class="accordion-navigation">
+    		<a href="#achievement_menu">Unlockables</a>
+    		<div id="achievement_menu" class="content active">
+				<div class="small-6 columns">
+					<select id="achievements_list" type="select"></select>
+				</div>
+				<div class="small-6 columns">
+					<table id="achievements_display"></table>
+					<div class="small-4 columns">
+						<button class="button round" id="add_reward" hidden=true></button>
+						<button class="button round" id="move_reward" hidden=true></button>
+					</div>
+					<div class="small-4 columns">
+						<button class="button round" id="rotate_reward" hidden=true></button>
+					</div>
+					<div class="small-4 columns">
+						<button class="button round" id="delete_reward" hidden=true></button>
+					</div>
 				</div>
 			</div>
 		</li>

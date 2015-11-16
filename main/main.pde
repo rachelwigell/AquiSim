@@ -8,6 +8,7 @@ public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
 public Tank tank;
 public ArrayList speciesList = new ArrayList();
+public ArrayList achievementsList = new ArrayList();
 public Selection_in_P3D_OPENGL_A3D picker;
 public int backMinX = null;
 public int backMaxX = null;
@@ -23,6 +24,7 @@ public int maxPlants = 6;
 tank_stats =  {};
 fish_stats = {};
 species_stats = {};
+achievements_stats = {};
 
 String clickMode = "DEFAULT";
 Plant previewPlant = null;
@@ -30,8 +32,6 @@ Plant rotatePlant = null;
 Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
-
-public PShape model = loadShape("greekarch.obj");
 
 void setup(){
   if(fieldY > fieldX){
@@ -73,11 +73,15 @@ void setup(){
   
   populateSpeciesList();
   populateSpeciesStats();
+  populateAchievementsList();
+  populateAchievementsStats();
   update_tank_stats();
   update_fish_dropdown();
   update_fish_stats();
   update_species_dropdown();
   update_species_stats();
+  update_achievements_dropdown();
+  update_achievements_stats();
   handle_plant_buttons();
   floatingFood = !$('#food_type').is(":checked");
   
@@ -94,7 +98,7 @@ void draw(){
   drawAllFish();
   drawAllWaste();
   tank.allEat();
-  drawAllPlants();
+  drawAllPlants(); 
   if(updateCount > 150){ //operations to happen every 5 seconds
       tank.progress();
       updateCount = 0;
@@ -110,6 +114,10 @@ public void populateSpeciesList(){
   speciesList.add(new CherryShrimp("Swimmy"));
   speciesList.add(new MysterySnail("Swimmy"));
   speciesList.add(new CoryCatfish("Swimmy"));
+}
+
+public void populateAchievementsList(){
+  achievementsList.add(new ClamShell());
 }
 
 public void determineBounds(){
@@ -141,7 +149,7 @@ public void drawTank(){
   translate((-.95*fieldX), 0, 0);
   box(1, (fieldY), (fieldZ)); //left
   translate((.475*fieldX), (.5*fieldY), 0);
-  fill(color(180));
+  fill(color(100));
   box((.95*fieldX), 1, (fieldZ)); //bottom
   fill(color(0, 0, 255, 20));
   translate(0, (-.5*fieldY) + (fieldY*.5*(1-waterLevel)), 0);
@@ -410,6 +418,20 @@ public void updateFishStats(){
       "Hardness levels tolerated:": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
       "max health": f.maxHealth,
       "max fullness": f.maxFullness
+    };
+  }
+}
+
+public void populateAchievementsStats(){
+  for(int i = 0; i < achievementsList.size(); i++){
+    Achievement a = (Achievement) achievementsList.get(i);
+    achievements_stats[a.rewardName] = {
+      "image url": a.rewardSprite,
+      "reward": a.rewardName,
+      "description": a.rewardDescription,
+      "condition": a.condition,
+      "earned": a.earned,
+      "used": a.used
     };
   }
 }

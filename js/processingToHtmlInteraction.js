@@ -3,6 +3,7 @@ var selected_fish = 'select';
 window.setInterval(function(){
   	update_tank_stats();
   	update_fish_stats();
+  	update_achievements_stats();
   	update_fish_dropdown();
   	write_cookie();
 }, 2000)
@@ -85,9 +86,59 @@ function update_species_stats(){
 				$('#species_stats_display').append('<tr><td colspan="2"><center><img src="' + stat + '"></center></td></tr>');
 			}
 			else{
-				$('#species_stats_display').append('<tr><td><b>' + name + '</b></td><td> ' + stat + '</td></tr>');	
+				$('#species_stats_display').append('<tr><th>' + name + '</th><td> ' + stat + '</td></tr>');	
 			}
 		}
+	}	
+}
+
+function update_achievements_dropdown(){
+	$('#achievements_list').empty();
+	$('#achievements_list').append(new Option('Select an unlockable', 'select'));
+	for(var achievement in achievements_stats){
+		$('#achievements_list').append(new Option(achievement, achievement));
+	}
+}
+
+function update_achievements_stats(){
+	$('#achievements_display').empty();
+	var selected_achievement = $('#achievements_list').find(':selected').val();
+	if(selected_achievement == 'select'){
+		$('#achievements_display').empty();
+		$('#add_reward').attr('hidden', true);
+		$('#move_reward').attr('hidden', true);
+		$('#rotate_reward').attr('hidden', true);
+		$('#delete_reward').attr('hidden', true);
+	}
+	else{
+		achievement_info = achievements_stats[selected_achievement];
+		var append_string = '<tr><td><img src="' + achievement_info['image url'] + '"></td>';
+		if(!achievement_info['earned']){
+			 append_string += '<td>' + achievement_info['description'] + ' To earn this achievement, you must keep <b>' + achievement_info['condition'] + '.</b></td></tr>';
+			$('#add_reward').attr('hidden', true);
+			$('#move_reward').attr('hidden', true);
+			$('#rotate_reward').attr('hidden', true);
+			$('#delete_reward').attr('hidden', true);
+		}
+		else if(!achievement_info['used']){
+			append_string += '<td>Congratulations! You earned the ' + achievement_info['reward'] + ' by keeping ' + achievement_info['condition'] + '. You can add it to your tank now.</td></tr>';
+			update_button_text('add_reward', 'Add ' + achievement_info['reward']);
+			$('#add_reward').attr('hidden', false);
+			$('#move_reward').attr('hidden', true);
+			$('#rotate_reward').attr('hidden', true);
+			$('#delete_reward').attr('hidden', true);
+		}
+		else{
+			append_string += '<td>The ' + achievement_info['reward'] + ' is already in your tank. You can modify it with the buttons below.</td></tr>';
+			update_button_text('rotate_reward', 'Rotate ' + achievement_info['reward']);
+			update_button_text('move_reward', 'Move ' + achievement_info['reward']);
+			update_button_text('delete_reward', 'Delete ' + achievement_info['reward']);
+			$('#add_reward').attr('hidden', true);
+			$('#move_reward').attr('hidden', false);
+			$('#rotate_reward').attr('hidden', false);
+			$('#delete_reward').attr('hidden', false);
+		}
+		$('#achievements_display').append(append_string);
 	}	
 }
 
@@ -142,6 +193,7 @@ function accordion_defaults(new_user){
 		$('#manage_plants_menu').removeClass('active');
 		$('#help_menu').addClass('active');
 		$('#feedback_menu').removeClass('active');
+		$('#achievements_menu').removeClass('active');
 	}
 	else{
 		$('#tank_health_menu').addClass('active');
@@ -150,6 +202,7 @@ function accordion_defaults(new_user){
 		$('#manage_plants_menu').addClass('active');
 		$('#help_menu').removeClass('active');
 		$('#feedback_menu').addClass('active');
+		$('#achievements_menu').addClass('active');
 	}
 }
 
@@ -160,6 +213,10 @@ $('#fish_list').change(function(){
 
 $('#species_list').change(function(){
 	update_species_stats();
+})
+
+$('#achievements_list').change(function(){
+	update_achievements_stats();
 })
 
 $('#help_topics').change(function(){
