@@ -33,6 +33,8 @@ public abstract class Fish {
   public Vector3D offset;
   public HashMap dangerRatings;
   public float region;
+  public long aliveSince;
+  public long happySince;
 
   public void setDangerRatings() {
     this.dangerRatings = new HashMap();

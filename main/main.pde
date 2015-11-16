@@ -55,9 +55,9 @@ void setup(){
     accordion_defaults(false);
     cookie = LZString.decompressFromUTF16(cookie);
     String[] stats = splitTokens(cookie, "+");
-    var now = new Date();
-    var lastSave = new Date(int(stats[13])+2000, int(stats[14]), int(stats[15]), int(stats[16]), int(stats[17]), 0, 0);
-    int elapsedMinutes = int((now.getTime() - lastSave.getTime())/60000);
+    long now = new Date().getTime();
+    long lastSave = stats[13];
+    int elapsedMinutes = int((now - lastSave)/60000);
     tank.skipAhead(elapsedMinutes);
   }
   
@@ -744,12 +744,9 @@ public ArrayList cookieInfo(){
   tankString += min(tank.sinkingFood.size(), 99) + "+";
   tankString += min(tank.floatingFood.size(), 99) + "+";
   tankString += min(tank.poops.size(), 99) + "+";
-  var date = new Date();
-  tankString += date.getFullYear()-2000 + "+";
-  tankString += date.getMonth() + "+";
-  tankString += date.getDate() + "+";
-  tankString += date.getHours() + "+";
-  tankString += date.getMinutes();
+  var date = new Date().getTime();
+  tankString += date + "+";
+  tankString += tank.createdAt;
   tankString = LZString.compressToUTF16(tankString) + ";";
   cookieInfo.add(tankStringPrefix + tankString);
   for(int i = 0; i < min(tank.fish.size(), maxFish); i++){
@@ -765,7 +762,9 @@ public ArrayList cookieInfo(){
    fishString += f.minHard.toFixed(2) + "+";
    fishString += f.maxHard.toFixed(2) + "+";
    fishString += f.minPH.toFixed(2) + "+";
-   fishString += f.maxPH.toFixed(2);
+   fishString += f.maxPH.toFixed(2) + "+";
+   fishString += f.aliveSince + "+";
+   fishString += f.happySince;
    fishString = LZString.compressToUTF16(fishString) + ";";
    cookieInfo.add(fishStringPrefix + fishString);
   }

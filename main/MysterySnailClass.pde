@@ -35,6 +35,8 @@ public class MysterySnail extends Fish{
     this.setDangerRatings();
     this.location = "FLOOR";
     this.region = 0;
+    this.aliveSince = new Date().getTime();
+    this.happySince = new Date().getTime();
   }
   
   
@@ -51,6 +53,8 @@ public class MysterySnail extends Fish{
       this.maxHard = float(stats[7]);
       this.minPH = float(stats[8]);
       this.maxPH = float(stats[9]);
+      this.aliveSince = stats[10];
+      this.happySince = stats[11];
     }
     this.ease = 5;
     this.maxHealth = this.ease*24*60*5;

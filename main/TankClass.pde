@@ -23,6 +23,7 @@ public class Tank{
   public ArrayList deadFish;
   public ArrayList plants;
   public String name;
+  public long createdAt;
 
   public final float pi = 3.14159;
   public final float timeScale = .01; //higher = harder
@@ -54,6 +55,7 @@ public class Tank{
     this.floatingFood = new ArrayList();
     this.deadFish = new ArrayList();
     this.name = "";
+    this.createdAt = new Date().getTime();
   }
   
   public Tank(String cookieString){ 
@@ -73,6 +75,7 @@ public class Tank{
     this.nitrobacter = float(stats[9]);
     this.waste = 0;
     this.time = getTime();
+    this.createdAt = stats[14];
     this.fish = new ArrayList();
     for(int i = 0; i < maxFish; i++){
      cookie = get_cookie("f" + i);
@@ -279,36 +282,49 @@ public class Tank{
   public String fishHappiness(Fish f){
     if(f.fullness <= 0){
       f.status = "Hungry!";
+      f.happySince = 0;
     }
     else if(this.ammonia > f.ammonia){
       f.status = "Ammonia too high.";
+      f.happySince = 0;
     }
     else if(this.nitrite > f.nitrite){
       f.status = "Nitrite too high.";
+      f.happySince = 0;
     }
     else if(this.nitrate > f.nitrate){
       f.status = "Nitrate too high.";
+      f.happySince = 0;
     }
     else if(this.pH < f.minPH){
       f.status = "pH too low.";
+      f.happySince = 0;
     }
     else if(this.pH > f.maxPH){
       f.status = "pH too high.";
+      f.happySince = 0;
     }
     else if(this.temp < f.minTemp){
       f.status = "Temperature too low.";
+      f.happySince = 0;
     }
     else if(this.temp > f.maxTemp){
       f.status = "Temperature too high.";
+      f.happySince = 0;
     }
     else if(this.hardness < f.minHard){
       f.status = "Hardness too low.";
+      f.happySince = 0;
     }
     else if(this.hardness > f.maxHard){
       f.status = "Hardness too high.";
+      f.happySince = 0;
     }
     else{ //if none of the above, then  it's happy
       f.status = "Happy.";
+      if(f.happySince == 0){
+        f.happySince = new Date().getTime();
+      }
     }
     return f.status;
   }
@@ -402,9 +418,9 @@ public class Tank{
   }
   
   public void allEat(){
+    ArrayList eaten = new ArrayList();
     for(int i = 0; i < this.fish.size(); i++){
       Fish aFish = (Fish) this.fish.get(i);
-      ArrayList eaten = new ArrayList();
       for(int j = 0; j < this.food.size(); j++){
         Food aFood = (Food) this.food.get(j);
         if(this.eat(aFish, aFood)){
@@ -448,8 +464,8 @@ public class Tank{
   }
   
   public void allRandomizedEat(){
+    ArrayList eaten = new ArrayList();
     for(int i = 0; i < this.fish.size(); i++){
-      ArrayList eaten = new ArrayList();
       Fish fish = (Fish) this.fish.get(i);
       for(int j = 0; j < this.food.size(); j++){
         Food food = (Food) this.food.get(j);
