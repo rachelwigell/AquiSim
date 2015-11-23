@@ -45,7 +45,7 @@ public class ClamShell extends Achievement{
       long now = new Date().getTime();
       for(int i = 0; i < tank.fish.size(); i++){
         Fish f = (Fish) tank.fish.get(i);
-        if(now - f.aliveSince > 10){ //6048000000
+        if(now - f.aliveSince > 6048000000){
           this.earned = true;
           return true;
         }
