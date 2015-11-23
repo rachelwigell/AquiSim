@@ -35,8 +35,34 @@ public abstract class Achievement {
         rotateX(PI/2);
         ellipse(0, 0, 60, 60);
         rotateX(-PI/2);
-        line(-20, -2, 20, 20, -2, -20);
-        line(20, -2, 20, -20, -2, -20);
+        line(-20, 0, 20, 20, 0, -20);
+        line(20, 0, 20, -20, 0, -20);
+        popMatrix();
+      }
+      else if(clickMode == "MOVEACHIEVEMENT"){
+        rotateY(-this.orientation);
+        scale(1/this.scaleVal, 1/this.scaleVal, 1/this.scaleVal);
+        pushMatrix();
+        translate(0, 0, this.dimensions.x/2+20);
+        fill(100, 100, 100);
+        stroke(230, 10, 20);
+        strokeWeight(2);
+        translate(0, -1, 0);
+        rotateX(PI/2);
+        ellipse(0, 0, 60, 60);
+        rotateX(-PI/2);
+        line(-30, 0, 0, -50, 0, 0);
+        line(-50, 0, 0, -40, 0, 10);
+        line(-50, 0, 0, -40, 0, -10);
+        line(30, 0, 0, 50, 0, 0);
+        line(50, 0, 0, 40, 0, 10);
+        line(50, 0, 0, 40, 0, -10);
+        line(0, 0, 30, 0, 0, 50);
+        line(0, 0, 50, 10, 0, 40);
+        line(0, 0, 50, -10, 0, 40);
+        line(0, 0, -30, 0, 0, -50);
+        line(0, 0, -50, 10, 0, -40);
+        line(0, 0, -50, -10, 0, -40);
         popMatrix();
       }
       popMatrix();

@@ -382,6 +382,18 @@ $('#cancel_plant_move').click(function(){
 	processing.cancelPlant();
 })
 
+$('#move_reward').click(function(){
+	reward_button_visibility();
+	var processing = Processing.getInstanceById('processing');
+	processing.setClickMode("MOVEACHIEVEMENT");
+})
+
+$('#cancel_reward_move').click(function(){
+	reward_button_visibility();
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
+})
+
 $('#rotate_plant').click(function(){
 	$('#add_plant').attr('hidden', true);
 	$('#new_plant').attr('hidden', true);

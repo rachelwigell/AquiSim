@@ -364,6 +364,16 @@ public void mouseReleased(){
       $('#cancel_plant_move').click();
     }
   }
+  else if(clickMode == "MOVEADDACHIEVEMENT"){
+    if(mouseY > 2*fieldY/3){
+      previewAchievement.used = true;
+      previewAchievement = null;
+      clickMode = "MOVEACHIEVEMENT";
+    }
+    else{
+      $('#cancel_reward_move').click();
+    }
+  }
   else if(clickMode == "DELETEPLANT"){
     if(!handlePlantDeleteClick(x, y, start, end)){
       $('#cancel_plant_delete').click();
@@ -393,6 +403,15 @@ public void mouseReleased(){
     else{
       clickMode = "DEFAULT";
       $('#cancel_plant_move').click();
+    }
+  }
+  else if(clickMode == "MOVEACHIEVEMENT"){
+    if(handleRewardMoveClick(x, y, start, end)){
+       clickMode = "MOVEADDACHIEVEMENT";
+    }
+    else{
+      clickMode = "DEFAULT";
+      $('#cancel_reward_move').click();
     }
   }
   else if(clickMode == "ROTATEPLANT"){
@@ -785,6 +804,23 @@ public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
     if(absolutePosition.distance(p.absolutePosition) < 40){
       previewPlant = p;
       tank.plants.remove(p);
+      return true;
+    }
+  }
+  return false;
+}
+
+public boolean handleRewardMoveClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    Vector3D movePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
+    if(absolutePosition.distance(movePos) < 40){
+      previewAchievement = a;
+      a.used = false;
       return true;
     }
   }
