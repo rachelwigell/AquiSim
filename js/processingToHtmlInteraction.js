@@ -100,43 +100,52 @@ function update_achievements_dropdown(){
 	}
 }
 
+function reward_button_visibility(){
+	var processing = Processing.getInstanceById('processing');
+	processing.updateAchievementsStats();
+	var clickMode = processing.getClickMode();
+	var selected_achievement = $('#achievements_list').find(':selected').val();
+	var achievement_info = achievements_stats[selected_achievement];
+	var add_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && !achievement_info['used'];
+	var move_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var rotate_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var delete_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var cancel_add = selected_achievement != 'select' && clickMode == 'ADDACHIEVEMENT' && achievement_info['earned'] && !achievement_info['used'];
+	var cancel_move = selected_achievement != 'select' && clickMode == 'MOVEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
+	var cancel_rotate = selected_achievement != 'select' && clickMode == 'ROTATEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
+	var cancel_delete = selected_achievement != 'select' && clickMode == 'DELETEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
+	$('#add_reward').attr('hidden', !add_val);
+	$('#move_reward').attr('hidden', !move_val);
+	$('#rotate_reward').attr('hidden', !rotate_val);
+	$('#delete_reward').attr('hidden', !delete_val);
+	$('#cancel_reward_add').attr('hidden', !cancel_add);
+	$('#cancel_reward_move').attr('hidden', !cancel_move);
+	$('#cancel_reward_rotate').attr('hidden', !cancel_rotate);
+	$('#cancel_reward_delete').attr('hidden', !cancel_delete);
+}
+
 function update_achievements_stats(){
+	reward_button_visibility();
 	$('#achievements_display').empty();
 	var selected_achievement = $('#achievements_list').find(':selected').val();
 	if(selected_achievement == 'select'){
 		$('#achievements_display').empty();
-		$('#add_reward').attr('hidden', true);
-		$('#move_reward').attr('hidden', true);
-		$('#rotate_reward').attr('hidden', true);
-		$('#delete_reward').attr('hidden', true);
 	}
 	else{
 		achievement_info = achievements_stats[selected_achievement];
 		var append_string = '<tr><td><img src="' + achievement_info['image url'] + '"></td>';
 		if(!achievement_info['earned']){
 			 append_string += '<td>' + achievement_info['description'] + ' Earn this achievement by <b>' + achievement_info['condition'] + '.</b></td></tr>';
-			$('#add_reward').attr('hidden', true);
-			$('#move_reward').attr('hidden', true);
-			$('#rotate_reward').attr('hidden', true);
-			$('#delete_reward').attr('hidden', true);
 		}
 		else if(!achievement_info['used']){
 			append_string += '<td>Congratulations! You earned the ' + achievement_info['reward'] + ' by ' + achievement_info['condition'] + '. You can add it to your tank now.</td></tr>';
 			update_button_text('add_reward', 'Add ' + achievement_info['reward']);
-			$('#add_reward').attr('hidden', false);
-			$('#move_reward').attr('hidden', true);
-			$('#rotate_reward').attr('hidden', true);
-			$('#delete_reward').attr('hidden', true);
 		}
 		else{
 			append_string += '<td>The ' + achievement_info['reward'] + ' is already in your tank. You can modify it with the buttons below.</td></tr>';
 			update_button_text('rotate_reward', 'Rotate ' + achievement_info['reward']);
 			update_button_text('move_reward', 'Move ' + achievement_info['reward']);
 			update_button_text('delete_reward', 'Delete ' + achievement_info['reward']);
-			$('#add_reward').attr('hidden', true);
-			$('#move_reward').attr('hidden', false);
-			$('#rotate_reward').attr('hidden', false);
-			$('#delete_reward').attr('hidden', false);
 		}
 		$('#achievements_display').append(append_string);
 	}	
@@ -265,6 +274,10 @@ $('#add_fish').click(function(){
 		update_button_text('add_fish', "Sorry, you can't have more than 20 fish.");
 		setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
 	}
+	else if(nickname == ''){
+		update_button_text('add_fish', 'Please select a nickname.');
+		setTimeout(update_button_text, 1500, 'add_fish', 'Add a ' + species + '!');
+	}
 	else if(processing.haveFishWithName(nickname)){
 		$('#nickname_entry').val('');
 		update_button_text('add_fish', 'Please select a unique nickname.');
@@ -295,6 +308,13 @@ $('#new_plant').click(function(){
 	processing.createPlantPreview();
 })
 
+$('#add_reward').click(function(){
+	var processing = Processing.getInstanceById('processing');
+	var achievement_type = $('#achievements_list').find(':selected').val();
+	processing.createAchievementPreview(achievement_type);
+	reward_button_visibility();
+})
+
 $('#cancel_plant_add').click(function(){
 	handle_plant_buttons();
 	$('#new_plant').attr('hidden', true);
@@ -302,6 +322,12 @@ $('#cancel_plant_add').click(function(){
 	$('#plant_instructions').empty();
 	var processing = Processing.getInstanceById('processing');
 	processing.cancelPlant();
+})
+
+$('#cancel_reward_add').click(function(){
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
+	reward_button_visibility();
 })
 
 $('#delete_plant').click(function(){
@@ -313,7 +339,19 @@ $('#delete_plant').click(function(){
 	$('#cancel_plant_delete').attr('hidden', false);
 	$('#plant_instructions').text("Click the X at the base of a plant to delete it.");
 	var processing = Processing.getInstanceById('processing');
-	processing.deleteMode();
+	processing.setClickMode("DELETEPLANT");
+})
+
+$('#delete_reward').click(function(){
+	reward_button_visibility();
+	var processing = Processing.getInstanceById('processing');
+	processing.setClickMode("DELETEACHIEVEMENT");
+})
+
+$('#cancel_reward_delete').click(function(){
+	reward_button_visibility();
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
 })
 
 $('#cancel_plant_delete').click(function(){
@@ -333,7 +371,7 @@ $('#move_plant').click(function(){
 	$('#cancel_plant_move').attr('hidden', false);
 	$('#plant_instructions').text("Click the grip at the base of a plant to move it.");
 	var processing = Processing.getInstanceById('processing');
-	processing.moveMode();
+	processing.setClickMode("MOVEPLANT");
 })
 
 $('#cancel_plant_move').click(function(){
@@ -354,7 +392,7 @@ $('#rotate_plant').click(function(){
 	$('#cancel_plant_rotate').attr('hidden', false);
 	$('#plant_instructions').text("Click and hold the grip at the base of a plant to rotate it.");
 	var processing = Processing.getInstanceById('processing');
-	processing.rotateMode();
+	processing.setClickMode("ROTATEPLANT");
 })
 
 $('#cancel_plant_rotate').click(function(){

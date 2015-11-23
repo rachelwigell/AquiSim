@@ -29,6 +29,8 @@ achievements_stats = {};
 String clickMode = "DEFAULT";
 Plant previewPlant = null;
 Plant rotatePlant = null;
+Achievement previewAchievement = null;
+Achievement rotateAchievement = null;
 Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
@@ -75,7 +77,7 @@ void setup(){
   
   populateSpeciesList();
   populateSpeciesStats();
-  populateAchievementsStats();
+  updateAchievementsStats();
   update_tank_stats();
   update_fish_dropdown();
   update_fish_stats();
@@ -98,6 +100,7 @@ void draw(){
   drawTank();
   drawAllFish();
   drawAllWaste();
+  drawAllAchievements();
   tank.allEat();
   drawAllPlants(); 
   if(updateCount > 150){ //operations to happen every 5 seconds
@@ -170,6 +173,25 @@ void drawAllFish(){
     f.updatePosition();
   }
 }
+
+void drawAllAchievements(){
+  hint(ENABLE_DEPTH_TEST);
+  for(int i=0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    a.drawAchievement();
+  }
+  if(previewAchievement != null && mouseY > 2*fieldY/3){
+   picker.captureViewMatrix(fieldX, fieldY);
+   picker.calculatePickPoints(mouseX,height-mouseY);
+   Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+   Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+   previewAchievement.changePosition(start, end);
+   previewAchievement.drawPreview();
+  }
+  if(clickMode == "ROTATEACHIEVEMENT" && rotateAchievement != null && mousePressed){
+   rotateAchievement.orientation+=.05;
+  }
+}
   
 public void drawAllWaste(){
   for(int i = 0; i < tank.poops.size(); i++){
@@ -209,8 +231,8 @@ public void drawPlant(Plant plant){
     translate(plant.position.x, plant.position.y, plant.position.z);
     rotateY(plant.orientation);
     drawStack(plant.stack[j]);
-    rotateY(-plant.orientation);
-    if(clickMode == "DELETE"){
+    if(clickMode == "DELETEPLANT"){
+      rotateY(-plant.orientation);
       pushMatrix();
       fill(100, 100, 100);
       stroke(230, 10, 20);
@@ -222,7 +244,8 @@ public void drawPlant(Plant plant){
       line(-20, -2, 20, 20, -2, -20);
       line(20, -2, 20, -20, -2, -20);
     }
-    else if(clickMode == "MOVE"){
+    else if(clickMode == "MOVEPLANT"){
+      rotateY(-plant.orientation);
       pushMatrix();
       fill(100, 100, 100);
       stroke(230, 10, 20);
@@ -244,7 +267,8 @@ public void drawPlant(Plant plant){
       line(0, -1, -50, 10, -1, -40);
       line(0, -1, -50, -10, -1, -40);
     }
-    else if(clickMode == "ROTATE"){
+    else if(clickMode == "ROTATEPLANT"){
+      rotateY(-plant.orientation);
       pushMatrix();
       fill(100, 100, 100);
       stroke(230, 10, 20);
@@ -279,13 +303,13 @@ public void drawAllPlants(){
     previewPlant.changePosition(start, end);
     drawPlant(previewPlant);
   }
-  if(clickMode == "ROTATE" && rotatePlant != null && mousePressed){
+  if(clickMode == "ROTATEPLANT" && rotatePlant != null && mousePressed){
     rotatePlant.orientation+=.05;
   }
 }
 
 public void mousePressed(){
-  if(clickMode == "ROTATE"){
+  if(clickMode == "ROTATEPLANT"){
     int x = mouseX;
     int y = mouseY;
     picker.captureViewMatrix(fieldX, fieldY);
@@ -310,7 +334,7 @@ public void mouseReleased(){
       handleFoodClick(x, y, start, end);
     }
   }
-  else if(clickMode == "PLANT"){
+  else if(clickMode == "ADDPLANT"){
     if(mouseY > 2*fieldY/3){
       previewPlant.encoding = previewPlant.encode();
       tank.plants.add(previewPlant);
@@ -320,18 +344,27 @@ public void mouseReleased(){
       $('#cancel_plant_add').click();
     }
   }
-  else if(clickMode == "MOVEPLANT"){
+  else if(clickMode == "ADDACHIEVEMENT"){
+    if(mouseY > 2*fieldY/3){
+      previewAchievement.used = true;
+      $('#cancel_reward_add').click();
+    }
+    else{
+      $('#cancel_reward_add').click();
+    }
+  }
+  else if(clickMode == "MOVEADDPLANT"){
     if(mouseY > 2*fieldY/3){
       previewPlant.encoding = previewPlant.encode();
       tank.plants.add(previewPlant);
       previewPlant = null;
-      clickMode = "MOVE";
+      clickMode = "MOVEPLANT";
     }
     else{
       $('#cancel_plant_move').click();
     }
   }
-  else if(clickMode == "DELETE"){
+  else if(clickMode == "DELETEPLANT"){
     if(!handlePlantDeleteClick(x, y, start, end)){
       $('#cancel_plant_delete').click();
       clickMode = "DEFAULT";
@@ -342,16 +375,27 @@ public void mouseReleased(){
       }
     }
   }
-  else if(clickMode == "MOVE"){
+  else if(clickMode == "DELETEACHIEVEMENT"){
+    if(!handleRewardDeleteClick(x, y, start, end)){
+      $('#cancel_reward_delete').click();
+      clickMode = "DEFAULT";
+    }
+    else{
+      if(!hasRewards()){
+        $('#cancel_reward_delete').click();
+      }
+    }
+  }
+  else if(clickMode == "MOVEPLANT"){
     if(handlePlantMoveClick(x, y, start, end)){
-       clickMode = "MOVEPLANT";
+       clickMode = "MOVEADDPLANT";
     }
     else{
       clickMode = "DEFAULT";
       $('#cancel_plant_move').click();
     }
   }
-  else if(clickMode == "ROTATE"){
+  else if(clickMode == "ROTATEPLANT"){
     if(!handlePlantRotateClick(x, y, start, end)){
       clickMode = "DEFAULT";
       $('#cancel_plant_rotate').click();
@@ -423,9 +467,9 @@ public void updateFishStats(){
   }
 }
 
-public void populateAchievementsStats(){
-  for(int i = 0; i < achievementsList.size(); i++){
-    Achievement a = (Achievement) achievementsList.get(i);
+public void updateAchievementsStats(){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
     achievements_stats[a.rewardName] = {
       "image url": a.rewardSprite,
       "reward": a.rewardName,
@@ -624,14 +668,26 @@ public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNorma
 }
 
 public void createPlantPreview(){
-  clickMode = "PLANT";
+  clickMode = "ADDPLANT";
   previewPlant = new Plant();
+}
+
+public void createAchievementPreview(String type){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    if(type == a.rewardName){
+      clickMode = "ADDACHIEVEMENT";
+      previewAchievement = a;
+    }
+  }
 }
 
 public void cancelPlant(){
   clickMode = "DEFAULT";
   previewPlant = null;
   rotatePlant = null;
+  previewAchievement = null;
+  rotateAchievement = null;
 }
 
 public boolean handleWasteClick(Vector3D start, Vector3D end){
@@ -703,6 +759,22 @@ public boolean handlePlantDeleteClick(int x, int y, Vector3D start, Vector3D end
   return false;
 }
 
+public boolean handleRewardDeleteClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    Vector3D deletePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
+    if(absolutePosition.distance(deletePos) < 40){
+      a.used = false;
+      return true;
+    }
+  }
+  return false;
+}
+
 public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   float y = fieldY;
@@ -734,16 +806,9 @@ public boolean handlePlantRotateClick(int x, int y, Vector3D start, Vector3D end
   return false;
 }
 
-public void deleteMode(){
-  clickMode = "DELETE";
-}
-
-public void moveMode(){
-  clickMode = "MOVE";
-}
-
-public void rotateMode(){
-  clickMode = "ROTATE";
+public String setClickMode(String to){
+  clickMode = to;
+  return clickMode;
 }
 
 public boolean haveFishWithName(String name){
@@ -758,6 +823,16 @@ public boolean haveFishWithName(String name){
 
 public boolean hasPlants(){
   return tank.plants.size() > 0;
+}
+
+public boolean hasRewards(){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = tank.achievements.get(i);
+    if(a.used){
+      return true;
+    }
+  }
+  return false;
 }
 
 public ArrayList cookieInfo(){
@@ -855,4 +930,8 @@ public boolean hasMaxPlants(){
 public boolean setFloatingFood(boolean floating){
   floatingFood = floating;
   return floatingFood;
+}
+
+public String getClickMode(){
+  return clickMode;
 }
