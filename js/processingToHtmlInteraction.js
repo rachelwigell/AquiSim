@@ -415,6 +415,18 @@ $('#cancel_plant_rotate').click(function(){
 	processing.cancelPlant();
 })
 
+$('#rotate_reward').click(function(){
+	handle_plant_buttons();
+	var processing = Processing.getInstanceById('processing');
+	processing.setClickMode("ROTATEACHIEVEMENT");
+})
+
+$('#cancel_reward_rotate').click(function(){
+	handle_plant_buttons();
+	var processing = Processing.getInstanceById('processing');
+	processing.cancelPlant();
+})
+
 $('#food_type').change(function(){
 	var processing = Processing.getInstanceById('processing');
 	var boolValue = !$('#food_type').is(":checked");

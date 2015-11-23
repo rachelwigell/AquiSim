@@ -65,6 +65,28 @@ public abstract class Achievement {
         line(0, 0, -50, -10, 0, -40);
         popMatrix();
       }
+      else if(clickMode == "ROTATEACHIEVEMENT"){
+        rotateY(-this.orientation);
+        scale(1/this.scaleVal, 1/this.scaleVal, 1/this.scaleVal);
+        pushMatrix();
+        translate(0, 0, this.dimensions.x/2+20);
+        fill(100, 100, 100);
+        stroke(230, 10, 20);
+        strokeWeight(2);
+        translate(0, -1, 0);
+        rotateX(PI/2);
+        ellipse(0, 0, 60, 60);
+        rotateX(-PI/2);
+        line(-30, 0, 0, -40, 0, -10);
+        line(-30, 0, 0, -20, 0, -10);
+        line(30, 0, 0, 20, 0, 10);
+        line(30, 0, 0, 40, 0, 10);
+        line(0, 0, -30, 10, 0, -40);
+        line(0, 0, -30, 10, 0, -20);
+        line(0, 0, 30, -10, 0, 40);
+        line(0, 0, 30, -10, 0, 20);
+        popMatrix();
+      }
       popMatrix();
     }
   }

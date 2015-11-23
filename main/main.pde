@@ -318,6 +318,15 @@ public void mousePressed(){
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
     handlePlantRotateClick(x, y, start, end);
   }
+  if(clickMode == "ROTATEACHIEVEMENT"){
+    int x = mouseX;
+    int y = mouseY;
+    picker.captureViewMatrix(fieldX, fieldY);
+    picker.calculatePickPoints(x,height-y);
+    Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+    Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+    handleRewardRotateClick(x, y, start, end);
+  }
 }
 
 public void mouseReleased(){
@@ -420,6 +429,13 @@ public void mouseReleased(){
       $('#cancel_plant_rotate').click();
     }
     rotatePlant = null;
+  }
+  else if(clickMode == "ROTATEACHIEVEMENT"){
+    if(!handleRewardRotateClick(x, y, start, end)){
+      clickMode = "DEFAULT";
+      $('#cancel_reward_rotate').click();
+    }
+    rotateAchievement = null;
   }
   //if(mouseButton == RIGHT){
   //  console.log("skipping ahead 1 hour");
@@ -836,6 +852,22 @@ public boolean handlePlantRotateClick(int x, int y, Vector3D start, Vector3D end
     Plant p = (Plant) tank.plants.get(i);
     if(absolutePosition.distance(p.absolutePosition) < 40){
       rotatePlant = p;
+      return true;
+    }
+  }
+  return false;
+}
+
+public boolean handleRewardRotateClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    Vector3D rotatePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
+    if(absolutePosition.distance(rotatePos) < 40){
+      rotateAchievement = a;
       return true;
     }
   }
