@@ -9,7 +9,7 @@ public class Plant {
   Vector3D position;
   Vector3D absolutePosition;
   float orientation;
-  long seed;
+  int seed;
   
   // 3 args
   public Plant(Vector3D start, Vector3D RGBcolor, int stack){
@@ -34,7 +34,7 @@ public class Plant {
   public Plant(){
     this.RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
     this.orientation = 0;
-    this.seed = random(1, 99).toFixed(2);
+    this.seed = int(random(1, 99));
     console.log(this.seed);
     randomSeed(this.seed);
     this.numBranches = 7;
