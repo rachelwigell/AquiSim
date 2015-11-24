@@ -123,7 +123,7 @@ public void populateSpeciesList(){
 }
 
 public void populateAchievementsList(){
-  achievementsList.add(new ClamShell());
+  achievementsList.add(new ScallopShell());
 }
 
 public void determineBounds(){

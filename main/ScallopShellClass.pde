@@ -1,10 +1,10 @@
-public class ClamShell extends Achievement{
-  public ClamShell(){
-    this.rewardModel = loadShape("clamshell.obj");
-    this.rewardSprite = "graphics/clamshell.png";
-    this.rewardDescription = "A pretty clam shell for your tank!";
+public class ScallopShell extends Achievement{
+  public ScallopShell(){
+    this.rewardModel = loadShape("scallopshell.obj");
+    this.rewardSprite = "graphics/scallopshell.png";
+    this.rewardDescription = "A pretty scallop shell for your tank!";
     this.condition = "keeping a fish alive for one week";
-    this.rewardName = "Clam Shell";
+    this.rewardName = "Scallop Shell";
     this.scaleVal = 12;
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(0, 0, 0);
@@ -14,12 +14,12 @@ public class ClamShell extends Achievement{
     this.dimensions = new Vector3D(this.scaleVal*7.6, this.scaleVal*1.2, this.scaleVal*6.5);
   }
   
-  public ClamShell(String[] stats){
-    this.rewardModel = loadShape("clamshell.obj");
-    this.rewardSprite = "graphics/clamshell.png";
-    this.rewardDescription = "A pretty clam shell for your tank!";
+  public ScallopShell(String[] stats){
+    this.rewardModel = loadShape("scallopshell.obj");
+    this.rewardSprite = "graphics/scallopshell.png";
+    this.rewardDescription = "A pretty scallop shell for your tank!";
     this.condition = "keeping a fish alive for one week";
-    this.rewardName = "Clam Shell";
+    this.rewardName = "Scallop Shell";
     this.scaleVal = 12;
     this.earned = stats[0] == "t";
     this.used = stats[1] == "t";
