@@ -63,7 +63,9 @@ void setup(){
       long now = new Date().getTime();
       long lastSave = stats[13];
       int elapsedMinutes = int((now - lastSave)/60000);
-      if(elapsedMinutes < 500000){
+      //if it's been more than a month, their tank will take forever to load
+      //all their fish would be dead anyway. just reset
+      if(elapsedMinutes < 43200){
         tank.skipAhead(elapsedMinutes);
       }
       else{

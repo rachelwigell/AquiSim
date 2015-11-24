@@ -35,6 +35,7 @@ public class Plant {
     this.RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
     this.orientation = 0;
     this.seed = random(1, 99).toFixed(2);
+    console.log(this.seed);
     randomSeed(this.seed);
     this.numBranches = 7;
     this.position = new Vector3D(0, fieldY/2, 0);
