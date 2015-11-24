@@ -38,7 +38,6 @@ public class Plant {
     if(this.seed == 62){
       this.seed = 0;
     }
-    console.log(this.seed);
     randomSeed(this.seed);
     this.numBranches = 7;
     this.position = new Vector3D(0, fieldY/2, 0);
