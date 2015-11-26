@@ -34,10 +34,7 @@ public class Plant {
   public Plant(){
     this.RGBcolor = new Vector3D(int(random(0, 100)), int(random(100, 200)), int(random(50, 150)));
     this.orientation = 0;
-    this.seed = int(random(1, 99));
-    if(this.seed == 62){
-      this.seed = 0;
-    }
+    this.seed = (new Date().getTime()) % 99;
     randomSeed(this.seed);
     this.numBranches = 7;
     this.position = new Vector3D(0, fieldY/2, 0);
