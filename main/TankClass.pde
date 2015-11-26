@@ -177,9 +177,15 @@ public class Tank{
       cookie = get_cookie("a" + i);
       if(cookie != ""){
         String[] achievementStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-        if(i == 0){
-          this.achievements.add(new ScallopShell(achievementStats));
-        }
+      }
+      else{
+        String[] achievementStats = {"f", "f"};
+      }
+      if(i == 0){
+        this.achievements.add(new ScallopShell(achievementStats));
+      }
+      else if(i == 1){
+        this.achievements.add(new ConchShell(achievementStats));
       }
     }
   }

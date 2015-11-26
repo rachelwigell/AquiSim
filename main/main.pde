@@ -124,6 +124,7 @@ public void populateSpeciesList(){
 
 public void populateAchievementsList(){
   achievementsList.add(new ScallopShell());
+  achievementsList.add(new ConchShell());
 }
 
 public void determineBounds(){
