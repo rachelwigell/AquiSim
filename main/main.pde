@@ -43,6 +43,7 @@ void setup(){
   }
   size(fieldX, fieldY, P3D);
   frameRate(30); //causes draw() to be called 30 times per second
+  sphereDetail(8);
   picker = new Selection_in_P3D_OPENGL_A3D();
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
