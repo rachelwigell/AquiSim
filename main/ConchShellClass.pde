@@ -41,11 +41,11 @@ public class ConchShell extends Achievement{
     if(this.earned){
       return true;
     }
-    else if(f.happySince != 0){
+    else{
       long now = new Date().getTime();
       for(int i = 0; i < tank.fish.size(); i++){
         Fish f = (Fish) tank.fish.get(i);
-        if(now - f.happySince > 6048000000){
+        if(f.happySince != 0 && now - f.happySince > 6048000000){
           this.earned = true;
           return true;
         }
