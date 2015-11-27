@@ -187,6 +187,9 @@ public class Tank{
       else if(i == 1){
         this.achievements.add(new ConchShell(achievementStats));
       }
+      else if(i == 2){
+       this.achievements.add(new Bubbler(achievementStats));
+      }
     }
   }
     
