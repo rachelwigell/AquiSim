@@ -113,4 +113,6 @@ public abstract class Achievement {
    this.position = this.absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
    return this;
   }
+  
+  public HashMap tankEffects(){}
 }
