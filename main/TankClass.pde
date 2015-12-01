@@ -280,7 +280,7 @@ public class Tank{
     int waste = 0;
     for(Fish f: this.fish){
       int threshold = (int) (((float) max(f.fullness, 0)) / ((float) f.maxFullness) * f.size/2.0);
-      int rand = random(5000);
+      int rand = random(3000);
       if(rand < threshold){
         waste++;
         addPoop(f);
