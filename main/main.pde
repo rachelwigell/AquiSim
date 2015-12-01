@@ -51,7 +51,7 @@ void setup(){
   populateAchievementsList();
   
   String cookie = localStorage.getItem("t");
-  if(cookie == ""){
+  if(cookie == "" || cookie == null){
     tank = new Tank();
     accordion_defaults(true);
   }
