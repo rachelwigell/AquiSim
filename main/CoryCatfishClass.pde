@@ -15,9 +15,9 @@ public class CoryCatfish extends Fish{
     this.maxTemp = 27;
     this.minHard = 5;
     this.maxHard = 18;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
+    this.ammonia = .1;
+    this.nitrite = .25;
+    this.nitrate = 50;
     this.scaleVal = 10;
     this.activity = 3;
     this.swimming = true;
@@ -60,9 +60,9 @@ public class CoryCatfish extends Fish{
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.size = 6;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
+    this.ammonia = .1;
+    this.nitrite = .25;
+    this.nitrate = 50;
     this.model = loadShape("corycatfish.obj");
     this.scaleVal = 10;
     this.activity = 3;

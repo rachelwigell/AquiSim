@@ -18,8 +18,8 @@ public int rightMaxX = null;
 public int sidesMaxY = null;
 public int updateCount = 0;
 public float waterLevel = .8;
-public int maxFish = 20;
-public int maxPlants = 6;
+public int maxFish = 50;
+public int maxPlants = 30;
 
 tank_stats =  {};
 fish_stats = {};
@@ -50,7 +50,7 @@ void setup(){
   
   populateAchievementsList();
   
-  String cookie = get_cookie("t");
+  String cookie = localStorage.getItem("t");
   if(cookie == ""){
     tank = new Tank();
     accordion_defaults(true);
@@ -988,6 +988,90 @@ public ArrayList cookieInfo(){
       }
     }
     cookieInfo.add(achievementStringPrefix + LZString.compressToUTF16(achievementString) + ";");
+  }
+  return cookieInfo;
+}
+
+public HashMap localStorageInfo(){
+  cookieInfo = new HashMap();
+  String tankStringPrefix = "t";
+  String tankString = "";
+  tankString += tank.pH.toFixed(2) + "+";
+  tankString += tank.temp.toFixed(2) + "+";
+  tankString += tank.hardness.toFixed(2) + "+";
+  tankString += tank.ammonia.toFixed(2) + "+";
+  tankString += tank.nitrite.toFixed(2) + "+";
+  tankString += tank.nitrate.toFixed(2) + "+";
+  tankString += tank.o2.toFixed(2) + "+";
+  tankString += tank.co2.toFixed(2) + "+";
+  tankString += tank.nitrosomonas.toFixed(2) + "+";
+  tankString += tank.nitrobacter.toFixed(2) + "+";
+  tankString += min(tank.sinkingFood.size(), 99) + "+";
+  tankString += min(tank.floatingFood.size(), 99) + "+";
+  tankString += min(tank.poops.size(), 99) + "+";
+  var date = new Date().getTime();
+  tankString += date + "+";
+  tankString += tank.createdAt;
+  tankString = LZString.compressToUTF16(tankString);
+  cookieInfo.put(tankStringPrefix, tankString);
+  for(int i = 0; i < min(tank.fish.size(), maxFish); i++){
+   Fish f = (Fish) tank.fish.get(i);
+   String fishStringPrefix = "f" + i;
+   String fishString = "";
+   fishString += f.species + "+";
+   fishString += f.name + "+";
+   fishString += f.health + "+";
+   fishString += f.fullness + "+";
+   fishString += f.minTemp.toFixed(2) + "+";
+   fishString += f.maxTemp.toFixed(2) + "+";
+   fishString += f.minHard.toFixed(2) + "+";
+   fishString += f.maxHard.toFixed(2) + "+";
+   fishString += f.minPH.toFixed(2) + "+";
+   fishString += f.maxPH.toFixed(2) + "+";
+   fishString += f.aliveSince + "+";
+   fishString += f.happySince;
+   fishString = LZString.compressToUTF16(fishString);
+   cookieInfo.put(fishStringPrefix, fishString);
+  }
+  for(int i = min(tank.fish.size(), maxFish); i < maxFish; i++){
+    cookieInfo.put("f" + i, "");
+  }
+  for(int i = 0; i < min(tank.deadFish.size(), maxFish); i++){
+   DeadFish f = (DeadFish) tank.deadFish.get(i);
+   String fishStringPrefix = "d" + i;
+   String fishString = f.sprite.species;
+   fishString = LZString.compressToUTF16(fishString);
+   cookieInfo.put(fishStringPrefix, fishString);
+  }
+  for(int i = min(tank.deadFish.size(), maxFish); i < maxFish; i++){
+    cookieInfo.put("d" + i, "");
+  }
+  for(int i = 0; i < min(tank.plants.size(), maxPlants); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    String plantStringPrefix = "p" + i;
+    String plantString = p.encode();
+    cookieInfo.put(plantStringPrefix, plantString);
+  }
+  for(int i = min(tank.plants.size(), maxPlants); i < maxPlants; i++){
+    cookieInfo.put("p" + i, "");
+  }
+  for(int i = 0; i < achievementsList.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    String achievementStringPrefix = "a" + i;
+    String achievementString = "";
+    if(!a.earned){
+      achievementString += "f+f";
+    }
+    else{
+      achievementString += "t+";
+      if(!a.used){
+        achievementString += "f";
+      }
+      else{
+        achievementString += "t+" + a.position.x + "+" + a.position.y + "+" + a.position.z + "+" + a.orientation + "";
+      }
+    }
+    cookieInfo.put(achievementStringPrefix, LZString.compressToUTF16(achievementString));
   }
   return cookieInfo;
 }

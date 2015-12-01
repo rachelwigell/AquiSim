@@ -17,9 +17,9 @@ public class MysterySnail extends Fish{
     this.maxTemp = 27;
     this.minHard = 5;
     this.maxHard = 20;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
+    this.ammonia = .1;
+    this.nitrite = .25;
+    this.nitrate = 50;
     this.scaleVal = 10;
     this.activity = 1;
     this.swimming = true;
@@ -61,9 +61,9 @@ public class MysterySnail extends Fish{
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.size = 5;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
+    this.ammonia = .1;
+    this.nitrite = .25;
+    this.nitrate = 50;
     this.model = loadShape("mysterysnail.obj");
     this.scaleVal = 10;
     this.activity = 3;

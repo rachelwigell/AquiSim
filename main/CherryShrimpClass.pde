@@ -15,8 +15,8 @@ public class CherryShrimp extends Fish{
     this.maxTemp = 28;
     this.minHard = 3;
     this.maxHard = 15;
-    this.ammonia = 1;
-    this.nitrite = 1;
+    this.ammonia = .1;
+    this.nitrite = .25;
     this.nitrate = 25;
     this.scaleVal = 25;
     this.activity = 3;
@@ -60,8 +60,8 @@ public class CherryShrimp extends Fish{
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.size = 3;
-    this.ammonia = 1;
-    this.nitrite = 1;
+    this.ammonia = .1;
+    this.nitrite = .25;
     this.nitrate = 25;
     this.model = loadShape("cherryshrimp.obj");
     this.scaleVal = 25;

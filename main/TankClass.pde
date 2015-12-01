@@ -84,7 +84,7 @@ public class Tank{
     this.createdAt = stats[14];
     this.fish = new ArrayList();
     for(int i = 0; i < maxFish; i++){
-     cookie = get_cookie("f" + i);
+     cookie = localStorage.getItem("f" + i);
      if(cookie != ""){
        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
        if(fishStats[0] == "Guppy"){
@@ -130,7 +130,7 @@ public class Tank{
     }
     this.deadFish = new ArrayList();
     for(int i = 0; i < maxFish; i++){
-     cookie = get_cookie("d" + i);
+     cookie = localStorage.getItem("d" + i);
      if(cookie != ""){
        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
        if(fishStats[0] == "Guppy"){
@@ -165,7 +165,7 @@ public class Tank{
     }
     this.plants = new ArrayList();
     for(int i = 0; i < maxPlants; i++){
-     cookie = get_cookie("p" + i);
+     cookie = localStorage.getItem("p" + i);
      if(cookie != ""){
        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
        this.plants.add(new Plant(plantStats[7], new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
@@ -174,7 +174,7 @@ public class Tank{
     }
     this.achievements = new ArrayList();
     for(int i = 0; i < achievementsList.size(); i++){
-      cookie = get_cookie("a" + i);
+      cookie = localStorage.getItem("a" + i);
       if(cookie != ""){
         String[] achievementStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
       }

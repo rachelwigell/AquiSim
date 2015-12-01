@@ -15,9 +15,9 @@ public class CherryBarb extends Fish{
     this.maxTemp = 28;
     this.minHard = 5;
     this.maxHard = 25;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
+    this.ammonia = .1;
+    this.nitrite = .25;
+    this.nitrate = 50;
     this.scaleVal = 8;
     this.activity = 5;
     this.swimming = true;
@@ -60,9 +60,9 @@ public class CherryBarb extends Fish{
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.size = 5;
-    this.ammonia = 1;
-    this.nitrite = 5;
-    this.nitrate = 60;
+    this.ammonia = .1;
+    this.nitrite = .25;
+    this.nitrate = 50;
     this.model = loadShape("cherrybarb.obj");
     this.scaleVal = 8;
     this.activity = 5;

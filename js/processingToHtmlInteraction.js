@@ -5,7 +5,7 @@ window.setInterval(function(){
   	update_fish_stats();
   	update_achievements_stats();
   	update_fish_dropdown();
-  	write_cookie();
+  	write_to_local_storage();
 }, 2000)
 
 function update_tank_stats(){
@@ -156,6 +156,17 @@ function write_cookie(){
 	var cookie_string = processing.cookieInfo();
 	for(var i = 0; i < cookie_string.size(); i++){
 		document.cookie = cookie_string.get(i) + "expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/";
+	}
+}
+
+function write_to_local_storage(){
+	var processing = Processing.getInstanceById('processing');
+	var storage_map = processing.localStorageInfo();
+	var i = storage_map.entrySet().iterator();
+	while (i.hasNext()) {
+		var info = i.next();
+		var key = info.getKey();
+		localStorage.setItem(key, info.getValue());
 	}
 }
 

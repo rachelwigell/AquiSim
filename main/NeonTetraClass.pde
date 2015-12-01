@@ -15,7 +15,7 @@ public class NeonTetra extends Fish{
     this.maxTemp = 26;
     this.minHard = 1;
     this.maxHard = 12;
-    this.ammonia = 0.1;
+    this.ammonia = 0.05;
     this.nitrite = 0.1;
     this.nitrate = 25;
     this.scaleVal = 8;
@@ -60,7 +60,7 @@ public class NeonTetra extends Fish{
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.size = 4;
-    this.ammonia = 0.1;
+    this.ammonia = 0.05;
     this.nitrite = 0.1;
     this.nitrate = 25;
     this.model = loadShape("neontetra.obj");
