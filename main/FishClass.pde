@@ -291,7 +291,7 @@ public abstract class Fish {
       //this helps prevent the fish from just piling up on top the leader
       int offset = int(name.toCharArray())[0];
       toward = toward.addVector(new Vector3D(offset, offset, offset));
-      //normalize
+      //convert to a vector pointing from the current position to the desired position and normalize
       toward = toward.addVector(this.position.multiplyScalar(-1)).normalize();
       //schoolingCoefficient is the "strength" of the pull, different for each species
       //also dependent upon the distance from the leader - when far away, move faster
