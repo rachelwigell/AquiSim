@@ -260,31 +260,42 @@ public abstract class Fish {
   
   // pull toward the nearest fish that comes before you in the list
   public void pullTowardsSchool(){
-    Vector3D nearest = null;
-    float distance = MAX_FLOAT;
+    Vector3D toward = null;
     for(int i = 0; i < tank.fish.size(); i++){
       Fish f = (Fish) tank.fish.get(i);
+      //only school with your own species
       if(f.species != this.species){
         continue;
       }
-      float dist = this.position.squareDistance(f.position);
-      if(dist < .001){
+      float distance = this.position.squareDistance(f.position);
+      //don't school with yourself
+      if(distance < .001){
+        //break here - only follow a fish that comes before you in the list of fish
+        //this is to allow the first fish in the list to be the "leader"
+        //we need a leader who swims normally, unaffected by the schooling algorithm
+        //otherwise, the fish just form a cluster that doesn't move
         break;
       }
-      if(dist < distance){
-        distance = dist;
-        nearest = f.position;
+      //now we've found the first fish in the list that isn't yourself
+      else{
+        //we're going to move towards his position
+        toward = f.position;
+        break;
       }
     }
-    if(nearest != null){
-      //we don't want to pull toward the nearest fish's exact position.
-      //instead we pull towards the point halfway between your own position and his
-      nearest = nearest.addVector(this.position.multiplyScalar(-.5));
+    if(toward != null){
+      //BUT, we don't want to move toward the leader fish's exact position.
+      //instead we pull toward a point that's near him, offset by some pseudorandom amount
+      //we base this amount on the fish's name so that is is consistent
+      //so one fish will consistently tend to be above the leader, another behind, etc
+      //this helps prevent the fish from just piling up on top the leader
+      int offset = int(name.toCharArray())[0];
+      toward = toward.addVector(new Vector3D(offset, offset, offset));
       //normalize
-      nearest = nearest.addVector(this.position.multiplyScalar(-1)).normalize();
+      toward = toward.addVector(this.position.multiplyScalar(-1)).normalize();
       //schoolingCoefficient is the "strength" of the pull, different for each species
-      //strength also affected by distance; when farther away, the pull is stronger
-      this.velocity = this.velocity.addVector(nearest.multiplyScalar(.01 * sqrt(distance) * this.schoolingCoefficient));
+      //also dependent upon the distance from the leader - when far away, move faster
+      this.velocity = this.velocity.addVector(toward.multiplyScalar(.008 * sqrt(distance) * this.schoolingCoefficient));
     }
   }
 }
