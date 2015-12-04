@@ -121,6 +121,7 @@ public void populateSpeciesList(){
   speciesList.add(new CherryShrimp("Swimmy"));
   speciesList.add(new MysterySnail("Swimmy"));
   speciesList.add(new CoryCatfish("Swimmy"));
+  speciesList.add(new Platy("Swimmy"));
 }
 
 public void populateAchievementsList(){
@@ -561,6 +562,9 @@ public Fish addFishToTank(String speciesName, String nickname){
   }
   else if(speciesName == "Cory Catfish"){
     toAdd = new CoryCatfish(nickname);
+  }
+  else if(speciesName == "Platy"){
+    toAdd = new Platy(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);

@@ -108,6 +108,9 @@ public class Tank{
        else if(fishStats[0] == "Cory Catfish"){
          this.fish.add(new CoryCatfish(fishStats, true));
        }
+       else if(fishStats[0] == "Platy"){
+         this.fish.add(new Platy(fishStats, true));
+       }
      }
     }
     this.poops = new ArrayList();
@@ -159,6 +162,10 @@ public class Tank{
        }
        else if(fishStats[0] == "Cory Catfish"){
          this.deadFish.add(new DeadFish(new CoryCatfish(fishStats, false))); 
+         this.waste += 6;
+       }
+       else if(fishStats[0] == "Platy"){
+         this.deadFish.add(new DeadFish(new Platy(fishStats, false))); 
          this.waste += 6;
        }
      }
