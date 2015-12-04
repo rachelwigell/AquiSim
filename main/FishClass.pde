@@ -35,6 +35,7 @@ public abstract class Fish {
   public float region;
   public long aliveSince;
   public long happySince;
+  public float schoolingCoefficient;
 
   public void setDangerRatings() {
     this.dangerRatings = new HashMap();
@@ -169,15 +170,15 @@ public abstract class Fish {
       }
     }
     if(swimming){
-      this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
-      this.acceleration.y = new Vector3D(-1, this.acceleration.y+random(-.25, .25), 1).centermost();
-      this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
+      this.acceleration.x = new Vector3D(-.8, this.acceleration.x+random(-.2, .2), 1).centermost();
+      this.acceleration.y = new Vector3D(-.8, this.acceleration.y+random(-.2, .2), 1).centermost();
+      this.acceleration.z = new Vector3D(-.8, this.acceleration.z+random(-.2, .2), 1).centermost();
       this.regionPull();
     }
     else{
-      this.acceleration.x = new Vector3D(-1, -.1*this.velocity.x, 1).centermost();
-      this.acceleration.y = new Vector3D(-1, -.1*this.velocity.y, 1).centermost();
-      this.acceleration.z = new Vector3D(-1, -.1*this.velocity.z, 1).centermost();
+      this.acceleration.x = new Vector3D(-.8, -.1*this.velocity.x, .8).centermost();
+      this.acceleration.y = new Vector3D(-.8, -.1*this.velocity.y, .8).centermost();
+      this.acceleration.z = new Vector3D(-.8, -.1*this.velocity.z, .8).centermost();
     }
   }
 
@@ -198,6 +199,7 @@ public abstract class Fish {
      this.acceleration.z = -1;
     }
     this.velocity.z = new Vector3D(-1-.2*this.activity, this.velocity.z + this.acceleration.z, 1+.2*this.activity).centermost();
+    pullTowardsSchool();
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
@@ -236,7 +238,6 @@ public abstract class Fish {
     pushMatrix();
     translate(zero.x, zero.y, zero.z);
     translate(this.position.x, this.position.y, this.position.z);
-
     rotateX(this.orientation.x);
     rotateY(this.orientation.y);
     rotateZ(this.orientation.z);
@@ -255,5 +256,35 @@ public abstract class Fish {
     translate(0, 0, -2*this.dimensions.z*this.eyePosition.z);
     sphere(2.5);
     popMatrix();
+  }
+  
+  // pull toward the nearest fish that comes before you in the list
+  public void pullTowardsSchool(){
+    Vector3D nearest = null;
+    float distance = MAX_FLOAT;
+    for(int i = 0; i < tank.fish.size(); i++){
+      Fish f = (Fish) tank.fish.get(i);
+      if(f.species != this.species){
+        continue;
+      }
+      float dist = this.position.squareDistance(f.position);
+      if(dist < .001){
+        break;
+      }
+      if(dist < distance){
+        distance = dist;
+        nearest = f.position;
+      }
+    }
+    if(nearest != null){
+      //we don't want to pull toward the nearest fish's exact position.
+      //instead we pull towards the point halfway between your own position and his
+      nearest = nearest.addVector(this.position.multiplyScalar(-.5));
+      //normalize
+      nearest = nearest.addVector(this.position.multiplyScalar(-1)).normalize();
+      //schoolingCoefficient is the "strength" of the pull, different for each species
+      //strength also affected by distance; when farther away, the pull is stronger
+      this.velocity = this.velocity.addVector(nearest.multiplyScalar(.01 * sqrt(distance) * this.schoolingCoefficient));
+    }
   }
 }

@@ -36,6 +36,7 @@ public class NeonTetra extends Fish{
     this.region = .1;
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
+    this.schoolingCoefficient = .8;
   }
   
   
@@ -87,5 +88,6 @@ public class NeonTetra extends Fish{
     this.offset = new Vector3D(0, 0, 1);
     this.setDangerRatings();
     this.region = .1;
+    this.schoolingCoefficient = .8;
   }
 }

@@ -37,6 +37,7 @@ public class MysterySnail extends Fish{
     this.region = 0;
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
+    this.schoolingCoefficient = 0;
   }
   
   
@@ -112,6 +113,7 @@ public class MysterySnail extends Fish{
     this.orientation = new Vector3D(0, 0, 0);
     this.setDangerRatings();
     this.region = 0;
+    this.schoolingCoefficient = 0;
   }
   
   public void updatePosition() {

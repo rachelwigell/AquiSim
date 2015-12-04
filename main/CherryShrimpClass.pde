@@ -36,6 +36,7 @@ public class CherryShrimp extends Fish{
     this.region = 0;
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
+    this.schoolingCoefficient = .5;
   }
   
   
@@ -101,14 +102,14 @@ public class CherryShrimp extends Fish{
       }
     }
     if(swimming){
-      this.acceleration.x = new Vector3D(-1, this.acceleration.x+random(-.25, .25), 1).centermost();
+      this.acceleration.x = new Vector3D(-.8, this.acceleration.x+random(-.2, .2), .8).centermost();
       this.acceleration.y = 0;
-      this.acceleration.z = new Vector3D(-1, this.acceleration.z+random(-.25, .25), 1).centermost();
+      this.acceleration.z = new Vector3D(-.8, this.acceleration.z+random(-.2, .2), .8).centermost();
     }
     else{
-      this.acceleration.x = new Vector3D(-1, -.1*this.velocity.x, 1).centermost();
+      this.acceleration.x = new Vector3D(-.8, -.1*this.velocity.x, .8).centermost();
       this.acceleration.y = 0;
-      this.acceleration.z = new Vector3D(-1, -.1*this.velocity.z, 1).centermost();
+      this.acceleration.z = new Vector3D(-.8, -.1*this.velocity.z, .8).centermost();
     }
   }
 
@@ -132,5 +133,6 @@ public class CherryShrimp extends Fish{
     this.velocity.y = 0;
     this.updateOrientationRelativeToVelocity();
     this.updateAcceleration();
+    this.schoolingCoefficient = .5;
   }
 }

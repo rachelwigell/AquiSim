@@ -36,6 +36,7 @@ public class CoryCatfish extends Fish{
     this.region = .7;
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
+    this.schoolingCoefficient = .6;
   }
   
   
@@ -87,5 +88,6 @@ public class CoryCatfish extends Fish{
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
     this.region = .7;
+    this.schoolingCoefficient = .6;
   }
 }
