@@ -258,7 +258,7 @@ public abstract class Fish {
     popMatrix();
   }
   
-  // pull toward the nearest fish that comes before you in the list
+  // pull toward the fish of your species that comes first in the list
   public void pullTowardsSchool(){
     Vector3D toward = null;
     for(int i = 0; i < tank.fish.size(); i++){
