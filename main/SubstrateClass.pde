@@ -20,7 +20,7 @@ public class Substrate extends Achievement{
   
   public Substrate(String[] stats){
     this.rewardSprite = "graphics/substrate.png";
-    this.rewardDescription = "Gravel or sand for the bottom of your tank!";
+    this.rewardDescription = "Gravel for the bottom of your tank!";
     this.condition = "playing AquiSim for 30 days";
     this.rewardName = "Substrate";
     this.earned = stats[0] == "t";
