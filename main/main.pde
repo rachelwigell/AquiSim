@@ -122,6 +122,7 @@ public void populateSpeciesList(){
   speciesList.add(new MysterySnail("Swimmy"));
   speciesList.add(new CoryCatfish("Swimmy"));
   speciesList.add(new Platy("Swimmy"));
+  speciesList.add(new Danio("Swimmy"));
 }
 
 public void populateAchievementsList(){
@@ -443,10 +444,10 @@ public void mouseReleased(){
     }
     rotateAchievement = null;
   }
-  //if(mouseButton == RIGHT){
-  //  console.log("skipping ahead 1 hour");
-  //  tank.skipAhead(60);
-  //}
+  if(mouseButton == RIGHT){
+   console.log("skipping ahead 1 hour");
+   tank.skipAhead(60);
+  }
 }
 
 /**************************************************
@@ -565,6 +566,9 @@ public Fish addFishToTank(String speciesName, String nickname){
   }
   else if(speciesName == "Platy"){
     toAdd = new Platy(nickname);
+  }
+  else if(speciesName == "Danio"){
+    toAdd = new Danio(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);

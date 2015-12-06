@@ -236,8 +236,7 @@ public abstract class Fish {
   void drawFish() {
     noStroke();
     pushMatrix();
-    translate(zero.x, zero.y, zero.z);
-    translate(this.position.x, this.position.y, this.position.z);
+    translate(this.absolutePosition.x, this.absolutePosition.y, this.absolutePosition.z);
     rotateX(this.orientation.x);
     rotateY(this.orientation.y);
     rotateZ(this.orientation.z);

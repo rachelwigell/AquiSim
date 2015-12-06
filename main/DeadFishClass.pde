@@ -21,6 +21,7 @@ public class DeadFish extends Waste{
     this.position = this.position.addVector(velocity);
     this.sprite.position = this.position;
     this.absolutePosition = this.absolutePosition.addVector(velocity);
+    this.sprite.absolutePosition = this.absolutePosition;
   }
   
   public void updateVelocity(){
