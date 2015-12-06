@@ -43,7 +43,7 @@ void setup(){
   }
   size(fieldX, fieldY, P3D);
   frameRate(30); //causes draw() to be called 30 times per second
-  sphereDetail(8);
+  sphereDetail(4);
   picker = new Selection_in_P3D_OPENGL_A3D();
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
@@ -105,7 +105,7 @@ void draw(){
   drawAllWaste();
   drawAllAchievements();
   tank.allEat();
-  drawAllPlants(); 
+  drawAllPlants();
   if(updateCount > 150){ //operations to happen every 5 seconds
       tank.progress();
       updateCount = 0;
@@ -129,6 +129,7 @@ public void populateAchievementsList(){
   achievementsList.add(new ScallopShell());
   achievementsList.add(new ConchShell());
   achievementsList.add(new Bubbler());
+  achievementsList.add(new Substrate());
 }
 
 public void determineBounds(){
@@ -160,7 +161,7 @@ public void drawTank(){
   translate((-.95*fieldX), 0, 0);
   box(1, (fieldY), (fieldZ)); //left
   translate((.475*fieldX), (.5*fieldY), 0);
-  fill(color(100));
+  fill(color(80));
   box((.95*fieldX), 1, (fieldZ)); //bottom
   fill(color(0, 0, 255, 20));
   translate(0, (-.5*fieldY) + (fieldY*.5*(1-waterLevel)), 0);
@@ -240,6 +241,9 @@ public void drawPlant(Plant plant){
     drawStack(plant.stack[j]);
     if(clickMode == "DELETEPLANT"){
       rotateY(-plant.orientation);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
       pushMatrix();
       fill(100, 100, 100);
       stroke(230, 10, 20);
@@ -253,6 +257,9 @@ public void drawPlant(Plant plant){
     }
     else if(clickMode == "MOVEPLANT"){
       rotateY(-plant.orientation);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
       pushMatrix();
       fill(100, 100, 100);
       stroke(230, 10, 20);
@@ -276,6 +283,9 @@ public void drawPlant(Plant plant){
     }
     else if(clickMode == "ROTATEPLANT"){
       rotateY(-plant.orientation);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
       pushMatrix();
       fill(100, 100, 100);
       stroke(230, 10, 20);
@@ -398,17 +408,6 @@ public void mouseReleased(){
     else{
       if(!hasPlants()){
         $('#cancel_plant_delete').click();
-      }
-    }
-  }
-  else if(clickMode == "DELETEACHIEVEMENT"){
-    if(!handleRewardDeleteClick(x, y, start, end)){
-      $('#cancel_reward_delete').click();
-      clickMode = "DEFAULT";
-    }
-    else{
-      if(!hasRewards()){
-        $('#cancel_reward_delete').click();
       }
     }
   }
@@ -725,6 +724,9 @@ public void createAchievementPreview(String type){
     Achievement a = (Achievement) tank.achievements.get(i);
     if(type == a.rewardName){
       clickMode = "ADDACHIEVEMENT";
+      if(type == "Substrate"){
+        a.initialize();
+      }
       previewAchievement = a;
     }
   }
@@ -807,22 +809,6 @@ public boolean handlePlantDeleteClick(int x, int y, Vector3D start, Vector3D end
   return false;
 }
 
-public boolean handleRewardDeleteClick(int x, int y, Vector3D start, Vector3D end){
-  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
-  float y = fieldY;
-  float factor = (y-start.y)/normal.y;
-  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-  for(int i = 0; i < tank.achievements.size(); i++){
-    Achievement a = (Achievement) tank.achievements.get(i);
-    Vector3D deletePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
-    if(absolutePosition.distance(deletePos) < 40){
-      a.used = false;
-      return true;
-    }
-  }
-  return false;
-}
-
 public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   float y = fieldY;
@@ -846,6 +832,9 @@ public boolean handleRewardMoveClick(int x, int y, Vector3D start, Vector3D end)
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.achievements.size(); i++){
     Achievement a = (Achievement) tank.achievements.get(i);
+    if(a.rewardName == "Substrate"){
+      continue;
+    }
     Vector3D movePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
     if(absolutePosition.distance(movePos) < 40){
       previewAchievement = a;
@@ -878,6 +867,9 @@ public boolean handleRewardRotateClick(int x, int y, Vector3D start, Vector3D en
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.achievements.size(); i++){
     Achievement a = (Achievement) tank.achievements.get(i);
+    if(a.rewardName == "Substrate"){
+      continue;
+    }
     Vector3D rotatePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
     if(absolutePosition.distance(rotatePos) < 40){
       rotateAchievement = a;
@@ -1075,8 +1067,11 @@ public HashMap localStorageInfo(){
       if(!a.used){
         achievementString += "f";
       }
-      else{
+      else if(a.rewardName != "Substrate"){
         achievementString += "t+" + a.position.x + "+" + a.position.y + "+" + a.position.z + "+" + a.orientation + "";
+      }
+      else{
+        achievementString += "t+" + a.RGBcolor.x + "+" + a.RGBcolor.y + "+" + a.RGBcolor.z + "";
       }
     }
     cookieInfo.put(achievementStringPrefix, LZString.compressToUTF16(achievementString));
@@ -1099,4 +1094,17 @@ public boolean setFloatingFood(boolean floating){
 
 public String getClickMode(){
   return clickMode;
+}
+
+public boolean hasSubstrate(){
+  return tank.achievements.get(3).used || (previewAchievement != null && previewAchievement.rewardName == "Substrate");
+}
+
+public void deleteAchievement(String name){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    if(a.rewardName == name){
+      a.used = false;
+    }
+  }
 }

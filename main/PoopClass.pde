@@ -41,6 +41,9 @@ public class Poop extends Waste{
     noStroke();
     pushMatrix();
     translate(fieldX/2, fieldY/2, -fieldZ);
+    if(hasSubstrate()){
+      translate(0, -16, 0);
+    }
     translate(this.position.x, this.position.y, this.position.z);
     fill(this.RGBcolor.x, this.RGBcolor.y, this.RGBcolor.z);
     sphere(this.dimensions.x);

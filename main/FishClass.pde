@@ -248,6 +248,7 @@ public abstract class Fish {
     shape(this.model);
     //draw eyes
     fill(0);
+    sphereDetail(8);
     scale(1/this.scaleVal, 1/this.scaleVal, 1/this.scaleVal);
     translate(-this.offset.x, -this.offset.y, -this.offset.z);
     translate(this.dimensions.x*this.eyePosition.x, this.dimensions.y*this.eyePosition.y, this.dimensions.z*this.eyePosition.z);

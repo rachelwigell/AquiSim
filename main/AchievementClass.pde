@@ -19,27 +19,14 @@ public abstract class Achievement {
       noStroke();
       pushMatrix();
       translate(center.x, center.y, center.z);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
       translate(this.position.x, this.position.y, this.position.z);
       rotateY(this.orientation);
       scale(this.scaleVal, this.scaleVal, this.scaleVal);
       shape(this.rewardModel);
-      if(clickMode == "DELETEACHIEVEMENT"){
-        rotateY(-this.orientation);
-        scale(1/this.scaleVal, 1/this.scaleVal, 1/this.scaleVal);
-        pushMatrix();
-        translate(0, 0, this.dimensions.x/2+20);
-        fill(100, 100, 100);
-        stroke(230, 10, 20);
-        strokeWeight(2);
-        translate(0, -1, 0);
-        rotateX(PI/2);
-        ellipse(0, 0, 60, 60);
-        rotateX(-PI/2);
-        line(-20, 0, 20, 20, 0, -20);
-        line(20, 0, 20, -20, 0, -20);
-        popMatrix();
-      }
-      else if(clickMode == "MOVEACHIEVEMENT"){
+      if(clickMode == "MOVEACHIEVEMENT"){
         rotateY(-this.orientation);
         scale(1/this.scaleVal, 1/this.scaleVal, 1/this.scaleVal);
         pushMatrix();
@@ -95,6 +82,9 @@ public abstract class Achievement {
     noStroke();
     pushMatrix();
     translate(center.x, center.y, center.z);
+    if(hasSubstrate()){
+      translate(0, -16, 0);
+    }
     translate(this.position.x, this.position.y, this.position.z);
     rotateY(this.orientation);
     scale(this.scaleVal, this.scaleVal, this.scaleVal);

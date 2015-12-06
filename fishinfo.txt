@@ -320,7 +320,7 @@ Gender ratio:
 Breeding: difficult
 Schooling: like to school
 
-Zebra Danio
+Zebra Danio X
 Care difficulty: 1/5
 Size: 6cm
 pH: 6-8

@@ -107,13 +107,12 @@ function reward_button_visibility(){
 	var selected_achievement = $('#achievements_list').find(':selected').val();
 	var achievement_info = achievements_stats[selected_achievement];
 	var add_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && !achievement_info['used'];
-	var move_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
-	var rotate_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var move_val = selected_achievement != 'select'&& selected_achievement != 'Substrate' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var rotate_val = selected_achievement != 'select' && selected_achievement != 'Substrate' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
 	var delete_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
 	var cancel_add = selected_achievement != 'select' && clickMode == 'ADDACHIEVEMENT' && achievement_info['earned'] && !achievement_info['used'];
 	var cancel_move = selected_achievement != 'select' && clickMode == 'MOVEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
 	var cancel_rotate = selected_achievement != 'select' && clickMode == 'ROTATEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
-	var cancel_delete = selected_achievement != 'select' && clickMode == 'DELETEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
 	$('#add_reward').attr('hidden', !add_val);
 	$('#move_reward').attr('hidden', !move_val);
 	$('#rotate_reward').attr('hidden', !rotate_val);
@@ -121,7 +120,6 @@ function reward_button_visibility(){
 	$('#cancel_reward_add').attr('hidden', !cancel_add);
 	$('#cancel_reward_move').attr('hidden', !cancel_move);
 	$('#cancel_reward_rotate').attr('hidden', !cancel_rotate);
-	$('#cancel_reward_delete').attr('hidden', !cancel_delete);
 }
 
 function update_achievements_stats(){
@@ -355,14 +353,9 @@ $('#delete_plant').click(function(){
 
 $('#delete_reward').click(function(){
 	reward_button_visibility();
+	var selected_achievement = $('#achievements_list').find(':selected').val();
 	var processing = Processing.getInstanceById('processing');
-	processing.setClickMode("DELETEACHIEVEMENT");
-})
-
-$('#cancel_reward_delete').click(function(){
-	reward_button_visibility();
-	var processing = Processing.getInstanceById('processing');
-	processing.cancelPlant();
+	processing.deleteAchievement(selected_achievement);
 })
 
 $('#cancel_plant_delete').click(function(){
