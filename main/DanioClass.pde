@@ -19,7 +19,7 @@ public class Danio extends Fish{
     this.nitrite = .25;
     this.nitrate = 50;
     this.scaleVal = 12;
-    this.activity = 5;
+    this.activity = 4;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.model = loadShape("danio.obj");

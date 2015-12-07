@@ -19,7 +19,7 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.nitrite = .25;
     this.nitrate = 50;
     this.scaleVal = 7;
-    this.activity = 5;
+    this.activity = 4;
     this.swimming = true;
     this.rotate = new Vector3D(0, 0, 0);
     this.model = loadShape("whitecloudmountainminnow.obj");

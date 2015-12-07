@@ -1,48 +1,48 @@
-public class Platy extends Fish{
-  public Platy(String name){
-    this.species = "Platy";
+public class TigerBarb extends Fish{
+  public TigerBarb(String name){
+    this.species = "Tiger Barb";
     this.name = name;
-    this.ease = 5;
+    this.ease = 4;
     this.maxHealth = this.ease*24*60*5;
     this.health = this.maxHealth;
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
     this.fullness = this.maxFullness;
-    this.size = 6;
-    this.minPH = 7;
-    this.maxPH = 8.5;
-    this.minTemp = 18;
+    this.size = 5;
+    this.minPH = 6;
+    this.maxPH = 7.5;
+    this.minTemp = 20;
     this.maxTemp = 26;
-    this.minHard = 8;
-    this.maxHard = 25;
+    this.minHard = 4;
+    this.maxHard = 20;
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;
-    this.scaleVal = 12;
-    this.activity = 4;
+    this.scaleVal = 11;
+    this.activity = 5;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("platy.obj");
-    this.sprite = "graphics/platy.png";
+    this.model = loadShape("tigerbarb.obj");
+    this.sprite = "graphics/tigerbarb.png";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.dimensions = new Vector3D(7.8*this.scaleVal, 3.6*this.scaleVal, 1.8*this.scaleVal);
-    this.eyePosition = new Vector3D(1/5.0, 0, 1/2.5);
+    this.dimensions = new Vector3D(6.7*this.scaleVal, 4.9*this.scaleVal, 1.1*this.scaleVal);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
     this.region = -.1;
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
-    this.schoolingCoefficient = .8;
+    this.schoolingCoefficient = .9;
   }
   
   
   //constructor for load
-  public Platy(String[] stats, boolean alive){
-    this.species = "Platy";
+  public TigerBarb(String[] stats, boolean alive){
+    this.species = "Tiger Barb";
     if(alive){
       this.name = stats[1];
       this.health = float(stats[2]);
@@ -56,21 +56,21 @@ public class Platy extends Fish{
       this.aliveSince = stats[10];
       this.happySince = stats[11];
     }
-    this.ease = 5;
+    this.ease = 4;
     this.maxHealth = this.ease*24*60*5;
     this.status = "Happy.";
     this.maxFullness = this.ease*24*60*5;
-    this.size = 6;
+    this.size = 5;
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;
-    this.model = loadShape("platy.obj");
-    this.scaleVal = 12;
+    this.model = loadShape("tigerbarb.obj");
+    this.scaleVal = 11;
     this.activity = 5;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.sprite = "graphics/platy.png";
-    this.dimensions = new Vector3D(7.8*this.scaleVal, 3.6*this.scaleVal, 1.8*this.scaleVal);
+    this.sprite = "graphics/tigerbarb.png";
+    this.dimensions = new Vector3D(6.7*this.scaleVal, 4.9*this.scaleVal, 1.1*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
     if(alive){
@@ -84,10 +84,10 @@ public class Platy extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(1/5.0, 0, 1/2.5);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
     this.region = -.1;
-    this.schoolingCoefficient = .8;
+    this.schoolingCoefficient = .9;
   }
 }

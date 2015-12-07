@@ -135,4 +135,32 @@ public class CherryShrimp extends Fish{
     this.updateAcceleration();
     this.schoolingCoefficient = .5;
   }
+  
+  void drawFish() {
+    noStroke();
+    pushMatrix();
+    translate(this.absolutePosition.x, this.absolutePosition.y, this.absolutePosition.z);
+    if(hasSubstrate()){
+      translate(0, -16, 0);
+    }
+    rotateX(this.orientation.x);
+    rotateY(this.orientation.y);
+    rotateZ(this.orientation.z);
+    rotateX(this.rotate.x);
+    rotateY(this.rotate.y);
+    rotateZ(this.rotate.z);
+    translate(this.offset.x, this.offset.y, this.offset.z);
+    scale(this.scaleVal, this.scaleVal, this.scaleVal);
+    shape(this.model);
+    //draw eyes
+    fill(0);
+    sphereDetail(8);
+    scale(1/this.scaleVal, 1/this.scaleVal, 1/this.scaleVal);
+    translate(-this.offset.x, -this.offset.y, -this.offset.z);
+    translate(this.dimensions.x*this.eyePosition.x, this.dimensions.y*this.eyePosition.y, this.dimensions.z*this.eyePosition.z);
+    sphere(2.5);
+    translate(0, 0, -2*this.dimensions.z*this.eyePosition.z);
+    sphere(2.5);
+    popMatrix();
+  }
 }

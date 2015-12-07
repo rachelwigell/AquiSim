@@ -41,7 +41,7 @@ public class Substrate extends Achievement{
       for(int j = 0; j < 15; j++){
         int x = int(.05*fieldX + (i+.5) * (.95*fieldX-.05*fieldX)/15.0 + random(-25, 25));
         int z = int(-1.5*fieldZ + j * (-.5*fieldZ+1.5*fieldZ)/15.0 + random(-10, 10));
-        size = int(random(24, 36));
+        size = int(random(fieldX/45.0, fieldX/30.0));
         pieces.add({size,
           int(random(this.RGBcolor.x-25, this.RGBcolor.x+25)),
           int(random(this.RGBcolor.y-25, this.RGBcolor.y+25)),

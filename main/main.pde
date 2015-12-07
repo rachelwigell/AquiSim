@@ -123,6 +123,7 @@ public void populateSpeciesList(){
   speciesList.add(new CoryCatfish("Swimmy"));
   speciesList.add(new Platy("Swimmy"));
   speciesList.add(new Danio("Swimmy"));
+  speciesList.add(new TigerBarb("Swimmy"));
 }
 
 public void populateAchievementsList(){
@@ -362,7 +363,6 @@ public void mouseReleased(){
   }
   else if(clickMode == "ADDPLANT"){
     if(mouseY > 2*fieldY/3){
-      previewPlant.encoding = previewPlant.encode();
       tank.plants.add(previewPlant);
       $('#cancel_plant_add').click();
     }
@@ -568,6 +568,9 @@ public Fish addFishToTank(String speciesName, String nickname){
   }
   else if(speciesName == "Danio"){
     toAdd = new Danio(nickname);
+  }
+  else if(speciesName == "Tiger Barb"){
+    toAdd = new TigerBarb(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);

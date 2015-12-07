@@ -19,7 +19,7 @@ public class NeonTetra extends Fish{
     this.nitrite = 0.1;
     this.nitrate = 25;
     this.scaleVal = 8;
-    this.activity = 5;
+    this.activity = 4;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
     this.model = loadShape("neontetra.obj");

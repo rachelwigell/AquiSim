@@ -236,6 +236,9 @@ public class MysterySnail extends Fish{
    pushMatrix();
    translate(zero.x, zero.y, zero.z);
    translate(this.position.x, this.position.y, this.position.z);
+   if(this.location == "FLOOR" && hasSubstrate()){
+     translate(0, -16, 0);
+   }
    rotateZ(this.orientation.z);
    rotateX(this.orientation.x);
    rotateY(this.orientation.y);
