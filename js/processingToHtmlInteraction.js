@@ -218,7 +218,7 @@ function accordion_defaults(new_user){
 		$('#fish_health_menu').addClass('active');
 		$('#add_fish_menu').addClass('active');
 		$('#manage_plants_menu').addClass('active');
-		$('#help_menu').removeClass('active');
+		$('#help_menu').addClass('active');
 		$('#feedback_menu').addClass('active');
 		$('#achievements_menu').addClass('active');
 	}
