@@ -76,7 +76,7 @@ function update_species_stats(){
 	}
 	else{
 		species_info = species_stats[selected_species];
-		$('#nickname_entry').attr('placeholder', 'Give your ' + selected_species + ' a name!');
+		$('#nickname_entry').attr('placeholder', 'Name your ' + selected_species + '!');
 		$('#add_fish').text('Add a ' + selected_species + '!');
 		$('#nickname_entry').show();
 		$('#add_fish').show();
