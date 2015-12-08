@@ -95,8 +95,7 @@ void setup(){
 }
 
 void draw(){
-  Vector3D bcolor = backgroundColor();
-  background(bcolor.x, bcolor.y, bcolor.z);
+  background(0);
   int spotColor = spotlightColor();
   ambientLight(spotColor, spotColor, spotColor);
   spotLight(spotColor/4, spotColor/4, spotColor/4, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
@@ -149,11 +148,50 @@ public void determineBounds(){
 public void drawTank(){
   noStroke();
   pushMatrix();
-  translate((.5*fieldX), (.8*fieldY), -1.5*fieldZ);
-  translate(0, (.5*fieldY), -1);
-  fill(color(200, 180, 100));
-  box(2*fieldX, fieldY, 1); //table
-  translate(0, (-.8*fieldY), 1);
+  translate(.5*fieldX, .5*fieldY, -.5*fieldZ);
+  fill(120, 110, 100);
+  beginShape();
+  vertex(-fieldX, fieldY, 0);
+  vertex(-fieldX, .5*fieldY, 0);
+  vertex(fieldX, .5*fieldY, 0);
+  vertex(fieldX, fieldY, 0);
+  endShape(CLOSE);
+  beginShape();
+  vertex(.475*fieldX, .5*fieldY, 0);
+  vertex(.475*fieldX, .2*fieldY, 0);
+  vertex(.475*fieldX, .145*fieldY, fieldZ);
+  vertex(.475*fieldX, .5*fieldY, fieldZ);
+  endShape(CLOSE);
+  beginShape();
+  vertex(-.475*fieldX, .5*fieldY, 0);
+  vertex(-.475*fieldX, .2*fieldY, 0);
+  vertex(-.475*fieldX, .145*fieldY, fieldZ);
+  vertex(-.475*fieldX, .5*fieldY, fieldZ);
+  endShape(CLOSE);
+  fill(160, 180, 200);
+  beginShape();
+  vertex(.475*fieldX, -.5*fieldY, 0);
+  vertex(.475*fieldX, .2*fieldY, 0);
+  vertex(.475*fieldX, .145*fieldY, fieldZ);
+  vertex(.475*fieldX, -.5*fieldY, fieldZ);
+  endShape(CLOSE);
+  beginShape();
+  vertex(-.475*fieldX, -.5*fieldY, 0);
+  vertex(-.475*fieldX, .2*fieldY, 0);
+  vertex(-.475*fieldX, .145*fieldY, fieldZ);
+  vertex(-.475*fieldX, -.5*fieldY, fieldZ);
+  endShape(CLOSE);
+  translate(0, 0, -fieldZ-1);
+  beginShape();
+  vertex(-fieldX, -.5*fieldY, 0);
+  vertex(-fieldX, -fieldY, 0);
+  vertex(fieldX, -fieldY, 0);
+  vertex(fieldX, -.5*fieldY, 0);
+  endShape(CLOSE);
+  popMatrix();
+    
+  pushMatrix();
+  translate((.5*fieldX), (.5*fieldY), -1.5*fieldZ);
   fill(color(200));
   box((.95*fieldX), (fieldY), 1); //back
   fill(color(255));
@@ -529,12 +567,7 @@ public void waterChange(float percent){
 /**************************************************
  * HELPERS *
  **************************************************/
-
-public Vector3D backgroundColor(){
-  int time = tank.time;
-  return new Vector3D( ((160.0/1020.0)*(720-abs(720-time) + 300)),  ((180.0/1020.0)*(720-abs(720-time) + 300)),  ((200.0/1020.0)*(720-abs(720-time) + 300)));
-}
-
+ 
 public int spotlightColor(){
   int time = tank.time;
   return  ((200.0/1320.0)*(720-abs(720-time) + 600));
@@ -800,6 +833,9 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
 public boolean handlePlantDeleteClick(int x, int y, Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
   float factor = (y-start.y)/normal.y;
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.plants.size(); i++){
@@ -815,6 +851,9 @@ public boolean handlePlantDeleteClick(int x, int y, Vector3D start, Vector3D end
 public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
   float factor = (y-start.y)/normal.y;
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.plants.size(); i++){
@@ -831,6 +870,9 @@ public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
 public boolean handleRewardMoveClick(int x, int y, Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
   float factor = (y-start.y)/normal.y;
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.achievements.size(); i++){
@@ -851,6 +893,9 @@ public boolean handleRewardMoveClick(int x, int y, Vector3D start, Vector3D end)
 public boolean handlePlantRotateClick(int x, int y, Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
   float factor = (y-start.y)/normal.y;
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.plants.size(); i++){
@@ -866,6 +911,9 @@ public boolean handlePlantRotateClick(int x, int y, Vector3D start, Vector3D end
 public boolean handleRewardRotateClick(int x, int y, Vector3D start, Vector3D end){
   Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
   float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
   float factor = (y-start.y)/normal.y;
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.achievements.size(); i++){

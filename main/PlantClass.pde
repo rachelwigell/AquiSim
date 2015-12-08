@@ -77,7 +77,7 @@ public class Plant {
     this.absolutePosition = start.addVector(normal.multiplyScalar(factor));
     this.absolutePosition.x = new Vector3D(int(.05*fieldX), int(this.absolutePosition.x), int(.95*fieldX)).centermost();
     this.absolutePosition.y = int(fieldY);
-    this.absolutePosition.z = new Vector3D(int(-1.5*fieldZ), int(this.absolutePosition.z), int(-.5*fieldZ)).centermost();
+    this.absolutePosition.z = new Vector3D(int(-1.5*fieldZ), int(this.absolutePosition.z), int(-.6*fieldZ)).centermost();
     this.position = this.absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
     return this;
   }
