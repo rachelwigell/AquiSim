@@ -270,7 +270,7 @@ public class Tank{
   }
 
   public float changeAmmonia(){
-    float ammonia = (.00005*this.temp*this.pH*(this.waste + this.food.size() + .05*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
+    float ammonia = (.00001*this.temp*this.pH*(this.waste + this.food.size() + .1*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
     return ammonia;
   }
 
