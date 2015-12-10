@@ -265,7 +265,7 @@ public class Tank{
   public float changeCO2(){
     float photosynthesis = (.5+.5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
     float respiration = (this.cmFish+this.plants.size())*this.o2;
-    float co2 = .05*(respiration-.5*photosynthesis+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
+    float co2 = .05*(respiration-photosynthesis+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return co2;
   }
 
