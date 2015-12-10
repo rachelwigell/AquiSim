@@ -189,8 +189,12 @@ public class Tank{
      cookie = localStorage.getItem("p" + i);
      if(cookie != "" && cookie != null){
        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-       this.plants.add(new Plant(plantStats[7], new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
-                                 new Vector3D(float(plantStats[3]), fieldY-center.y, float(plantStats[4])), float(plantStats[5])));
+       this.plants.add(new Plant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
      }
     }
     this.achievements = new ArrayList();

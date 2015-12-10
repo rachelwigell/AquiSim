@@ -667,7 +667,11 @@ public Waste removeWaste(Vector3D start, Vector3D end){
   float z = MIN_FLOAT;
   for(int i = 0; i < tank.poops.size(); i++){
     Poop p = (Poop) tank.poops.get(i);
-    if(raySphereIntersect(start, normal, p.absolutePosition, p.dimensions.x*2)){
+    compare = new Vector3D(p.absolutePosition.x, p.absolutePosition.y, p.absolutePosition.z);
+    if(hasSubstrate()){
+      compare.y -= 16;
+    }
+    if(raySphereIntersect(start, normal, compare, p.dimensions.x*2)){
       if(p.absolutePosition.z > z){
         z = p.absolutePosition.z;
         closest = p;
@@ -676,7 +680,11 @@ public Waste removeWaste(Vector3D start, Vector3D end){
   }
   for(int i = 0; i < tank.sinkingFood.size(); i++){
     SinkingFood f = (SinkingFood) tank.sinkingFood.get(i);
-    if(raySphereIntersect(start, normal, f.absolutePosition, f.dimensions.x*2)){
+    compare = new Vector3D(f.absolutePosition.x, f.absolutePosition.y, f.absolutePosition.z);
+    if(hasSubstrate()){
+      compare.y -= 16;
+    }
+    if(raySphereIntersect(start, normal, compare, f.dimensions.x*2)){
       if(f.absolutePosition.z > z){
         z = f.absolutePosition.z;
         closest = f;
