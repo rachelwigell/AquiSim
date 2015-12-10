@@ -258,14 +258,14 @@ public class Tank{
   public float changeO2(){
     float photosynthesis = (.5 + .5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2; //check this
     float respiration = (this.cmFish+this.plants.size())*this.o2; // and this
-    float o2 = .02*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
+    float o2 = .05*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return o2;
   }
 
   public float changeCO2(){
     float photosynthesis = (.5+.5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
     float respiration = (this.cmFish+this.plants.size())*this.o2;
-    float co2 = .015*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
+    float co2 = .045*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return co2;
   }
 
