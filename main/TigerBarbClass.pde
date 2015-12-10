@@ -30,8 +30,8 @@ public class TigerBarb extends Fish{
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
     this.dimensions = new Vector3D(6.7*this.scaleVal, 4.9*this.scaleVal, 1.1*this.scaleVal);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
-    this.offset = new Vector3D(0, 0, 0);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.0);
+    this.offset = new Vector3D(0, 0, 1);
     this.setDangerRatings();
     this.region = -.1;
     this.aliveSince = new Date().getTime();
@@ -84,8 +84,8 @@ public class TigerBarb extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
-    this.offset = new Vector3D(0, 0, 0);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.0);
+    this.offset = new Vector3D(0, 0, 1);
     this.setDangerRatings();
     this.region = -.1;
     this.schoolingCoefficient = .9;
