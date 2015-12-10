@@ -103,7 +103,7 @@ public class Plant {
   public String encode(){
     String code = "";
     code += int(this.RGBcolor.x) + "+" + int(this.RGBcolor.y) + "+" + int(this.RGBcolor.z) + "+";
-    code += int(this.position.x) + "+" + int(this.position.y) + "+" + int(this.position.z) + "+";
+    code += int(this.position.x) + "+" + int(this.position.z) + "+";
     code += this.orientation.toFixed(2) + "+";
     code += this.seed;
     return LZString.compressToUTF16(code);

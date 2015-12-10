@@ -190,7 +190,7 @@ public class Tank{
      if(cookie != "" && cookie != null){
        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
        this.plants.add(new Plant(plantStats[7], new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
-                                 new Vector3D(float(plantStats[3]), float(plantStats[4]), float(plantStats[5])), float(plantStats[6])));
+                                 new Vector3D(float(plantStats[3]), fieldY-center.y, float(plantStats[5])), float(plantStats[6])));
      }
     }
     this.achievements = new ArrayList();

@@ -1119,7 +1119,7 @@ public HashMap localStorageInfo(){
         achievementString += "f";
       }
       else if(a.rewardName != "Substrate"){
-        achievementString += "t+" + a.position.x + "+" + a.position.y + "+" + a.position.z + "+" + a.orientation + "";
+        achievementString += "t+" + a.position.x + "+" + a.position.z + "+" + a.orientation + "";
       }
       else{
         achievementString += "t+" + a.RGBcolor.x + "+" + a.RGBcolor.y + "+" + a.RGBcolor.z + "";
