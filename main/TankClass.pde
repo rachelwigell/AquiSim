@@ -285,12 +285,12 @@ public class Tank{
   }
 
   public float changeNitrosomonas(){
-    float nitrosomonas = .01*this.ammonia*this.nitrosomonas-.0001*this.nitrosomonas;
+    float nitrosomonas = .05*this.ammonia*this.nitrosomonas-.0001*this.nitrosomonas;
     return nitrosomonas;
   }
 
   public float changeNitrobacter(){
-    float nitrobacter = .01*this.nitrite*this.nitrobacter-.0001*this.nitrobacter;
+    float nitrobacter = .05*this.nitrite*this.nitrobacter-.0001*this.nitrobacter;
     return nitrobacter;
   }
   
