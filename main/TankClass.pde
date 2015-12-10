@@ -240,7 +240,7 @@ public class Tank{
   }
   
   public float changePH(){
-    float pH = .0001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
+    float pH = .001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
     return pH;
   }
 
@@ -251,7 +251,7 @@ public class Tank{
   }
 
   public float changeHard(){
-    float hardness = -.0008*this.co2*this.hardness/this.volume + .000002*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
+    float hardness = -.0001*this.co2*this.hardness/this.volume;
     return hardness;
   }
 
@@ -270,7 +270,7 @@ public class Tank{
   }
 
   public float changeAmmonia(){
-    float ammonia = (.000008*this.temp*this.pH*(this.waste + this.food.size() + .01*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
+    float ammonia = (.000008*this.temp*this.pH*(this.waste + this.food.size() + .05*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
     return ammonia;
   }
 
