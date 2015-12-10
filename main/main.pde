@@ -2,8 +2,8 @@
  * INITIALIZE *
  **************************************************/
 
-public final static int fieldX = window.screen.availWidth-100;
-public final static int fieldY = window.screen.availHeight-100;
+public final static int fieldX = window.screen.availWidth-10;
+public final static int fieldY = window.screen.availHeight-10;
 public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
 public Tank tank;
