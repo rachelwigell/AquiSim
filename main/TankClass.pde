@@ -256,16 +256,16 @@ public class Tank{
   }
 
   public float changeO2(){
-    float photosynthesis = (.5 + .5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2; //check this
-    float respiration = (this.cmFish+this.plants.size())*this.o2; // and this
-    float o2 = .05*(photosynthesis-.5*respiration+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
+    float photosynthesis = (1+sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2; //check this
+    float respiration = .5*(this.cmFish+this.plants.size())*this.o2; // and this
+    float o2 = .01*(photosynthesis-respiration+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return o2;
   }
 
   public float changeCO2(){
-    float photosynthesis = (.5+.5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
-    float respiration = (this.cmFish+this.plants.size())*this.o2;
-    float co2 = .05*(.5*respiration-photosynthesis+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
+    float photosynthesis = (1+sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
+    float respiration = .5*(this.cmFish+this.plants.size())*this.o2;
+    float co2 = .01*(respiration-photosynthesis+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return co2;
   }
 
@@ -280,7 +280,7 @@ public class Tank{
   }
 
   public float changeNitrate(){
-    float nitrate = (.001*this.nitrite*this.nitrobacter-.001*this.plants.size()*this.nitrate)/this.volume;
+    float nitrate = (.001*this.nitrite*this.nitrobacter-.0001*this.plants.size()*this.nitrate)/this.volume;
     return nitrate;
   }
 
