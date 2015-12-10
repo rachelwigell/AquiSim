@@ -24,9 +24,9 @@ public class ConchShell extends Achievement{
     this.earned = stats[0] == "t";
     this.used = stats[1] == "t";
     if(this.used){
-      this.position = new Vector3D(int(stats[2]), fieldY-center.y, int(stats[4]));
+      this.position = new Vector3D(int(stats[2]), fieldY-center.y, int(stats[3]));
       this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
-      this.orientation = float(stats[5]);
+      this.orientation = float(stats[4]);
       this.dimensions = new Vector3D(this.scaleVal*11.2, this.scaleVal*5.6, this.scaleVal*5.7);
     }
     else{

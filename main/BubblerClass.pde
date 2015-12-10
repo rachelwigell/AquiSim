@@ -27,9 +27,9 @@ public class Bubbler extends Achievement{
     this.earned = stats[0] == "t";
     this.used = stats[1] == "t";
     if(this.used){
-      this.position = new Vector3D(int(stats[2]), fieldY-center.y, int(stats[4]));
+      this.position = new Vector3D(int(stats[2]), fieldY-center.y, int(stats[3]));
       this.absolutePosition = this.position.addVector(new Vector3D(center.x, center.y, center.z));
-      this.orientation = float(stats[5]);
+      this.orientation = float(stats[4]);
       this.dimensions = new Vector3D(this.scaleVal*4, this.scaleVal*2.5, this.scaleVal*4);
       this.bubbles = new ArrayList();
     }
