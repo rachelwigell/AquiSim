@@ -240,7 +240,7 @@ public class Tank{
   }
   
   public float changePH(){
-    float pH = .005*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
+    float pH = .001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
     return pH;
   }
 
@@ -251,7 +251,7 @@ public class Tank{
   }
 
   public float changeHard(){
-    float hardness = -.0005*this.co2*this.hardness/this.volume;
+    float hardness = -.0001*this.co2*this.hardness/this.volume;
     return hardness;
   }
 
