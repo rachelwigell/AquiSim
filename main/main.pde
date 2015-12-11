@@ -96,8 +96,6 @@ void setup(){
 
 void draw(){
   background(0);
-  pushMatrix();
-  translate(0, 0, fieldZ/5.0);
   int spotColor = spotlightColor();
   ambientLight(spotColor, spotColor, spotColor);
   spotLight(spotColor/4, spotColor/4, spotColor/4, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
@@ -107,7 +105,6 @@ void draw(){
   drawAllAchievements();
   tank.allEat();
   drawAllPlants();
-  popMatrix();
   if(updateCount > 150){ //operations to happen every 5 seconds
       tank.progress();
       updateCount = 0;
