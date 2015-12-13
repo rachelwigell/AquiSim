@@ -85,10 +85,10 @@ public abstract class Fish {
 
   public double setHealth() {
     if (this.status == "Happy.") {
-      this.health = min(this.maxHealth, this.health+1);
+      this.health = min(this.maxHealth, this.health+(tank.timeScale*100*1));
     }
     else if (this.status == "Hungry!") {
-      this.health = max(0, this.health-2);
+      this.health = max(0, this.health-(tank.timeScale*100*2));
     }
     else {
      String problemElement = "";
@@ -105,13 +105,13 @@ public abstract class Fish {
      float dist = 0;
      dist = abs(tank.getParameter(problemElement) - this.getParameter(problemElement, problemDirection));
      float reduction = max(1, dist*this.dangerRatings.get(problemElement));
-     this.health = max(0, this.health-reduction);
+     this.health = max(0, this.health-(tank.timeScale*100*reduction));
     }
     return this.health;
   }
   
   public void adapt(){
-    float adaptCoeff = .0001;
+    float adaptCoeff = .01*tank.timeScale;
     if (this.status == "pH too high."){
        float dist = tank.pH - this.maxPH;
        this.minPH += adaptCoeff*dist;
@@ -145,9 +145,59 @@ public abstract class Fish {
   }
 
   public long changeHunger() {
-    int hunger = (int) (this.size); //hunger changes relative to fish size
+    int hunger = (int) (tank.timeScale*100*this.size); //hunger changes relative to fish size
     this.fullness = Math.max(this.fullness - hunger, 0);
     return hunger;
+  }
+  
+  public String fishHappiness(){
+    if(this.fullness <= 0){
+      this.status = "Hungry!";
+      this.happySince = 0;
+    }
+    else if(tank.ammonia > this.ammonia){
+      this.status = "Ammonia too high.";
+      this.happySince = 0;
+    }
+    else if(tank.nitrite > this.nitrite){
+      this.status = "Nitrite too high.";
+      this.happySince = 0;
+    }
+    else if(tank.nitrate > this.nitrate){
+      this.status = "Nitrate too high.";
+      this.happySince = 0;
+    }
+    else if(tank.pH < this.minPH){
+      this.status = "pH too low.";
+      this.happySince = 0;
+    }
+    else if(tank.pH > this.maxPH){
+      this.status = "pH too high.";
+      this.happySince = 0;
+    }
+    else if(tank.temp < this.minTemp){
+      this.status = "Temperature too low.";
+      this.happySince = 0;
+    }
+    else if(tank.temp > this.maxTemp){
+      this.status = "Temperature too high.";
+      this.happySince = 0;
+    }
+    else if(tank.hardness < this.minHard){
+      this.status = "Hardness too low.";
+      this.happySince = 0;
+    }
+    else if(tank.hardness > this.maxHard){
+      this.status = "Hardness too high.";
+      this.happySince = 0;
+    }
+    else{ //if none of the above, then  it's happy
+      this.status = "Happy.";
+      if(this.happySince == 0){
+        this.happySince = new Date().getTime();
+      }
+    }
+    return this.status;
   }
 
   public void updatePosition() {

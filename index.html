@@ -4,6 +4,7 @@
 	<link rel="stylesheet" href="libraries/foundation-5.5.2/css/normalize.css">
 	<script src="libraries/processing.js"></script>
 	<script src="libraries/jquery-1.11.3.min.js"></script>
+	<script src="libraries/foundation-5.5.2/js/vendor/modernizr.js"></script>
 	<style>
 		.switch-on {
 			position: absolute;
@@ -130,7 +131,56 @@
     		<a href="#tank_health_menu"><b>Tank Health</b></a>
     		<div id="tank_health_menu" class="content inactive">
 				<div class="small-5 columns">
-					<table id = "tank_stats_display"></table>
+					<table id = "tank_stats_display">
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Acidity of the water. Falls when ammonia goes up.">pH:
+							</span>
+						</th><td id="pH_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produced by plants.">O₂ :
+							</span>
+						</th><td id="O2_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Changes according to the time of day.">temperature:
+							</span>
+						</th><td id="temperature_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produced by fish and plants.">CO₂ :
+							</span>
+						</th><td id="CO2_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Raised by shells and gravel.">hardness:
+							</span>
+						</th><td id="hardness_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Convert ammonia into nitrite.">nitrosomonas:
+							</span>
+						</th><td id="nitrosomonas_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Toxic to fish. Produced by rotting food and waste.">ammonia:
+							</span>
+						</th><td id="ammonia_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Convert nitrite into nitrate.">nitrobacter:
+							</span>
+						</th><td id="nitrobacter_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Toxic to fish.">nitrite:
+							</span>
+						</th><td id="nitrite_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produces ammonia when allowed to sit in tank.">food:
+							</span>
+						</th><td id="food_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Mildly toxic to fish. Remove with water changes.">nitrate:
+							</span>
+						</th><td id="nitrate_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produces ammonia when allowed to sit in tank.">waste:
+							</span>
+						</th><td id="waste_val"></td></tr>
+					</table>
 				</div>
 				<div class="small-3 columns" id="water_change">
 						<div class="range-slider round" id="water_change_percentage" align="left" data-slider=50>
@@ -139,8 +189,13 @@
 							  </span>
 							  <span class="range-slider-active-segment"></span>
 							  <input type="hidden">
-						</div><br>
-					<button class="button round" id="perform_water_change">Change Water</button>
+						</div>
+					<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Changing the water can help neutralize it, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.">
+						<button class="button round" id="perform_water_change">Change Water</button><br>
+					</span>
+					<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="This game moves in real time. Turn on fast mode to make it more entertaining to watch (stats change at 100x speed).">
+						<button class="button round" id="toggle_fast_mode">Turn on Fast Mode</button>
+					</span>
 				</div>
 				<div class="small-4 columns">
 					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -169,10 +224,25 @@
 							<span class="switch-off">Flake</span>
 						</label>
 					</div>
-
 				</div>
 				<div class="small-6 columns">
-					<table id="fish_stats_display"></table>
+					<table id="fish_stats_display">
+						<tr><th>Name:</th><td id="fish_Name_val"></td>
+						<th>Ammonia levels tolerated:</th><td id="fish_Ammonia_val"></td></tr>
+						<tr><th>Species:</th><td id="fish_Species_val"></td>
+						<th>Nitrite levels tolerated:</th><td id="fish_Nitrite_val"></td></tr>
+						<tr><td colspan="2"><center>
+							<img id="fish_image_url_val"></center></td>
+						<th>Nitrate levels tolerated:</th><td id="fish_Nitrate_val"></td></tr>
+						<tr><th>Status:</td><td id="fish_Status_val"></td>
+						<th>pH levels tolerated:</th><td id="fish_pH_val"></td></tr>
+						<tr><th>Health:</th><td>
+							<div class="progress round" style="width: 100px"><span id="fish_health_val" class="meter"></span></div></td>
+						<th>Temperatures tolerated:</th><td id="fish_Temperatures_val"></td></tr>
+						<tr><th>Fullness:</th><td>
+							<div class="progress round" style="width: 100px"><span id="fish_fullness_val" class="meter"></span></div></td>
+						<th>Hardness levels tolerated:</th><td id="fish_Hardness_val"></td></tr>
+					</table>
 				</div>
 				<div class="small-4 columns">
 					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -295,58 +365,24 @@
 		</li>
 		<div class="row"></div>
 		<li class="accordion-navigation">
-    		<a href="#help_menu"><b>Help</b></a>
-    		<div id="help_menu" class="content active">
-				<div class="small-4 columns">
-					<b>What would you like to know more about?</b>
-					<select id="help_topics" type="select">
-						<option value="fish">Fish</option>
-						<option value="change">Water Change</option>
-						<option value="pH">pH</option>
-						<option value="temperature">Temperature</option>
-						<option value="hardness">Hardness</option>
-						<option value="cycle">Nitrogen Cycle</option>
-						<option value="bacteria">Bacteria</option>
-						<option value="gases">Gases</option>
-					</select>
-				</div>
-				<div class="small-4 columns">
-					<p align="left" id="help_text">
-						Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!
-					</p>
-				</div>
-				<div class="small-4 columns">
-					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-					<!-- Help -->
-					<ins class="adsbygoogle"
-					     style="display:inline-block;width:336px;height:280px"
-					     data-ad-client="ca-pub-4926371143211898"
-					     data-ad-slot="6320435163"></ins>
-					<script>
-					(adsbygoogle = window.adsbygoogle || []).push({});
-					</script>
-				</div>
-			</div>
-		</li>
-		<div class="row"></div>
-		<li class="accordion-navigation">
     		<a href="#feedback_menu"><b>Feedback</b></a>
     		<div id="feedback_menu" class="content active">
 				<div class="small-4 columns">
 					<b>Changelog</b>
 					<table>
+						<tr><th>12/12/2015:</th><td>Added tooltips</td></tr>
+						<tr><th>12/12/2015:</th><td>Added "fast mode."</td></tr>
 						<tr><th>12/7/2015:</th><td>Added the Tiger Barb species</td></tr>
 						<tr><th>12/6/2015:</th><td>Added substrate as an achievement!</td></tr>
 						<tr><th>12/6/2015:</th><td>Added the Danio species</td></tr>
-						<tr><th>12/4/2015:</th><td>Added the Platy species</td></tr>
 						<tr><th>12/3/2015:</th><td>Added schooling behavior!</td></tr>
 					</table>	
 				</div>
 				<div class="small-4 columns">
 					<b>What's on Deck</b>
 					<table>
-						<tr><td>"Fast mode" to make it more entertaining to watch.</tr></td>
-						<tr><td>The ability to upgrade to a bigger tank and unlock bigger/more difficult fish species</tr></td>
+						<tr><td>The ability to upgrade to a bigger tank and unlock bigger/more difficult fish species</td></tr>
+						<tr><td>Add inter-fish dynamics - bullying, predation, breeding, etc.</td></tr>
 						<tr><td>Add more fish species</td></tr>
 						<tr><td>Add more achievements</td></tr>
 						<tr><td>Troubleshoot Internet Explorer compatibility</td></tr>

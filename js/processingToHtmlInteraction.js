@@ -1,4 +1,18 @@
 var selected_fish = 'select';
+var tooltip_text = {
+	'pH': 'blah',
+	'temperature': '',
+	'hardness': '',
+	'ammonia': '',
+	'nitrite': '',
+	'nitrate': '',
+	'O₂': '',
+	'CO₂': '',
+	'nitrosomonas': '',
+	'nitrobacter': '',
+	'food': '',
+	'waste': ''
+}
 
 window.setInterval(function(){
   	update_tank_stats();
@@ -11,15 +25,10 @@ window.setInterval(function(){
 function update_tank_stats(){
 	var processing = Processing.getInstanceById('processing');
 	processing.updateTankStats();
-	$('#tank_stats_display').empty();
-	for(var i = 0; i < 6; i++){
-		name1 = Object.keys(tank_stats)[i];
-		stat1 = tank_stats[name1];
-		name2 = Object.keys(tank_stats)[i+6];
-		stat2 = tank_stats[name2];
-		$('#tank_stats_display').append('<tr><td><b>' + name1 + ':</b></td><td> ' + stat1 + '</td>' +
-										'<td><b>' + name2 + ':</b></td><td> ' + stat2 + '</td></tr>');
-
+	for(var i = 0; i < 12; i++){
+		name = Object.keys(tank_stats)[i];
+		stat = tank_stats[name];
+		$('#' + name + '_val').text(stat);
 	}
 }
 
@@ -35,26 +44,30 @@ function update_fish_dropdown(){
 function update_fish_stats(){
 	var processing = Processing.getInstanceById('processing');
 	processing.updateFishStats();
-	$('#fish_stats_display').empty();
 	if(selected_fish == 'select'){
-		$('#fish_stats_display').empty();
+		$('#fish_stats_display').hide();
 	}
 	else{
+		$('#fish_stats_display').show();
 		fish_info = fish_stats[selected_fish];
-		var row = '<tr><td><b>Name:</b></td><td>' + fish_info['Name:'] + '</td><td><b>Ammonia levels tolerated:</b></td><td>' + fish_info["Ammonia levels tolerated:"] + '</td></tr>';
-		$('#fish_stats_display').append(row);
-		row = '<tr><td><b>Species:</b></td><td>' + fish_info['Species:'] + '</td><td><b>Nitrite levels tolerated:</b></td><td>' + fish_info["Nitrite levels tolerated:"] + '</td></tr>';
-		$('#fish_stats_display').append(row);
-		row = '<tr><td colspan="2"><center><img src="' + fish_info['image url'] + '"></center></td><td><b>Nitrate levels tolerated:</b></td><td>' + fish_info["Nitrate levels tolerated:"] + '</td></tr>';
-		$('#fish_stats_display').append(row);
-		row = '<tr><td><b>Status:</b></td><td>' + fish_info['Status:'] + '</td><td><b>pH levels tolerated:</b></td><td>' + fish_info["pH levels tolerated:"] + '</td></tr>';
-		$('#fish_stats_display').append(row);
-		var health_percentage = fish_info['health'] * 100 / fish_info['max health'];
-		row = '<tr><td><b>Health:</b></td><td><div class="progress round" style="width: 100px"><span class="meter" style="width: ' + health_percentage + '%"></span></div></td><td><b>Temperatures tolerated:</b></td><td>' + fish_info["Temperatures tolerated:"] + '</td></tr>';
-		$('#fish_stats_display').append(row);
-		var fullness_percentage = fish_info['fullness'] * 100 / fish_info['max fullness'];
-		row = '<tr><td><b>Fullness:</b></td><td><div class="progress round" style="width: 100px"><span class="meter" style="width: ' + fullness_percentage + '%"></span></div></td><td><b>Hardness levels tolerated:</b></td><td>' + fish_info["Hardness levels tolerated:"] + '</td></tr>';
-		$('#fish_stats_display').append(row);
+		for(var i = 0; i < 12; i++){
+			name = Object.keys(fish_info)[i];
+			stat = fish_info[name];
+			if(name == "health"){
+				var health_percentage = stat * 100 / fish_info['max_health'];
+				$('#fish_health_val').attr('style', 'width: ' + health_percentage + '%');
+			}
+			else if(name == "fullness"){
+				var fullness_percentage = stat * 100 / fish_info['max_fullness'];
+				$('#fish_fullness_val').attr('style', 'width: ' + fullness_percentage + '%');
+			}
+			else if(name == "image_url"){
+				$('#fish_image_url_val').attr('src', stat);	
+			}
+			else{
+				$('#fish_' + name + '_val').text(stat);
+			}
+		}
 	}	
 }
 
@@ -209,7 +222,6 @@ function accordion_defaults(new_user){
 		$('#fish_health_menu').removeClass('active');
 		$('#add_fish_menu').addClass('active');
 		$('#manage_plants_menu').removeClass('active');
-		$('#help_menu').addClass('active');
 		$('#feedback_menu').removeClass('active');
 		$('#achievements_menu').removeClass('active');
 	}
@@ -218,7 +230,6 @@ function accordion_defaults(new_user){
 		$('#fish_health_menu').addClass('active');
 		$('#add_fish_menu').addClass('active');
 		$('#manage_plants_menu').addClass('active');
-		$('#help_menu').addClass('active');
 		$('#feedback_menu').addClass('active');
 		$('#achievements_menu').addClass('active');
 	}
@@ -235,34 +246,6 @@ $('#species_list').change(function(){
 
 $('#achievements_list').change(function(){
 	update_achievements_stats();
-})
-
-$('#help_topics').change(function(){
-	var selected_topic = $('#help_topics').find(':selected').val();
-	if(selected_topic == 'fish'){
-		$('#help_text').text("Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!");
-	}
-	if(selected_topic == 'change'){
-		$('#help_text').text("Changing the water can help bring chemistry back to neutral values, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.");
-	}
-	else if(selected_topic == 'pH'){
-		$('#help_text').text("pH refers to the acidity of the tank water. Each fish has a range of pH's in which it can survive. pH is lowered by the presence of waste and food in the water. If you need to raise it, perform a water change.");
-	}
-	else if(selected_topic == 'temperature'){
-		$('#help_text').text("Water temperature varies based on time of day. Each species of fish has a range of temperatures in which it can survive.");
-	}
-	else if(selected_topic == 'hardness'){
-		$('#help_text').text("Water hardness is a measure of how many minerals are dissolved in the water. Each fish has a range of hardnesses that it prefers. Hardness cannot directly be controlled in this game, but will fluctuate natrually.");
-	}
-	else if(selected_topic == 'cycle'){
-		$('#help_text').text("Waste and excess food break down into ammonia, which is toxic to fish. Bacteria will grow to convert ammonia into a less deadly substance, nitrite. A different sort of bacteria will convert nitrite into mostly harmless nitrates. Some kinds of fish tolerate these compounds better than others. Cut down on all of these compounds by keeping your tank clean or by performing water changes.");
-	}
-	else if(selected_topic == 'bacteria'){
-		$('#help_text').text("Nitrosomonas bacteria convert ammonia to nitrite. Nitrobacter bacteria convert nitrite to nitrate. The bacteria are harmless, and in fact their work is beneficial to your tank chemistry. Their populations rise when they have a lot of their corresponding chemicals to 'eat!'");
-	}
-	else if(selected_topic == 'gases'){
-		$('#help_text').text("Dissolved O2 and CO2 are influenced by the ratio of fish to plants. The fish are not directly affected by these levels, but their values do impact other aspects of tank chemistry. Increase the O2:CO2 ratio by keeping fewer fish or more plants!");
-	}
 })
 
 $('#perform_water_change').click(function(){
@@ -435,6 +418,17 @@ $('#food_type').change(function(){
 	var processing = Processing.getInstanceById('processing');
 	var boolValue = !$('#food_type').is(":checked");
 	processing.setFloatingFood(boolValue);
+})
+
+$('#toggle_fast_mode').click(function(){
+	var processing = Processing.getInstanceById('processing');
+	var mode = processing.toggleFastMode();
+	if(mode){
+		update_button_text('toggle_fast_mode', 'Turn off Fast Mode');
+	}
+	else{
+		update_button_text('toggle_fast_mode', 'Turn on Fast Mode');
+	}
 })
 
 $(document).ready(function() {

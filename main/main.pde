@@ -34,6 +34,7 @@ Achievement rotateAchievement = null;
 Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
+boolean fastMode = false;
 
 void setup(){
   if(fieldY > fieldX){
@@ -67,7 +68,9 @@ void setup(){
       //if it's been more than a month, their tank will take forever to load
       //all their fish would be dead anyway. just reset
       if(elapsedMinutes < 43200){
+        tank.timeScale = .12;
         tank.skipAhead(elapsedMinutes);
+        tank.timeScale = .01;
       }
       else{
         tank = new Tank();
@@ -515,8 +518,8 @@ public void updateTankStats(){
   tank_stats.ammonia = tank.ammonia.toFixed(2) + ' ppm';
   tank_stats.nitrite = tank.nitrite.toFixed(2) + ' ppm';
   tank_stats.nitrate = tank.nitrate.toFixed(2) + ' ppm';
-  tank_stats["O₂ "] = tank.o2.toFixed(1) + ' ppm';
-  tank_stats["CO₂ "] = tank.co2.toFixed(1) + ' ppm';
+  tank_stats.O2 = tank.o2.toFixed(1) + ' ppm';
+  tank_stats.CO2 = tank.co2.toFixed(1) + ' ppm';
   tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(2) + 'M bacteria';
   tank_stats.nitrobacter = tank.nitrobacter.toFixed(2) + 'M bacteria';
   tank_stats.food = tank.food.size() + ' noms';
@@ -528,20 +531,20 @@ public void updateFishStats(){
   for(int i = 0; i < tank.fish.size(); i++){
     Fish f = (Fish) (tank.fish.get(i));
     fish_stats[f.name] = {
-      "Name:": f.name,
-      "Ammonia levels tolerated:": "0-" + f.ammonia.toFixed(1) + ' ppm',
-      "Species:": f.species,
-      "Nitrite levels tolerated:": "0-" + f.nitrite.toFixed(1) + ' ppm',
-      "image url": f.sprite,
-      "Nitrate levels tolerated:": "0-" + f.nitrate.toFixed(1) + ' ppm',
-      "Status:": f.status,
-      "pH levels tolerated:": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
+      "Name": f.name,
+      "Ammonia": "0-" + f.ammonia.toFixed(1) + ' ppm',
+      "Species": f.species,
+      "Nitrite": "0-" + f.nitrite.toFixed(1) + ' ppm',
+      "image_url": f.sprite,
+      "Nitrate": "0-" + f.nitrate.toFixed(1) + ' ppm',
+      "Status": f.status,
+      "pH": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
       "fullness": f.fullness,
-      "Temperatures tolerated:": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
+      "Temperatures": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
       "health": f.health,
-      "Hardness levels tolerated:": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
-      "max health": f.maxHealth,
-      "max fullness": f.maxFullness
+      "Hardness": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
+      "max_health": f.maxHealth,
+      "max_fullness": f.maxFullness
     };
   }
 }
@@ -1166,4 +1169,15 @@ public void deleteAchievement(String name){
       a.used = false;
     }
   }
+}
+
+public boolean toggleFastMode(){
+  fastMode = !fastMode;
+  if(fastMode){
+    tank.timeScale = 1;
+  }
+  else{
+    tank.timeScale = .01;
+  }
+  return fastMode;
 }

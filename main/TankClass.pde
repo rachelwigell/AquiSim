@@ -307,8 +307,8 @@ public class Tank{
   public int changeWaste(){
     int waste = 0;
     for(Fish f: this.fish){
-      int threshold = (int) (((float) max(f.fullness, 0)) / ((float) f.maxFullness) * f.size/2.0);
-      int rand = random(3000);
+      float threshold = (((float) max(f.fullness, 0)) / ((float) f.maxFullness) * f.size/2.0);
+      float rand = random(30/float(tank.timeScale));
       if(rand < threshold){
         waste++;
         addPoop(f);
@@ -330,56 +330,6 @@ public class Tank{
     this.nitrosomonas = (percent*.2)*1 + (1-(percent*.2))*this.nitrosomonas;
     this.nitrobacter = (percent*.2)*1 + (1-(percent*.2))*this.nitrobacter;
     return this;
-  }
-  
-  public String fishHappiness(Fish f){
-    if(f.fullness <= 0){
-      f.status = "Hungry!";
-      f.happySince = 0;
-    }
-    else if(this.ammonia > f.ammonia){
-      f.status = "Ammonia too high.";
-      f.happySince = 0;
-    }
-    else if(this.nitrite > f.nitrite){
-      f.status = "Nitrite too high.";
-      f.happySince = 0;
-    }
-    else if(this.nitrate > f.nitrate){
-      f.status = "Nitrate too high.";
-      f.happySince = 0;
-    }
-    else if(this.pH < f.minPH){
-      f.status = "pH too low.";
-      f.happySince = 0;
-    }
-    else if(this.pH > f.maxPH){
-      f.status = "pH too high.";
-      f.happySince = 0;
-    }
-    else if(this.temp < f.minTemp){
-      f.status = "Temperature too low.";
-      f.happySince = 0;
-    }
-    else if(this.temp > f.maxTemp){
-      f.status = "Temperature too high.";
-      f.happySince = 0;
-    }
-    else if(this.hardness < f.minHard){
-      f.status = "Hardness too low.";
-      f.happySince = 0;
-    }
-    else if(this.hardness > f.maxHard){
-      f.status = "Hardness too high.";
-      f.happySince = 0;
-    }
-    else{ //if none of the above, then  it's happy
-      f.status = "Happy.";
-      if(f.happySince == 0){
-        f.happySince = new Date().getTime();
-      }
-    }
-    return f.status;
   }
   
   public float getParameter(String parameter){
@@ -415,7 +365,7 @@ public class Tank{
     for(int i = 0; i < this.fish.size(); i++){
       Fish f = (Fish) this.fish.get(i);
       f.changeHunger(); //update fish's hunger level 
-      this.fishHappiness(f); //update fish's happiness status
+      f.fishHappiness(); //update fish's happiness status
       f.setHealth(); //update fish's health
       f.adapt();
       this.handleDeceased(f); //check if fish is dead and perform necessary operations if so
@@ -577,7 +527,7 @@ public class Tank{
   }
   
   public void skipAhead(int minutes){
-    for(int i = 0; i < minutes*12; i++){
+    for(int i = 0; i < minutes; i++){
       this.progress();
       this.allRandomizedEat();
     }
