@@ -417,8 +417,8 @@ public class Tank{
     }
 
     //tank operations
-    float cmFish = this.changeFish();
     if(playMode != "casual_mode"){
+      float cmFish = this.changeFish();
       float pH = new Vector3D(.01, this.pH + timeScale * this.changePH() + timeScale * achievementPH, 13.99).centermost();
       float temp = new Vector3D(19, this.temp + timeScale * this.changeTemp() + timeScale * achievementTemp, 25).centermost();
       float hardness = new Vector3D(.01, this.hardness + timeScale * this.changeHard() + timeScale * achievementHard, 99).centermost();
@@ -430,13 +430,11 @@ public class Tank{
       float nitrosomonas = new Vector3D(1, this.nitrosomonas + timeScale * this.changeNitrosomonas() + timeScale * achievementNitrosomonas, 9999).centermost();
       float nitrobacter = new Vector3D(1, this.nitrobacter + timeScale * this.changeNitrobacter() + timeScale * achievementNitrobacter, 9999).centermost();
       console.log(pH, ammonia, nitrosomonas, co2);
-    }
-    int waste = this.waste + this.changeWaste();
-    int time = this.getTime();
+      int waste = this.waste + this.changeWaste();
+      int time = this.getTime();
 
     //do assignment after so that all calculations are accurate
-    this.cmFish = cmFish;
-    if(playMode != "casual_mode"){
+      this.cmFish = cmFish;
       this.pH = pH;
       this.temp = temp;
       this.hardness = hardness;
@@ -447,10 +445,18 @@ public class Tank{
       this.nitrate = nitrate;
       this.nitrosomonas = nitrosomonas;
       this.nitrobacter = nitrobacter;
+      this.waste = waste;
+      this.time = time;
       console.log(this.pH, this.ammonia, this.nitrosomonas, this.co2);
     }
-    this.waste = waste;
-    this.time = time;
+    else{
+      float cmFish = this.changeFish();
+      int waste = this.waste + this.changeWaste();
+      int time = this.getTime();
+      this.cmFish = cmFish;
+      this.waste = waste;
+      this.time = time;
+    }
   }
   
   public Vector3D nearestFood(Vector3D absolutePosition){
