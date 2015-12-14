@@ -1,17 +1,16 @@
 var selected_fish = 'select';
 var tooltip_text = {
-	'pH': 'blah',
-	'temperature': '',
-	'hardness': '',
-	'ammonia': '',
-	'nitrite': '',
-	'nitrate': '',
-	'O₂': '',
-	'CO₂': '',
-	'nitrosomonas': '',
-	'nitrobacter': '',
-	'food': '',
-	'waste': ''
+	'pH too low.': 'Have you been letting food and waste rot in the tank? Try a water change or adding some plants.',
+	'pH too high.': 'Delete some plants or add some food.',
+	'Temperature too low.': 'Your fish will adapt to the tank temperature over time!',
+	'Temperature too high.': 'Your fish will adapt to the tank temperature over time!',
+	'Hardness too low.': 'Try adding some shells or substrate if you can!',
+	'Hardness too high.': 'Try a water change.',
+	'Ammonia too high.': 'Have you been letting food and waste rot in the tank? Have you built up your bacteria populations? Allow a small amount of ammonia to remain in the tank so that the bacteria can eat. For a quick fix, do a small water change.',
+	'Nitrite too high.': 'Have you built up your nitrobacter populations? Allow a small amount of nitrite to remain in the tank so that the bacteria can eat. For a quick fix, do a small water change.',
+	'Nitrate too high.': 'Add some plants or do a water change.',
+	'Hungry!': "Your fish's fullness bar is empty. Feed your fish!",
+	'Happy.': 'When your fish is happy, it will slowly recover health until the health bar is full.'
 }
 
 window.setInterval(function(){
@@ -63,6 +62,13 @@ function update_fish_stats(){
 			}
 			else if(name == "image_url"){
 				$('#fish_image_url_val').attr('src', stat);	
+			}
+			else if(name == 'Status'){
+				$('#fish_Status_val').text(stat);
+				var prev_tooltip = Foundation.libs.tooltip.getTip($('#fish_Status')).contents().first();
+				if(prev_tooltip != tooltip_text[stat]){
+					Foundation.libs.tooltip.getTip($('#fish_Status')).contents().first().replaceWith(tooltip_text[stat]);	
+				}	
 			}
 			else{
 				$('#fish_' + name + '_val').text(stat);
