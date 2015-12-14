@@ -419,7 +419,6 @@ public class Tank{
     //tank operations
     float cmFish = this.changeFish();
     if(playMode != "casual_mode"){
-      console.log(playMode);
       float pH = new Vector3D(.01, this.pH + timeScale * this.changePH() + timeScale * achievementPH, 13.99).centermost();
       float temp = new Vector3D(19, this.temp + timeScale * this.changeTemp() + timeScale * achievementTemp, 25).centermost();
       float hardness = new Vector3D(.01, this.hardness + timeScale * this.changeHard() + timeScale * achievementHard, 99).centermost();
@@ -437,6 +436,7 @@ public class Tank{
     //do assignment after so that all calculations are accurate
     this.cmFish = cmFish;
     if(playMode != "casual_mode"){
+      console.log("got here");
       this.pH = pH;
       this.temp = temp;
       this.hardness = hardness;
