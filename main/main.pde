@@ -109,7 +109,6 @@ void draw(){
   tank.allEat();
   drawAllPlants();
   if(updateCount > 150){ //operations to happen every 5 seconds
-      console.log(tank.pH, tank.ammonia, tank.nitrosomonas, tank.co2);
       tank.progress();
       updateCount = 0;
     }
@@ -485,10 +484,10 @@ public void mouseReleased(){
     }
     rotateAchievement = null;
   }
-  if(mouseButton == RIGHT){
-   console.log("skipping ahead 1 hour");
-   tank.skipAhead(60);
-  }
+  //if(mouseButton == RIGHT){
+  // console.log("skipping ahead 1 hour");
+  // tank.skipAhead(60);
+  //}
 }
 
 /**************************************************
