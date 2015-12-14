@@ -436,7 +436,6 @@ public class Tank{
     //do assignment after so that all calculations are accurate
     this.cmFish = cmFish;
     if(playMode != "casual_mode"){
-      console.log("got here");
       this.pH = pH;
       this.temp = temp;
       this.hardness = hardness;

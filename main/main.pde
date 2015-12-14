@@ -109,6 +109,7 @@ void draw(){
   tank.allEat();
   drawAllPlants();
   if(updateCount > 150){ //operations to happen every 5 seconds
+      console.log(tank.pH, tank.ammonia, tank.nitrosomonas, tank.co2);
       tank.progress();
       updateCount = 0;
     }
