@@ -18,6 +18,7 @@ window.setInterval(function(){
   	update_fish_stats();
   	update_achievements_stats();
   	update_fish_dropdown();
+  	update_species_stats();
   	write_to_local_storage();
 }, 2000)
 
@@ -86,6 +87,8 @@ function update_species_dropdown(){
 }
 
 function update_species_stats(){
+	var processing = Processing.getInstanceById('processing');
+	processing.populateSpeciesStats();
 	$('#species_stats_display').empty();
 	var selected_species = $('#species_list').find(':selected').val();
 	if(selected_species == 'select'){
@@ -426,16 +429,13 @@ $('#food_type').change(function(){
 	processing.setFloatingFood(boolValue);
 })
 
-$('#toggle_fast_mode').click(function(){
+$('input:radio').click(function(){
+	var mode = $(this).attr('value');
 	var processing = Processing.getInstanceById('processing');
-	var mode = processing.toggleFastMode();
-	if(mode){
-		update_button_text('toggle_fast_mode', 'Turn off Fast Mode');
-	}
-	else{
-		update_button_text('toggle_fast_mode', 'Turn on Fast Mode');
-	}
+	processing.setMode(mode);
 })
+
+
 
 $(document).ready(function() {
 	$(document).foundation({

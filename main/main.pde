@@ -34,7 +34,7 @@ Achievement rotateAchievement = null;
 Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
-boolean fastMode = false;
+String playMode = "normal_mode";
 
 void setup(){
   if(fieldY > fieldX){
@@ -497,55 +497,106 @@ public void mouseReleased(){
 public void populateSpeciesStats(){
   for(int i = 0; i < speciesList.size(); i++){
     Fish f = (Fish) speciesList.get(i);
-    species_stats[f.species] = {
-      "image url": f.sprite,
-      "Species:": f.species,
-      "Ease of care:": f.ease + "/5",
-      "Ammonia levels tolerated:": "0-" + f.ammonia + ' ppm',
-      "Nitrite levels tolerated:": "0-" + f.nitrite + ' ppm',
-      "Nitrate levels tolerated:": "0-" + f.nitrate + ' ppm',
-      "pH levels tolerated:": f.minPH + "-" + f.maxPH,
-      "Temperatures tolerated:": f.minTemp + "-" + f.maxTemp + ' °C',
-      "Hardness levels tolerated:": f.minHard + "-" + f.maxHard + ' dH'
-    };
+    if(playMode == "casual_mode"){
+      species_stats[f.species] = {
+        "image url": f.sprite,
+        "Species:": f.species,
+        "Ease of care:": f.ease + "/5",
+        "Ammonia levels tolerated:": "Disabled by casual mode",
+        "Nitrite levels tolerated:": "Disabled by casual mode",
+        "Nitrate levels tolerated:": "Disabled by casual mode",
+        "pH levels tolerated:": "Disabled by casual mode",
+        "Temperatures tolerated:": "Disabled by casual mode",
+        "Hardness levels tolerated:": "Disabled by casual mode"
+      };
+    }
+    else{
+      species_stats[f.species] = {
+        "image url": f.sprite,
+        "Species:": f.species,
+        "Ease of care:": f.ease + "/5",
+        "Ammonia levels tolerated:": "0-" + f.ammonia + ' ppm',
+        "Nitrite levels tolerated:": "0-" + f.nitrite + ' ppm',
+        "Nitrate levels tolerated:": "0-" + f.nitrate + ' ppm',
+        "pH levels tolerated:": f.minPH + "-" + f.maxPH,
+        "Temperatures tolerated:": f.minTemp + "-" + f.maxTemp + ' °C',
+        "Hardness levels tolerated:": f.minHard + "-" + f.maxHard + ' dH'
+      };
+    }
   }
 }
 
 public void updateTankStats(){
-  tank_stats.pH = tank.pH.toFixed(2);
-  tank_stats.temperature = tank.temp.toFixed(1) + ' °C';
-  tank_stats.hardness = tank.hardness.toFixed(2) + ' dH';
-  tank_stats.ammonia = tank.ammonia.toFixed(2) + ' ppm';
-  tank_stats.nitrite = tank.nitrite.toFixed(2) + ' ppm';
-  tank_stats.nitrate = tank.nitrate.toFixed(2) + ' ppm';
-  tank_stats.O2 = tank.o2.toFixed(1) + ' ppm';
-  tank_stats.CO2 = tank.co2.toFixed(1) + ' ppm';
-  tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(2) + 'M bacteria';
-  tank_stats.nitrobacter = tank.nitrobacter.toFixed(2) + 'M bacteria';
-  tank_stats.food = tank.food.size() + ' noms';
-  tank_stats.waste = tank.waste + ' poops';
+  if(playMode == "casual_mode"){
+    tank_stats.pH = "Disabled by casual mode.";
+    tank_stats.temperature = "Disabled by casual mode.";
+    tank_stats.hardness = "Disabled by casual mode.";
+    tank_stats.ammonia = "Disabled by casual mode.";
+    tank_stats.nitrite = "Disabled by casual mode.";
+    tank_stats.nitrate = "Disabled by casual mode.";
+    tank_stats.O2 = "Disabled by casual mode.";
+    tank_stats.CO2 = "Disabled by casual mode.";
+    tank_stats.nitrosomonas = "Disabled by casual mode.";
+    tank_stats.nitrobacter = "Disabled by casual mode.";
+    tank_stats.food = tank.food.size() + ' noms';
+    tank_stats.waste = tank.waste + ' poops';
+  }
+  else{
+    tank_stats.pH = tank.pH.toFixed(2);
+    tank_stats.temperature = tank.temp.toFixed(1) + ' °C';
+    tank_stats.hardness = tank.hardness.toFixed(2) + ' dH';
+    tank_stats.ammonia = tank.ammonia.toFixed(2) + ' ppm';
+    tank_stats.nitrite = tank.nitrite.toFixed(2) + ' ppm';
+    tank_stats.nitrate = tank.nitrate.toFixed(2) + ' ppm';
+    tank_stats.O2 = tank.o2.toFixed(1) + ' ppm';
+    tank_stats.CO2 = tank.co2.toFixed(1) + ' ppm';
+    tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(2) + 'M bacteria';
+    tank_stats.nitrobacter = tank.nitrobacter.toFixed(2) + 'M bacteria';
+    tank_stats.food = tank.food.size() + ' noms';
+    tank_stats.waste = tank.waste + ' poops';
+  }
 }
 
 public void updateFishStats(){
   fish_stats = {};
   for(int i = 0; i < tank.fish.size(); i++){
     Fish f = (Fish) (tank.fish.get(i));
-    fish_stats[f.name] = {
-      "Name": f.name,
-      "Ammonia": "0-" + f.ammonia.toFixed(1) + ' ppm',
-      "Species": f.species,
-      "Nitrite": "0-" + f.nitrite.toFixed(1) + ' ppm',
-      "image_url": f.sprite,
-      "Nitrate": "0-" + f.nitrate.toFixed(1) + ' ppm',
-      "Status": f.status,
-      "pH": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
-      "fullness": f.fullness,
-      "Temperatures": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
-      "health": f.health,
-      "Hardness": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
-      "max_health": f.maxHealth,
-      "max_fullness": f.maxFullness
-    };
+    if(playMode == "casual_mode"){
+      fish_stats[f.name] = {
+        "Name": f.name,
+        "Ammonia": "Disabled by casual mode",
+        "Species": f.species,
+        "Nitrite": "Disabled by casual mode",
+        "image_url": f.sprite,
+        "Nitrate": "Disabled by casual mode",
+        "Status": f.status,
+        "pH": "Disabled by casual mode",
+        "fullness": f.fullness,
+        "Temperatures": "Disabled by casual mode",
+        "health": f.health,
+        "Hardness": "Disabled by casual mode",
+        "max_health": f.maxHealth,
+        "max_fullness": f.maxFullness
+      };
+    }
+    else{
+      fish_stats[f.name] = {
+        "Name": f.name,
+        "Ammonia": "0-" + f.ammonia.toFixed(1) + ' ppm',
+        "Species": f.species,
+        "Nitrite": "0-" + f.nitrite.toFixed(1) + ' ppm',
+        "image_url": f.sprite,
+        "Nitrate": "0-" + f.nitrate.toFixed(1) + ' ppm',
+        "Status": f.status,
+        "pH": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
+        "fullness": f.fullness,
+        "Temperatures": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
+        "health": f.health,
+        "Hardness": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
+        "max_health": f.maxHealth,
+        "max_fullness": f.maxFullness
+      };
+    }
   }
 }
 
@@ -1073,7 +1124,8 @@ public HashMap localStorageInfo(){
   tankString += min(tank.poops.size(), 99) + "+";
   var date = new Date().getTime();
   tankString += date + "+";
-  tankString += tank.createdAt;
+  tankString += tank.createdAt + "+";
+  tankString += playMode;
   tankString = LZString.compressToUTF16(tankString);
   cookieInfo.put(tankStringPrefix, tankString);
   for(int i = 0; i < min(tank.fish.size(), maxFish); i++){
@@ -1171,13 +1223,13 @@ public void deleteAchievement(String name){
   }
 }
 
-public boolean toggleFastMode(){
-  fastMode = !fastMode;
-  if(fastMode){
+public String setMode(String mode){
+  playMode = mode;
+  if(mode == "fast_mode"){
     tank.timeScale = 1;
   }
   else{
     tank.timeScale = .01;
   }
-  return fastMode;
+  return playMode;
 }

@@ -90,7 +90,7 @@ public abstract class Fish {
     else if (this.status == "Hungry!") {
       this.health = max(0, this.health-(tank.timeScale*100*2));
     }
-    else {
+    else if(playMode != "casual_mode"){
      String problemElement = "";
      Iterator i = this.dangerRatings.entrySet().iterator();
      while (i.hasNext()) {
@@ -155,39 +155,39 @@ public abstract class Fish {
       this.status = "Hungry!";
       this.happySince = 0;
     }
-    else if(tank.ammonia > this.ammonia){
+    else if(tank.ammonia > this.ammonia && playMode != "casual_mode"){
       this.status = "Ammonia too high.";
       this.happySince = 0;
     }
-    else if(tank.nitrite > this.nitrite){
+    else if(tank.nitrite > this.nitrite && playMode != "casual_mode"){
       this.status = "Nitrite too high.";
       this.happySince = 0;
     }
-    else if(tank.nitrate > this.nitrate){
+    else if(tank.nitrate > this.nitrate && playMode != "casual_mode"){
       this.status = "Nitrate too high.";
       this.happySince = 0;
     }
-    else if(tank.pH < this.minPH){
+    else if(tank.pH < this.minPH && playMode != "casual_mode"){
       this.status = "pH too low.";
       this.happySince = 0;
     }
-    else if(tank.pH > this.maxPH){
+    else if(tank.pH > this.maxPH && playMode != "casual_mode"){
       this.status = "pH too high.";
       this.happySince = 0;
     }
-    else if(tank.temp < this.minTemp){
+    else if(tank.temp < this.minTemp && playMode != "casual_mode"){
       this.status = "Temperature too low.";
       this.happySince = 0;
     }
-    else if(tank.temp > this.maxTemp){
+    else if(tank.temp > this.maxTemp && playMode != "casual_mode"){
       this.status = "Temperature too high.";
       this.happySince = 0;
     }
-    else if(tank.hardness < this.minHard){
+    else if(tank.hardness < this.minHard && playMode != "casual_mode"){
       this.status = "Hardness too low.";
       this.happySince = 0;
     }
-    else if(tank.hardness > this.maxHard){
+    else if(tank.hardness > this.maxHard && playMode != "casual_mode"){
       this.status = "Hardness too high.";
       this.happySince = 0;
     }

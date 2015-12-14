@@ -192,10 +192,25 @@
 						</div>
 					<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Changing the water can help neutralize it, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.">
 						<button class="button round" id="perform_water_change">Change Water</button><br>
-					</span>
-					<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="This game moves in real time. Turn on fast mode to make it more entertaining to watch (stats change at 100x speed).">
-						<button class="button round" id="toggle_fast_mode">Turn on Fast Mode</button>
-					</span>
+					</span><br>
+					<form>
+						<b>Play Mode</b><br>
+						<div class="small-4 columns" style="padding-left:0; padding-right:0">
+							<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Turn off water chemistry simulation. Just feed your fish to keep them alive.">
+						 		<input type="radio" name="play_mode" value="casual_mode" id="casual_mode"> Casual 
+							</span>
+						</div>
+						<div class="small-4 columns" style="padding-left:0; padding-right:0">
+						 	<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Simulate water chemistry in real-time.">
+						 		<input type="radio"  name="play_mode" value="normal_mode" id="normal_mode"> Normal 
+							</span>
+						</div>
+						<div class="small-4 columns" style="padding-left:0; padding-right:0">
+						 	<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Hard mode, but more entertaining to watch. Stats change at 100x speed.">
+						 		<input type="radio" name="play_mode" value="fast_mode" id="fast_mode"> Fast 
+							</span>
+						</div>
+					</form>
 				</div>
 				<div class="small-4 columns">
 					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -379,12 +394,12 @@
 				<div class="small-4 columns">
 					<b>Changelog</b>
 					<table>
+						<tr><th>12/14/2015:</th><td>Added casual mode.</td></tr>
 						<tr><th>12/12/2015:</th><td>Added tooltips</td></tr>
 						<tr><th>12/12/2015:</th><td>Added "fast mode."</td></tr>
 						<tr><th>12/7/2015:</th><td>Added the Tiger Barb species</td></tr>
 						<tr><th>12/6/2015:</th><td>Added substrate as an achievement!</td></tr>
 						<tr><th>12/6/2015:</th><td>Added the Danio species</td></tr>
-						<tr><th>12/3/2015:</th><td>Added schooling behavior!</td></tr>
 					</table>	
 				</div>
 				<div class="small-4 columns">
