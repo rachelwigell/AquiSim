@@ -146,6 +146,15 @@ public class MysterySnail extends Fish{
       this.acceleration.z = new Vector3D(-.3, -.1*this.velocity.z, .3).centermost();
     }
   }
+  
+  public Vector3D hungerContribution() {
+    Vector3D nearestFood = tank.nearestFood(this.absolutePosition);
+    if (nearestFood == null) return new Vector3D(0, 0, 0);
+    nearestFood = nearestFood.addVector(new Vector3D(-zero.x, -zero.y, -zero.z));
+    float percent = max((.8-(max(this.fullness, 0)/((double) this.maxFullness)))*6, 0);
+    Vector3D normal = nearestFood.addVector(this.position.multiplyScalar(-1)).normalize();
+    return normal.multiplyScalar(percent/3);
+  }
 
   public void updateVelocity() {
     if(this.location == "FLOOR"){

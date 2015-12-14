@@ -674,7 +674,7 @@ public Waste removeWaste(Vector3D start, Vector3D end){
     if(hasSubstrate()){
       compare.y -= 16;
     }
-    if(raySphereIntersect(start, normal, compare, p.dimensions.x*3)){
+    if(raySphereIntersect(start, normal, compare, p.dimensions.x*2)){
       if(p.absolutePosition.z > z){
         z = p.absolutePosition.z;
         closest = p;

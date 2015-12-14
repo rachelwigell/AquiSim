@@ -40,6 +40,7 @@ public class SinkingFood extends Food{
     }
     if(this.position.y >= this.restingPosition.y && this.velocity.y > 0){
       this.velocity.y = 0;
+      this.position.y = this.restingPosition.y;
     }
   }
   
