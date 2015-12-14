@@ -429,6 +429,7 @@ public class Tank{
       float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate() + timeScale * achievementNitrate, 99).centermost();
       float nitrosomonas = new Vector3D(1, this.nitrosomonas + timeScale * this.changeNitrosomonas() + timeScale * achievementNitrosomonas, 9999).centermost();
       float nitrobacter = new Vector3D(1, this.nitrobacter + timeScale * this.changeNitrobacter() + timeScale * achievementNitrobacter, 9999).centermost();
+      console.log(pH, ammonia, nitrosomonas, co2);
     }
     int waste = this.waste + this.changeWaste();
     int time = this.getTime();
@@ -446,6 +447,7 @@ public class Tank{
       this.nitrate = nitrate;
       this.nitrosomonas = nitrosomonas;
       this.nitrobacter = nitrobacter;
+      console.log(this.pH, this.ammonia, this.nitrosomonas, this.co2);
     }
     this.waste = waste;
     this.time = time;
