@@ -159,7 +159,7 @@ function update_achievements_stats(){
 		}
 		else if(!achievement_info['used']){
 			if(selected_achievement == 'Vacuum'){
-				append_string += '<td>Congratulations! You earned the Vacuum. Click the button below, then click inside your tank to use it.</td></tr>';
+				append_string += '<td>Congratulations! You earned the Vacuum. Click the button below, then click and hold inside your tank to use it.</td></tr>';
 				update_button_text('add_reward', 'Use Vacuum');
 				update_button_text('cancel_reward_add', 'Stop Using Vacuum');
 			}
