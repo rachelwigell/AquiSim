@@ -129,9 +129,9 @@ function reward_button_visibility(){
 	var selected_achievement = $('#achievements_list').find(':selected').val();
 	var achievement_info = achievements_stats[selected_achievement];
 	var add_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && !achievement_info['used'];
-	var move_val = selected_achievement != 'select'&& selected_achievement != 'Substrate' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
-	var rotate_val = selected_achievement != 'select' && selected_achievement != 'Substrate' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
-	var delete_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var move_val = selected_achievement != 'select'&& selected_achievement != 'Substrate' && selected_achievement != 'Vacuum' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var rotate_val = selected_achievement != 'select' && selected_achievement != 'Substrate' && selected_achievement != 'Vacuum' && clickMode == 'DEFAULT' && achievement_info['earned'] && achievement_info['used'];
+	var delete_val = selected_achievement != 'select' && clickMode == 'DEFAULT' && selected_achievement != 'Vacuum' && achievement_info['earned'] && achievement_info['used'];
 	var cancel_add = selected_achievement != 'select' && clickMode == 'ADDACHIEVEMENT' && achievement_info['earned'] && !achievement_info['used'];
 	var cancel_move = selected_achievement != 'select' && clickMode == 'MOVEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
 	var cancel_rotate = selected_achievement != 'select' && clickMode == 'ROTATEACHIEVEMENT' && achievement_info['earned'] && achievement_info['used'];
@@ -158,8 +158,16 @@ function update_achievements_stats(){
 			 append_string += '<td>' + achievement_info['description'] + ' Earn this achievement by <b>' + achievement_info['condition'] + '.</b></td></tr>';
 		}
 		else if(!achievement_info['used']){
-			append_string += '<td>Congratulations! You earned the ' + achievement_info['reward'] + ' by ' + achievement_info['condition'] + '. You can add it to your tank now.</td></tr>';
-			update_button_text('add_reward', 'Add ' + achievement_info['reward']);
+			if(selected_achievement == 'Vacuum'){
+				append_string += '<td>Congratulations! You earned the Vacuum. Click the button below, then click inside your tank to use it.</td></tr>';
+				update_button_text('add_reward', 'Use Vacuum');
+				update_button_text('cancel_reward_add', 'Stop Using Vacuum');
+			}
+			else{
+				append_string += '<td>Congratulations! You earned the ' + achievement_info['reward'] + ' by ' + achievement_info['condition'] + '. You can add it to your tank now.</td></tr>';
+				update_button_text('add_reward', 'Add ' + achievement_info['reward']);
+				update_button_text('cancel_reward_add', 'Cancel Add');
+			}
 		}
 		else{
 			append_string += '<td>The ' + achievement_info['reward'] + ' is already in your tank. You can modify it with the buttons below.</td></tr>';
@@ -244,6 +252,11 @@ function accordion_defaults(new_user){
 	}
 }
 
+function enable_debug(){
+	var processing = Processing.getInstanceById('processing');
+	processing.enableDebugMode();
+}
+
 $('#fish_list').change(function(){
 	selected_fish = $('#fish_list').find(':selected').val();
 	update_fish_stats();
@@ -312,6 +325,9 @@ $('#new_plant').click(function(){
 $('#add_reward').click(function(){
 	var processing = Processing.getInstanceById('processing');
 	var achievement_type = $('#achievements_list').find(':selected').val();
+	if(achievement_type == "Vacuum"){
+		processing.toggleVacuum(true);
+	}
 	processing.createAchievementPreview(achievement_type);
 	reward_button_visibility();
 })
@@ -327,6 +343,10 @@ $('#cancel_plant_add').click(function(){
 
 $('#cancel_reward_add').click(function(){
 	var processing = Processing.getInstanceById('processing');
+	var achievement_type = $('#achievements_list').find(':selected').val();
+	if(achievement_type == "Vacuum"){
+		processing.toggleVacuum(false);
+	}
 	processing.cancelPlant();
 	reward_button_visibility();
 })

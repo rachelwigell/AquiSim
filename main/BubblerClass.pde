@@ -65,6 +65,9 @@ public class Bubbler extends Achievement{
       pushMatrix();
       translate(center.x, center.y, center.z);
       translate(this.position.x, this.position.y, this.position.z);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
       rotateY(this.orientation);
       scale(this.scaleVal, this.scaleVal, this.scaleVal);
       shape(this.rewardModel);

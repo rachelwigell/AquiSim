@@ -35,7 +35,9 @@ Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
 String playMode = "normal_mode";
+boolean vacuumEnabled = false;
 boolean vacuum = false;
+boolean debugMode = false;
 
 void setup(){
   if(fieldY > fieldX){
@@ -134,6 +136,7 @@ public void populateAchievementsList(){
   achievementsList.add(new ConchShell());
   achievementsList.add(new Bubbler());
   achievementsList.add(new Substrate());
+  achievementsList.add(new Vacuum());
 }
 
 public void determineBounds(){
@@ -387,6 +390,9 @@ public void mousePressed(){
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
     handleRewardRotateClick(x, y, start, end);
   }
+  if(clickMode == "ADDACHIEVEMENT" && vacuumEnabled){
+    vacuum = true;
+  }
 }
 
 public void mouseReleased(){
@@ -396,12 +402,15 @@ public void mouseReleased(){
   picker.calculatePickPoints(x,height-y);
   Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
   Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
-  if(clickMode == "DEFAULT"){
+  if(clickMode == "DEFAULT" && !vacuumEnabled){
     // first check whether waste was clicked on; if so, remove it
     wasteRemoved = handleWasteClick(start, end);
     if(!wasteRemoved){
       handleFoodClick(x, y, start, end);
     }
+  }
+  else if(clickMode == "ADDACHIEVEMENT" && vacuumEnabled){
+    vacuum = false;
   }
   else if(clickMode == "ADDPLANT"){
     if(mouseY > 2*fieldY/3){
@@ -485,10 +494,10 @@ public void mouseReleased(){
     }
     rotateAchievement = null;
   }
-  //if(mouseButton == RIGHT){
-  // console.log("skipping ahead 1 hour");
-  // tank.skipAhead(60);
-  //}
+  if(debugMode && mouseButton == RIGHT){
+    console.log("skipping ahead 1 hour");
+    tank.skipAhead(60);
+  }
 }
 
 /**************************************************
@@ -940,7 +949,7 @@ public boolean handleRewardMoveClick(int x, int y, Vector3D start, Vector3D end)
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.achievements.size(); i++){
     Achievement a = (Achievement) tank.achievements.get(i);
-    if(a.rewardName == "Substrate"){
+    if(a.rewardName == "Substrate" || a.rewardName == "Vacuum"){
       continue;
     }
     Vector3D movePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
@@ -981,7 +990,7 @@ public boolean handleRewardRotateClick(int x, int y, Vector3D start, Vector3D en
   Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
   for(int i = 0; i < tank.achievements.size(); i++){
     Achievement a = (Achievement) tank.achievements.get(i);
-    if(a.rewardName == "Substrate"){
+    if(a.rewardName == "Substrate" || a.rewardName == "Vacuum"){
       continue;
     }
     Vector3D rotatePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
@@ -1182,7 +1191,7 @@ public HashMap localStorageInfo(){
       if(!a.used){
         achievementString += "f";
       }
-      else if(a.rewardName != "Substrate"){
+      else if(a.rewardName != "Substrate" && a.rewardName != "Vacuum"){
         achievementString += "t+" + a.position.x + "+" + a.position.z + "+" + a.orientation + "";
       }
       else{
@@ -1233,4 +1242,13 @@ public String setMode(String mode){
     tank.timeScale = .01;
   }
   return playMode;
+}
+
+public void enableDebugMode(){
+  debugMode = true;
+}
+
+public boolean toggleVacuum(boolean val){
+  vacuumEnabled = val;
+  return vacuumEnabled;
 }

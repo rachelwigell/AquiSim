@@ -32,6 +32,7 @@ public class Poop extends Waste{
   }
   
   public void updateVelocity(){
+    this.velocity = new Vector3D(0, 1, 0);
     if(vacuum){
       float z = -fieldZ;
       picker.captureViewMatrix(fieldX, fieldY);
@@ -43,7 +44,7 @@ public class Poop extends Waste{
       Vector3D mousePos = start.addVector(normal.multiplyScalar(factor));
       if(mousePos.x > fieldX*.025 && mousePos.x < fieldX*.975 && mousePos.y < fieldY && mousePos.y > fieldY*(1-waterLevel)){
         float distBetween = mousePos.squareDistance(this.absolutePosition);
-        float magnitude = 5000/distBetween;
+        float magnitude = 50000/distBetween;
         if(distBetween < 1000){
           this.removeFromTank(tank);
         }

@@ -55,15 +55,18 @@ public class FloatingFood extends Food{
   }
   
   public void updateVelocity(){
-    if(this.position.y >= this.speedChangeLocation.y && this.velocity.y == 8){
+    if(this.position.y >= this.speedChangeLocation.y && (this.velocity.y == 8 || this.velocity.y == -.5)){
       this.velocity.y = -.5;
     }
-    else if(this.position.y <= this.speedChangeLocation.y && this.velocity.y < 0){
+    else if(this.position.y <= this.speedChangeLocation.y && this.velocity.y <= 0){
       this.velocity.y = 0;
     }
-    else if(this.position.y >= this.restingPosition.y && this.velocity.y > 0){
+    else if(this.position.y >= this.restingPosition.y && this.velocity.y >= 0){
       this.position.y = this.restingPosition.y;
       this.velocity.y = 0;
+    }
+    else if(this.position.y > this.speedChangeLocation.y){
+      this.velocity = new Vector3D(0, 1, 0);
     }
     if(vacuum && this.position.y >= this.speedChangeLocation.y){
       float z = -fieldZ;
@@ -76,7 +79,7 @@ public class FloatingFood extends Food{
       Vector3D mousePos = start.addVector(normal.multiplyScalar(factor));
       if(mousePos.x > fieldX*.025 && mousePos.x < fieldX*.975 && mousePos.y < fieldY && mousePos.y > fieldY*(1-waterLevel)){
         float distBetween = mousePos.squareDistance(this.absolutePosition);
-        float magnitude = 5000/distBetween;
+        float magnitude = 50000/distBetween;
         if(distBetween < 1000){
           this.removeFromTank(tank);
         }

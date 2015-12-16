@@ -223,6 +223,9 @@ public class Tank{
       else if(i == 3){
        this.achievements.add(new Substrate(achievementStats));
       }
+      else if(i == 4){
+        this.achievements.add(new Vacuum(achievementStats));
+      }
     }
   }
     
