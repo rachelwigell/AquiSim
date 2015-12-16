@@ -223,12 +223,18 @@ public abstract class Fish {
       this.acceleration.x = new Vector3D(-.8, this.acceleration.x+random(-.2, .2), 1).centermost();
       this.acceleration.y = new Vector3D(-.8, this.acceleration.y+random(-.2, .2), 1).centermost();
       this.acceleration.z = new Vector3D(-.8, this.acceleration.z+random(-.2, .2), 1).centermost();
+      this.regionPull();
     }
     else{
       this.acceleration.x = new Vector3D(-.8, -.1*this.velocity.x, .8).centermost();
       this.acceleration.y = new Vector3D(-.8, -.1*this.velocity.y, .8).centermost();
       this.acceleration.z = new Vector3D(-.8, -.1*this.velocity.z, .8).centermost();
     }
+  }
+  
+  public void regionPull() {
+    float pull = .001*random(0, 10)*abs(this.region) * (fieldY*waterLevel*this.region - this.position.y);
+    this.acceleration.y += pull;
   }
 
   public void updateVelocity() {
