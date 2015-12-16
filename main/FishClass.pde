@@ -223,7 +223,6 @@ public abstract class Fish {
       this.acceleration.x = new Vector3D(-.8, this.acceleration.x+random(-.2, .2), 1).centermost();
       this.acceleration.y = new Vector3D(-.8, this.acceleration.y+random(-.2, .2), 1).centermost();
       this.acceleration.z = new Vector3D(-.8, this.acceleration.z+random(-.2, .2), 1).centermost();
-      this.regionPull();
     }
     else{
       this.acceleration.x = new Vector3D(-.8, -.1*this.velocity.x, .8).centermost();
@@ -263,12 +262,7 @@ public abstract class Fish {
     Vector3D normal = nearestFood.addVector(this.position.multiplyScalar(-1)).normalize();
     return normal.multiplyScalar(percent);
   }
-
-  public void regionPull() {
-    float pull = .001*random(0, 10)*abs(this.region) * (fieldY*waterLevel*this.region - this.position.y);
-    this.acceleration.y += pull;
-  }
-
+  
   public void updateOrientationRelativeToVelocity() {
     Vector3D velocity = this.velocity;  
     double angle = asin(abs(velocity.z)/velocity.magnitude());

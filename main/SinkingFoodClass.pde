@@ -42,6 +42,32 @@ public class SinkingFood extends Food{
       this.velocity.y = 0;
       this.position.y = this.restingPosition.y;
     }
+    if(vacuum && this.position.y >= this.speedChangeLocation.y){
+      float z = -fieldZ;
+      picker.captureViewMatrix(fieldX, fieldY);
+      picker.calculatePickPoints(mouseX,height-mouseY);
+      Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+      Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+      Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+      float factor = (z-start.z)/normal.z;
+      Vector3D mousePos = start.addVector(normal.multiplyScalar(factor));
+      if(mousePos.x > fieldX*.025 && mousePos.x < fieldX*.975 && mousePos.y < fieldY && mousePos.y > fieldY*(1-waterLevel)){
+        float distBetween = mousePos.squareDistance(this.absolutePosition);
+        float magnitude = 5000/distBetween;
+        if(distBetween < 1000){
+          this.removeFromTank(tank);
+        }
+        if(magnitude < .1){
+          this.velocity = new Vector3D(0, 1, 0);
+        }
+        else{
+          this.velocity = this.velocity.addVector(mousePos.addVector(this.absolutePosition.multiplyScalar(-1)).normalize().multiplyScalar(min(magnitude, 500)));
+        }
+      }
+      else{
+        this.velocity = new Vector3D(0, 1, 0);
+      }
+    }
   }
   
   public void addToAppropriateList(tank t){

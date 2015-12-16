@@ -35,6 +35,7 @@ Vector3D zero = null;
 Vector3D center = null;
 boolean floatingFood = false;
 String playMode = "normal_mode";
+boolean vacuum = false;
 
 void setup(){
   if(fieldY > fieldX){

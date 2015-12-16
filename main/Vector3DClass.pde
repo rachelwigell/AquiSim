@@ -64,4 +64,8 @@ public class Vector3D {
   public boolean isEqual(Vector3D vector){
     return this.x == vector.x && this.y == vector.y && this.z == vector.z;
   }     
+  
+  public Vector3D multiplyVector(Vector3D vector){
+    return new Vector3D(this.x * vector.x, this.y*vector.y, this.z*vector.z);
+  }
 }
