@@ -248,7 +248,7 @@ public class Tank{
   }
   
   public float changePH(){
-    float pH = .001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
+    float pH = .002*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
     return pH;
   }
 
