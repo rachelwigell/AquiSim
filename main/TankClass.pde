@@ -368,7 +368,7 @@ public class Tank{
     }
   }
   
-  public void progress(){
+  public void progressFish(){
     //per fish operations
     for(int i = 0; i < this.fish.size(); i++){
       Fish f = (Fish) this.fish.get(i);
@@ -380,9 +380,15 @@ public class Tank{
       }
       this.handleDeceased(f); //check if fish is dead and perform necessary operations if so
     }
-    
+  }
+  
+  public void progressAchievements(){
     //achievement operations
     this.checkAchievementsFulfilled();
+  }
+  
+  public void progressTank(){
+    //tank operations
     if(playMode != "casual_mode"){
       float achievementPH = 0;
       float achievementTemp = 0;
@@ -418,8 +424,7 @@ public class Tank{
         }
       }
     }
-
-    //tank operations
+    
     if(playMode != "casual_mode"){
       float cmFish = this.changeFish();
       float pH = new Vector3D(.01, this.pH + timeScale * this.changePH() + timeScale * achievementPH, 13.99).centermost();
@@ -458,6 +463,12 @@ public class Tank{
       this.waste = waste;
       this.time = time;
     }
+  }
+  
+  public void progress(){
+    this.progressFish();
+    this.progressAchievements();
+    this.progressTank();
   }
   
   public Vector3D nearestFood(Vector3D absolutePosition){
@@ -522,7 +533,7 @@ public class Tank{
   }
   
   public boolean randomizedEating(Fish fish){
-    double percentChance = .005*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
+    double percentChance = .001*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
     float rand = random(0, 1);
     if(rand < percentChance){
       fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);

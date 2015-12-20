@@ -16,7 +16,6 @@ public int backMaxY = null;
 public int leftMinX = null;
 public int rightMaxX = null;
 public int sidesMaxY = null;
-public int updateCount = 0;
 public float waterLevel = .8;
 public int maxFish = 50;
 public int maxPlants = 30;
@@ -38,6 +37,7 @@ String playMode = "normal_mode";
 boolean vacuumEnabled = false;
 boolean vacuum = false;
 boolean debugMode = false;
+int dontUpdate = 0;
 
 void setup(){
   if(fieldY > fieldX){
@@ -46,7 +46,7 @@ void setup(){
     fieldX = temp;
   }
   size(fieldX, fieldY, P3D);
-  frameRate(30); //causes draw() to be called 30 times per second
+  frameRate(20); //causes draw() to be called 20 times per second
   sphereDetail(4);
   picker = new Selection_in_P3D_OPENGL_A3D();
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
@@ -111,11 +111,19 @@ void draw(){
   drawAllAchievements();
   tank.allEat();
   drawAllPlants();
-  if(updateCount > 150){ //operations to happen every 5 seconds
-      tank.progress();
-      updateCount = 0;
-    }
-  updateCount++;
+  int checkUpdate = int(new Date().getTime()/1000);
+  if(checkUpdate % 5 == 0 && checkUpdate != dontUpdate){ //operations to happen every 5 seconds
+    dontUpdate = checkUpdate;
+    tank.progressFish();
+  }
+  else if(checkUpdate % 5 == 3 && checkUpdate != dontUpdate){ //staggered for performance
+    dontUpdate = checkUpdate;
+    tank.progressAchievements();
+  }
+  else if(checkUpdate % 5 == 4 && checkUpdate != dontUpdate){
+    dontUpdate = checkUpdate;
+    tank.progressTank();
+  }
 }
 
 public void populateSpeciesList(){
