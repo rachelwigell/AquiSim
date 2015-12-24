@@ -7,7 +7,7 @@ public class FloatingFood extends Food{
     this.position = absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
     this.speedChangeLocation = new Vector3D(0, fieldY*(.5-waterLevel), 0);
     if(this.position.y <= speedChangeLocation.y){
-      this.velocity = new Vector3D(0, 8, 0);
+      this.velocity = new Vector3D(0, 6, 0);
     }
     else{
       this.velocity = new Vector3D(0, 1, 0);
@@ -35,7 +35,7 @@ public class FloatingFood extends Food{
     this.position = absolutePosition.addVector(new Vector3D(-center.x, -center.y, -center.z));
     this.speedChangeLocation = new Vector3D(0, fieldY*(.5-waterLevel), 0);
     if(this.position.y <= speedChangeLocation.y){
-      this.velocity = new Vector3D(0, 8, 0);
+      this.velocity = new Vector3D(0, 6, 0);
     }
     else{
       this.velocity = new Vector3D(0, 1, 0);
@@ -55,7 +55,7 @@ public class FloatingFood extends Food{
   }
   
   public void updateVelocity(){
-    if(this.position.y >= this.speedChangeLocation.y && (this.velocity.y == 8 || this.velocity.y == -.5)){
+    if(this.position.y >= this.speedChangeLocation.y && (this.velocity.y == 6 || this.velocity.y == -.5)){
       this.velocity.y = -.5;
     }
     else if(this.position.y <= this.speedChangeLocation.y && this.velocity.y <= 0){
@@ -90,7 +90,7 @@ public class FloatingFood extends Food{
           this.velocity = this.velocity.addVector(mousePos.addVector(this.absolutePosition.multiplyScalar(-1)).normalize().multiplyScalar(min(magnitude, 500)));
         }
       }
-      else if(this.position.y > this.speedChangeLocation.y+8){
+      else if(this.position.y > this.speedChangeLocation.y+6){
         this.velocity = new Vector3D(0, 1, 0);
       }
       else{

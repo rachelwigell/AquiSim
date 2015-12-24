@@ -117,9 +117,9 @@ public class MysterySnail extends Fish{
   }
   
   public void updatePosition() {
-    this.position.x = new Vector3D((-.475*fieldX), this.position.x+this.velocity.x, (.475*fieldX)).centermost();
-    this.position.y = new Vector3D((-.5*fieldY*waterLevel), this.position.y+this.velocity.y, (.5*fieldY*waterLevel)).centermost();
-    this.position.z = new Vector3D((-.5*fieldZ), this.position.z+this.velocity.z, (.5*fieldZ-this.dimensions.x/2.0)).centermost();
+    this.position.x = new Vector3D((-.475*fieldX), this.position.x+30/rate*this.velocity.x, (.475*fieldX)).centermost();
+    this.position.y = new Vector3D((-.5*fieldY*waterLevel), this.position.y+30/rate*this.velocity.y, (.5*fieldY*waterLevel)).centermost();
+    this.position.z = new Vector3D((-.5*fieldZ), this.position.z+30/rate*this.velocity.z, (.5*fieldZ-this.dimensions.x/2.0)).centermost();
     this.absolutePosition = this.position.addVector(new Vector3D(zero.x, zero.y, zero.z));
     this.updateVelocity();
   }

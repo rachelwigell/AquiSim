@@ -38,6 +38,7 @@ boolean vacuumEnabled = false;
 boolean vacuum = false;
 boolean debugMode = false;
 int dontUpdate = 0;
+int rate = 15;
 
 void setup(){
   if(fieldY > fieldX){
@@ -46,7 +47,7 @@ void setup(){
     fieldX = temp;
   }
   size(fieldX, fieldY, P3D);
-  frameRate(20); //causes draw() to be called 20 times per second
+  frameRate(rate); //causes draw() to be called 'rate' times per second
   sphereDetail(4);
   picker = new Selection_in_P3D_OPENGL_A3D();
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);

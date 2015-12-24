@@ -84,7 +84,7 @@ public class Bubbler extends Achievement{
         translate(bubble.x, bubble.y, bubble.z);
         sphere(3);
         popMatrix();
-        bubble.y -= 10;
+        bubble.y -= 300/rate;
         if(bubble.y <= (-fieldY*waterLevel)){
           this.bubbles.remove(bubble);
         }
