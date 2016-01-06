@@ -145,7 +145,7 @@ public abstract class Fish {
   }
 
   public long changeHunger() {
-    int hunger = (int) (tank.timeScale*100*this.size); //hunger changes relative to fish size
+    int hunger = (int) (tank.timeScale*100*this.size/1.5); //hunger changes relative to fish size
     this.fullness = Math.max(this.fullness - hunger, 0);
     return hunger;
   }

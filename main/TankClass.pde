@@ -533,7 +533,7 @@ public class Tank{
   }
   
   public boolean randomizedEating(Fish fish){
-    double percentChance = .001*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
+    double percentChance = .002*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
     float rand = random(0, 1);
     if(rand < percentChance){
       fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
