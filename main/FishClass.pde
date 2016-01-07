@@ -261,6 +261,10 @@ public abstract class Fish {
   }
 
   public Vector3D hungerContribution() {
+    if(this.fullness > .8*this.maxFullness){
+      //for performance, if this fish is not very hungry, skip this function
+      return new Vector3D(0, 0, 0);
+    }
     Vector3D nearestFood = tank.nearFood(this.absolutePosition);
     if (nearestFood == null) return new Vector3D(0, 0, 0);
     nearestFood = nearestFood.addVector(new Vector3D(-zero.x, -zero.y, -zero.z));
