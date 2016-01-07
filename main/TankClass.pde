@@ -490,7 +490,7 @@ public class Tank{
       return false;
     }
     if(fish.absolutePosition.distance(food.absolutePosition) < 40){
-      fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
+      fish.fullness = min(fish.fullness+fish.ease*2000, fish.maxFullness);
       return true;
     }
     return false;
@@ -536,7 +536,7 @@ public class Tank{
     double percentChance = .002*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
     float rand = random(0, 1);
     if(rand < percentChance){
-      fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
+      fish.fullness = min(fish.fullness+fish.ease*2000, fish.maxFullness);
       return true;
     }
     return false;
