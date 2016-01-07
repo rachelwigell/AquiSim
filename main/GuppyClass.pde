@@ -57,10 +57,10 @@ public class Guppy extends Fish{
       this.happySince = stats[11];
     }
     this.ease = 5;
-    this.maxHealth = this.ease*24*60*5;
+    this.maxHealth = this.ease*24*60*12;
     this.status = "Happy.";
-    this.maxFullness = this.ease*24*60*5;
     this.size = 5;
+    this.maxFullness = this.ease*this.size*24*60*12;
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;
