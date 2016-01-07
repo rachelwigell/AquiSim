@@ -3,12 +3,12 @@ public class NeonTetra extends Fish{
     this.species = "Neon Tetra";
     this.name = name;
     this.ease = 4;
-    this.maxHealth = this.ease*24*60*5;
+    this.maxHealth = this.ease*24*60*12;
     this.health = this.maxHealth;
     this.status = "Happy.";
-    this.maxFullness = this.ease*24*60*5;
-    this.fullness = this.maxFullness;
     this.size = 4;
+    this.maxFullness = this.ease*this.size*24*60*12;
+    this.fullness = this.maxFullness;
     this.minPH = 5;
     this.maxPH = 7.5;
     this.minTemp = 20;

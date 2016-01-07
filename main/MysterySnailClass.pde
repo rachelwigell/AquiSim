@@ -5,12 +5,12 @@ public class MysterySnail extends Fish{
     this.species = "Mystery Snail";
     this.name = name;
     this.ease = 5;
-    this.maxHealth = this.ease*24*60*5;
+    this.maxHealth = this.ease*24*60*12;
     this.health = this.maxHealth;
     this.status = "Happy.";
-    this.maxFullness = this.ease*24*60*5;
-    this.fullness = this.maxFullness;
     this.size = 5;
+    this.maxFullness = this.ease*this.size*24*60*12;
+    this.fullness = this.maxFullness;
     this.minPH = 7;
     this.maxPH = 8.5;
     this.minTemp = 18;
