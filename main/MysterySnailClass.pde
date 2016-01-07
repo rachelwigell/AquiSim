@@ -9,7 +9,7 @@ public class MysterySnail extends Fish{
     this.health = this.maxHealth;
     this.status = "Happy.";
     this.size = 5;
-    this.maxFullness = this.ease*this.size*24*60*12;
+    this.maxFullness = this.ease*this.size*24*60*3;
     this.fullness = this.maxFullness;
     this.minPH = 7;
     this.maxPH = 8.5;
@@ -44,10 +44,15 @@ public class MysterySnail extends Fish{
   //constructor for load
   public MysterySnail(String[] stats, boolean alive){
     this.species = "Mystery Snail";
+    this.ease = 5;
+    this.maxHealth = this.ease*24*60*12;
+    this.status = "Happy.";
+    this.size = 5;
+    this.maxFullness = this.ease*this.size*24*60*3;
     if(alive){
       this.name = stats[1];
-      this.health = float(stats[2]);
-      this.fullness = float(stats[3]);
+      this.health = min(float(stats[2]), this.maxHealth);
+      this.fullness = min(float(stats[3]), this.maxFullness);
       this.minTemp = float(stats[4]);
       this.maxTemp = float(stats[5]);
       this.minHard = float(stats[6]);
@@ -57,11 +62,6 @@ public class MysterySnail extends Fish{
       this.aliveSince = stats[10];
       this.happySince = stats[11];
     }
-    this.ease = 5;
-    this.maxHealth = this.ease*24*60*12;
-    this.status = "Happy.";
-    this.size = 5;
-    this.maxFullness = this.ease*this.size*24*60*12;
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;

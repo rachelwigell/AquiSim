@@ -7,7 +7,7 @@ public class NeonTetra extends Fish{
     this.health = this.maxHealth;
     this.status = "Happy.";
     this.size = 4;
-    this.maxFullness = this.ease*this.size*24*60*12;
+    this.maxFullness = this.ease*this.size*24*60*3;
     this.fullness = this.maxFullness;
     this.minPH = 5;
     this.maxPH = 7.5;
@@ -43,10 +43,15 @@ public class NeonTetra extends Fish{
   //constructor for load
   public NeonTetra(String[] stats, boolean alive){
     this.species = "Neon Tetra";
+    this.ease = 4;
+    this.maxHealth = this.ease*24*60*12;
+    this.status = "Happy.";
+    this.size = 4;
+    this.maxFullness = this.ease*this.size*24*60*3;
     if(alive){
       this.name = stats[1];
-      this.health = float(stats[2]);
-      this.fullness = float(stats[3]);
+      this.health = min(float(stats[2]), this.maxHealth);
+      this.fullness = min(float(stats[3]), this.maxFullness);
       this.minTemp = float(stats[4]);
       this.maxTemp = float(stats[5]);
       this.minHard = float(stats[6]);
@@ -56,11 +61,6 @@ public class NeonTetra extends Fish{
       this.aliveSince = stats[10];
       this.happySince = stats[11];
     }
-    this.ease = 4;
-    this.maxHealth = this.ease*24*60*12;
-    this.status = "Happy.";
-    this.size = 4;
-    this.maxFullness = this.ease*this.size*24*60*12;
     this.ammonia = 0.05;
     this.nitrite = 0.1;
     this.nitrate = 25;

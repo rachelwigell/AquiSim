@@ -505,7 +505,9 @@ public void mouseReleased(){
   }
   if(debugMode && mouseButton == RIGHT){
     console.log("skipping ahead 1 hour");
+    tank.timeScale = .12;
     tank.skipAhead(60);
+    tank.timeScale = .01;
   }
 }
 

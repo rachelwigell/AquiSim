@@ -471,7 +471,7 @@ public class Tank{
     this.progressTank();
   }
   
-  public Vector3D nearestFood(Vector3D absolutePosition){
+  public Vector3D nearFood(Vector3D absolutePosition){
     Vector3D closest = null;
     float distance = MAX_FLOAT;
     for(int i = 0; i < this.food.size(); i++){
@@ -480,6 +480,12 @@ public class Tank{
       if(fDistance < distance){
         distance = fDistance;
         closest = f.absolutePosition;
+      }
+      if(distance < 50){
+        //to increase performance (e.g. if there is a lot of food in the tank)
+        //we don't necessarily have to go to the very closest food. if we've found
+        //food less than 50 units away, that's good enough.
+        break;
       }
     }
     return closest;
@@ -490,7 +496,7 @@ public class Tank{
       return false;
     }
     if(fish.absolutePosition.distance(food.absolutePosition) < 40){
-      fish.fullness = min(fish.fullness+fish.ease*4000, fish.maxFullness);
+      fish.fullness = min(fish.fullness+fish.ease*2200, fish.maxFullness);
       return true;
     }
     return false;
@@ -536,7 +542,7 @@ public class Tank{
     double percentChance = .002*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
     float rand = random(0, 1);
     if(rand < percentChance){
-      fish.fullness = min(fish.fullness+fish.ease*4000, fish.maxFullness);
+      fish.fullness = min(fish.fullness+fish.ease*2200, fish.maxFullness);
       return true;
     }
     return false;
