@@ -48,7 +48,6 @@ void setup(){
   }
   size(fieldX, fieldY, P3D);
   frameRate(rate); //causes draw() to be called 'rate' times per second
-  sphereDetail(4);
   picker = new Selection_in_P3D_OPENGL_A3D();
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
@@ -274,98 +273,10 @@ public void drawAllWaste(){
   }
 }
 
-public void drawStack(Plant plant){
-  strokeWeight(5-plant.level);
-  line(plant.path.start.x, plant.path.start.y, plant.path.start.z,
-    plant.path.end.x, plant.path.end.y, plant.path.end.z);
-  if(plant.level < 3){
-    for(int i = 0; i < plant.numBranches; i++){
-      Plant b = (Plant) plant.branches[i];
-      drawStack(b);
-    }
-  }
-}
-
-public void drawPlant(Plant plant){
-  for(int j = 0; j < 3; j++){
-    stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
-    pushMatrix();
-    translate(center.x, center.y, center.z);
-    translate(plant.position.x, plant.position.y, plant.position.z);
-    rotateY(plant.orientation);
-    drawStack(plant.stack[j]);
-    if(clickMode == "DELETEPLANT"){
-      rotateY(-plant.orientation);
-      if(hasSubstrate()){
-        translate(0, -16, 0);
-      }
-      pushMatrix();
-      fill(100, 100, 100);
-      stroke(230, 10, 20);
-      strokeWeight(2);
-      translate(0, -1, 0);
-      rotateX(PI/2);
-      ellipse(0, 0, 60, 60);
-      popMatrix();
-      line(-20, -2, 20, 20, -2, -20);
-      line(20, -2, 20, -20, -2, -20);
-    }
-    else if(clickMode == "MOVEPLANT"){
-      rotateY(-plant.orientation);
-      if(hasSubstrate()){
-        translate(0, -16, 0);
-      }
-      pushMatrix();
-      fill(100, 100, 100);
-      stroke(230, 10, 20);
-      strokeWeight(2);
-      translate(0, -1, 0);
-      rotateX(PI/2);
-      ellipse(0, 0, 60, 60);
-      popMatrix();
-      line(-30, -1, 0, -50, -1, 0);
-      line(-50, -1, 0, -40, -1, 10);
-      line(-50, -1, 0, -40, -1, -10);
-      line(30, -1, 0, 50, -1, 0);
-      line(50, -1, 0, 40, -1, 10);
-      line(50, -1, 0, 40, -1, -10);
-      line(0, -1, 30, 0, -1, 50);
-      line(0, -1, 50, 10, -1, 40);
-      line(0, -1, 50, -10, -1, 40);
-      line(0, -1, -30, 0, -1, -50);
-      line(0, -1, -50, 10, -1, -40);
-      line(0, -1, -50, -10, -1, -40);
-    }
-    else if(clickMode == "ROTATEPLANT"){
-      rotateY(-plant.orientation);
-      if(hasSubstrate()){
-        translate(0, -16, 0);
-      }
-      pushMatrix();
-      fill(100, 100, 100);
-      stroke(230, 10, 20);
-      strokeWeight(2);
-      translate(0, -1, 0);
-      rotateX(PI/2);
-      ellipse(0, 0, 60, 60);
-      popMatrix();
-      line(-30, 0, 0, -40, 0, -10);
-      line(-30, 0, 0, -20, 0, -10);
-      line(30, 0, 0, 20, 0, 10);
-      line(30, 0, 0, 40, 0, 10);
-      line(0, 0, -30, 10, 0, -40);
-      line(0, 0, -30, 10, 0, -20);
-      line(0, 0, 30, -10, 0, 40);
-      line(0, 0, 30, -10, 0, 20);
-    }
-    popMatrix();
-  }
-}
-
 public void drawAllPlants(){
   for(int i = 0; i < tank.plants.size(); i++){
     Plant plant = (Plant) tank.plants.get(i);
-    drawPlant(plant);
+    plant.drawPlant();
   }
   if(previewPlant != null && mouseY > 2*fieldY/3){
     picker.captureViewMatrix(fieldX, fieldY);
@@ -373,7 +284,7 @@ public void drawAllPlants(){
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
     previewPlant.changePosition(start, end);
-    drawPlant(previewPlant);
+    previewPlant.drawPlant();
   }
   if(clickMode == "ROTATEPLANT" && rotatePlant != null && mousePressed){
     rotatePlant.orientation+=.05;
@@ -835,7 +746,13 @@ public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNorma
 
 public void createPlantPreview(){
   clickMode = "ADDPLANT";
-  previewPlant = new Plant();
+  float type = random(0, 2);
+  if(type < 1){
+    previewPlant = new SpindlePlant();
+  }
+  else{
+    previewPlant = new LeafPlant();
+  }
 }
 
 public void createAchievementPreview(String type){

@@ -78,6 +78,7 @@ public class Bubbler extends Achievement{
       if(chance <= 2){
         this.bubbles.add(new Vector3D(random(-this.scaleVal, this.scaleVal), 0, random(-this.scaleVal, this.scaleVal)));
       }
+      sphereDetail(4);
       for(int i = 0; i < this.bubbles.size(); i++){
         Vector3D bubble = (Vector3D) this.bubbles.get(i);
         pushMatrix();

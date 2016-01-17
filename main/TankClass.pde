@@ -194,12 +194,33 @@ public class Tank{
      cookie = localStorage.getItem("p" + i);
      if(cookie != "" && cookie != null){
        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-       this.plants.add(new Plant(plantStats[6],
+       if(plantStats.length > 7){
+         String type = plantStats[7];
+         if(type == "Spindle"){
+           this.plants.add(new SpindlePlant(plantStats[6],
                        new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
                        new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
                        fieldY-center.y,
                        new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
                        float(plantStats[5])));
+         }
+         else if(type == "Leaf"){
+           this.plants.add(new LeafPlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+         }
+       }
+       else{
+         this.plants.add(new SpindlePlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+       }
      }
     }
     this.achievements = new ArrayList();
