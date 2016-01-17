@@ -96,78 +96,78 @@ public class LeafPlant extends Plant{
     sphereDetail(6);
     noStroke();
     fill(this.RGBcolor.x, this.RGBcolor.y, this.RGBcolor.z);
+    pushMatrix();
+    translate(center.x, center.y, center.z);
+    translate(this.position.x, this.position.y, this.position.z);
+    rotateY(this.orientation);
     for(int j = 0; j < 3; j++){
-      pushMatrix();
-      translate(center.x, center.y, center.z);
-      translate(this.position.x, this.position.y, this.position.z);
-      rotateY(this.orientation);
       this.stack[j].drawStack(true);
-      if(clickMode == "DELETEPLANT"){
-        rotateY(-this.orientation);
-        if(hasSubstrate()){
-          translate(0, -16, 0);
-        }
-        pushMatrix();
-        fill(100, 100, 100);
-        stroke(230, 10, 20);
-        strokeWeight(2);
-        translate(0, -1, 0);
-        rotateX(PI/2);
-        ellipse(0, 0, 60, 60);
-        popMatrix();
-        line(-20, -2, 20, 20, -2, -20);
-        line(20, -2, 20, -20, -2, -20);
-      }
-      else if(clickMode == "MOVEPLANT"){
-        rotateY(-this.orientation);
-        if(hasSubstrate()){
-          translate(0, -16, 0);
-        }
-        pushMatrix();
-        fill(100, 100, 100);
-        stroke(230, 10, 20);
-        strokeWeight(2);
-        translate(0, -1, 0);
-        rotateX(PI/2);
-        ellipse(0, 0, 60, 60);
-        popMatrix();
-        line(-30, -1, 0, -50, -1, 0);
-        line(-50, -1, 0, -40, -1, 10);
-        line(-50, -1, 0, -40, -1, -10);
-        line(30, -1, 0, 50, -1, 0);
-        line(50, -1, 0, 40, -1, 10);
-        line(50, -1, 0, 40, -1, -10);
-        line(0, -1, 30, 0, -1, 50);
-        line(0, -1, 50, 10, -1, 40);
-        line(0, -1, 50, -10, -1, 40);
-        line(0, -1, -30, 0, -1, -50);
-        line(0, -1, -50, 10, -1, -40);
-        line(0, -1, -50, -10, -1, -40);
-      }
-      else if(clickMode == "ROTATEPLANT"){
-        rotateY(-this.orientation);
-        if(hasSubstrate()){
-          translate(0, -16, 0);
-        }
-        pushMatrix();
-        fill(100, 100, 100);
-        stroke(230, 10, 20);
-        strokeWeight(2);
-        translate(0, -1, 0);
-        rotateX(PI/2);
-        ellipse(0, 0, 60, 60);
-        popMatrix();
-        line(-30, 0, 0, -40, 0, -10);
-        line(-30, 0, 0, -20, 0, -10);
-        line(30, 0, 0, 20, 0, 10);
-        line(30, 0, 0, 40, 0, 10);
-        line(0, 0, -30, 10, 0, -40);
-        line(0, 0, -30, 10, 0, -20);
-        line(0, 0, 30, -10, 0, 40);
-        line(0, 0, 30, -10, 0, 20);
-      }
-      popMatrix();
     }
+    if(clickMode == "DELETEPLANT"){
+      rotateY(-this.orientation);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
+      pushMatrix();
+      fill(100, 100, 100);
+      stroke(230, 10, 20);
+      strokeWeight(2);
+      translate(0, -1, 0);
+      rotateX(PI/2);
+      ellipse(0, 0, 60, 60);
+      popMatrix();
+      line(-20, -2, 20, 20, -2, -20);
+      line(20, -2, 20, -20, -2, -20);
+    }
+    else if(clickMode == "MOVEPLANT"){
+      rotateY(-this.orientation);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
+      pushMatrix();
+      fill(100, 100, 100);
+      stroke(230, 10, 20);
+      strokeWeight(2);
+      translate(0, -1, 0);
+      rotateX(PI/2);
+      ellipse(0, 0, 60, 60);
+      popMatrix();
+      line(-30, -1, 0, -50, -1, 0);
+      line(-50, -1, 0, -40, -1, 10);
+      line(-50, -1, 0, -40, -1, -10);
+      line(30, -1, 0, 50, -1, 0);
+      line(50, -1, 0, 40, -1, 10);
+      line(50, -1, 0, 40, -1, -10);
+      line(0, -1, 30, 0, -1, 50);
+      line(0, -1, 50, 10, -1, 40);
+      line(0, -1, 50, -10, -1, 40);
+      line(0, -1, -30, 0, -1, -50);
+      line(0, -1, -50, 10, -1, -40);
+      line(0, -1, -50, -10, -1, -40);
+    }
+    else if(clickMode == "ROTATEPLANT"){
+      rotateY(-this.orientation);
+      if(hasSubstrate()){
+        translate(0, -16, 0);
+      }
+      pushMatrix();
+      fill(100, 100, 100);
+      stroke(230, 10, 20);
+      strokeWeight(2);
+      translate(0, -1, 0);
+      rotateX(PI/2);
+      ellipse(0, 0, 60, 60);
+      popMatrix();
+      line(-30, 0, 0, -40, 0, -10);
+      line(-30, 0, 0, -20, 0, -10);
+      line(30, 0, 0, 20, 0, 10);
+      line(30, 0, 0, 40, 0, 10);
+      line(0, 0, -30, 10, 0, -40);
+      line(0, 0, -30, 10, 0, -20);
+      line(0, 0, 30, -10, 0, 40);
+      line(0, 0, 30, -10, 0, 20);
+    }
+    popMatrix();
   }
   
   // 4 args (for loading)
