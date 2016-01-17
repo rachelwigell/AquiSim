@@ -212,6 +212,14 @@ public class Tank{
                        new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
                        float(plantStats[5])));
          }
+         else if(type == "Skeletal"){
+           this.plants.add(new SkeletalPlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+         }
        }
        else{
          this.plants.add(new SpindlePlant(plantStats[6],
