@@ -349,7 +349,7 @@ public abstract class Fish {
       toward = toward.addVector(this.position.multiplyScalar(-1)).normalize();
       //schoolingCoefficient is the "strength" of the pull, different for each species
       //also dependent upon the distance from the leader - when far away, move faster
-      this.velocity = this.velocity.addVector(toward.multiplyScalar(.008 * sqrt(distance) * this.schoolingCoefficient));
+      this.velocity = this.velocity.addVector(toward.multiplyScalar(this.schoolingCoefficient));
     }
   }
 }
