@@ -8,7 +8,7 @@ public class CherryShrimp extends Fish{
     this.status = "Happy.";
     this.size = 3;
     this.maxFullness = this.ease*this.size*24*60*3;
-    this.fullness = this.maxFullness;
+    this.fullness = this.maxFullness/2;
     this.minPH = 7;
     this.maxPH = 8;
     this.minTemp = 15;

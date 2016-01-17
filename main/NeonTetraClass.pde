@@ -8,7 +8,7 @@ public class NeonTetra extends Fish{
     this.status = "Happy.";
     this.size = 4;
     this.maxFullness = this.ease*this.size*24*60*3;
-    this.fullness = this.maxFullness;
+    this.fullness = this.maxFullness/2;
     this.minPH = 5;
     this.maxPH = 7.5;
     this.minTemp = 20;

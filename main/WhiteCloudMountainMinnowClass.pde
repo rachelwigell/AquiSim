@@ -8,7 +8,7 @@ public class WhiteCloudMountainMinnow extends Fish{
     this.status = "Happy.";
     this.size = 4;
     this.maxFullness = this.ease*this.size*24*60*3;
-    this.fullness = this.maxFullness;
+    this.fullness = this.maxFullness/2;
     this.minPH = 6;
     this.maxPH = 8.5;
     this.minTemp = 7;
