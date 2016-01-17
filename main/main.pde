@@ -753,8 +753,11 @@ public void createPlantPreview(){
   else if(type < 2){
     previewPlant = new LeafPlant();
   }
-  else{
+  else if(type < 3){
     previewPlant = new SkeletalPlant();
+  }
+  else{
+    previewPlant = new MossPlant();
   }
 }
 
