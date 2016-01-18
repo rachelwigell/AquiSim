@@ -746,7 +746,7 @@ public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNorma
 
 public void createPlantPreview(){
   clickMode = "ADDPLANT";
-  float type = random(0, 3);
+  float type = random(0, 4);
   if(type < 1){
     previewPlant = new SpindlePlant();
   }
