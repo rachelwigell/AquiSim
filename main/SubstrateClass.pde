@@ -70,7 +70,7 @@ public class Substrate extends Achievement{
   
   public HashMap tankEffects(){
     HashMap effects = new HashMap();
-    effects.put("hardness", .001);
+    effects.put("hardness", .0002);
     return effects;
   }
   
