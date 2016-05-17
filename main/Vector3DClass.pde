@@ -55,7 +55,17 @@ public class Vector3D {
     return (float) (this.x*vector.x + this.y*vector.y + this.z*vector.z);
   }
   
+  public Vector3D crossProduct(Vector3D vector){
+    return new Vector3D(this.y * vector.z - vector.y * this.z,
+                        this.z * vector.x - vector.z * this.x,
+                        this.x * vector.y - vector.x * this.y);
+  }
+  
   public boolean isEqual(Vector3D vector){
     return this.x == vector.x && this.y == vector.y && this.z == vector.z;
   }     
+  
+  public Vector3D multiplyVector(Vector3D vector){
+    return new Vector3D(this.x * vector.x, this.y*vector.y, this.z*vector.z);
+  }
 }

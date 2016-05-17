@@ -9,12 +9,20 @@ public abstract class Waste {
 
   public void updatePosition() {
     this.updateVelocity();
-    this.position = this.position.addVector(velocity);
-    this.absolutePosition = this.absolutePosition.addVector(velocity);
+    if(this.position.y < fieldY*(.5-waterLevel) && this.velocity.y > 0){
+      this.position = this.position.addVector(this.velocity.multiplyScalar(30/rate));
+    }
+    else{
+      this.position = new Vector3D(new Vector3D(-.475*fieldX, this.position.x + 30/rate*this.velocity.x, .475*fieldX).centermost(),
+                                   new Vector3D(fieldY*(.5-waterLevel), this.position.y + 30/rate*this.velocity.y, .5*fieldY).centermost(),
+                                   new Vector3D(-.5*fieldZ, this.position.z + 30/rate*this.velocity.z, .5*fieldZ).centermost());
+    }
+    this.absolutePosition = this.position.addVector(center);
   }
 
   public void removeFromTank(Tank t) {}
   
   public void updateVelocity(){}
+  
+  public void drawWaste(){}
 }
-

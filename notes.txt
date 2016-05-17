@@ -1,7 +1,0 @@
-add acclimation - fish slowly used to current water properties; at risk if sudden changes occur. Have their happy ranges slowly change toward the current environment
-
-gameify - achievements, unlockable species, etc.
-
-health is always either slowly increasing or decreasing, depending on if fish are happy with their conditions or not. Health decreases faster for some issues than others (i.e. ammonia too high > nitrate too high)
-
-Room temperature varies with time of day (see co2 and o2 for reference)

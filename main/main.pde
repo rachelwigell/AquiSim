@@ -2,12 +2,13 @@
  * INITIALIZE *
  **************************************************/
 
-public final static int fieldX = window.screen.availWidth-100;
-public final static int fieldY = window.screen.availHeight-100;
+public final static int fieldX = window.screen.availWidth-10;
+public final static int fieldY = window.screen.availHeight-10;
 public final static int fieldZ = (fieldX*.1+fieldY*.1);
 
 public Tank tank;
 public ArrayList speciesList = new ArrayList();
+public ArrayList achievementsList = new ArrayList();
 public Selection_in_P3D_OPENGL_A3D picker;
 public int backMinX = null;
 public int backMaxX = null;
@@ -15,70 +16,135 @@ public int backMaxY = null;
 public int leftMinX = null;
 public int rightMaxX = null;
 public int sidesMaxY = null;
-public int updateCount = 0;
 public float waterLevel = .8;
+public int maxFish = 50;
+public int maxPlants = 30;
 
 tank_stats =  {};
 fish_stats = {};
 species_stats = {};
+achievements_stats = {};
 
 String clickMode = "DEFAULT";
 Plant previewPlant = null;
+Plant rotatePlant = null;
+Achievement previewAchievement = null;
+Achievement rotateAchievement = null;
 Vector3D zero = null;
 Vector3D center = null;
+boolean floatingFood = false;
+String playMode = "normal_mode";
+boolean vacuumEnabled = false;
+boolean vacuum = false;
+boolean debugMode = false;
+int dontUpdate = 0;
+int rate = 15;
 
 void setup(){
+  if(fieldY > fieldX){
+    int temp = fieldY;
+    fieldY = fieldX;
+    fieldX = temp;
+  }
   size(fieldX, fieldY, P3D);
-  frameRate(30); //causes draw() to be called 30 times per second
+  frameRate(rate); //causes draw() to be called 'rate' times per second
   picker = new Selection_in_P3D_OPENGL_A3D();
   zero = new Vector3D(fieldX/2, fieldY*(1-.5*waterLevel), -fieldZ);
   center = new Vector3D(fieldX/2, fieldY/2, -fieldZ);
   
-  cookie = get_cookie("t");
-  if(cookie == ""){
+  populateAchievementsList();
+  
+  String cookie = localStorage.getItem("t");
+  if(cookie == "" || cookie == null){
     tank = new Tank();
     accordion_defaults(true);
   }
   else{
-    tank = new Tank(cookie);
-    accordion_defaults(false);
+    try{
+      tank = new Tank(cookie);
+      accordion_defaults(false);
+      cookie = LZString.decompressFromUTF16(cookie);
+      String[] stats = splitTokens(cookie, "+");
+      long now = new Date().getTime();
+      long lastSave = stats[13];
+      int elapsedMinutes = int((now - lastSave)/60000);
+      //if it's been more than a month, their tank will take forever to load
+      //all their fish would be dead anyway. just reset
+      if(elapsedMinutes < 43200){
+        tank.timeScale = .12;
+        tank.skipAhead(elapsedMinutes);
+        tank.timeScale = .01;
+      }
+      else{
+        tank = new Tank();
+      }
+    }
+    catch(Exception e){
+      tank = new Tank();
+    }
   }
   
   populateSpeciesList();
   populateSpeciesStats();
+  updateAchievementsStats();
   update_tank_stats();
   update_fish_dropdown();
   update_fish_stats();
   update_species_dropdown();
   update_species_stats();
-  handle_add_plant();
-  handle_move_plant();
-  handle_delete_plant();
+  update_achievements_dropdown();
+  update_achievements_stats();
+  handle_plant_buttons();
+  floatingFood = !$('#food_type').is(":checked");
   
   determineBounds();
-  
-  //addFishToTank("Guppy", "Swimmy");
 }
 
 void draw(){
-  Vector3D bcolor = backgroundColor();
-  background(bcolor.x, bcolor.y, bcolor.z);
+  background(0);
   int spotColor = spotlightColor();
   ambientLight(spotColor, spotColor, spotColor);
+  spotLight(spotColor/4, spotColor/4, spotColor/4, fieldX/4, 0, fieldZ, 0, 0, -1, PI/2, 0);
   drawTank();
   drawAllFish();
   drawAllWaste();
+  drawAllAchievements();
   tank.allEat();
   drawAllPlants();
-  if(updateCount > 150){ //operations to happen every 5 seconds
-      tank.progress();
-      updateCount = 0;
-    }
-  updateCount++;
+  int checkUpdate = int(new Date().getTime()/1000);
+  if(checkUpdate % 5 == 0 && checkUpdate != dontUpdate){ //operations to happen every 5 seconds
+    dontUpdate = checkUpdate;
+    tank.progressFish();
+  }
+  else if(checkUpdate % 5 == 3 && checkUpdate != dontUpdate){ //staggered for performance
+    dontUpdate = checkUpdate;
+    tank.progressAchievements();
+  }
+  else if(checkUpdate % 5 == 4 && checkUpdate != dontUpdate){
+    dontUpdate = checkUpdate;
+    tank.progressTank();
+  }
 }
 
 public void populateSpeciesList(){
   speciesList.add(new Guppy("Swimmy"));
+  speciesList.add(new NeonTetra("Swimmy"));
+  speciesList.add(new CherryBarb("Swimmy"));
+  speciesList.add(new WhiteCloudMountainMinnow("Swimmy"));
+  speciesList.add(new CherryShrimp("Swimmy"));
+  speciesList.add(new MysterySnail("Swimmy"));
+  speciesList.add(new CoryCatfish("Swimmy"));
+  speciesList.add(new Platy("Swimmy"));
+  speciesList.add(new Danio("Swimmy"));
+  speciesList.add(new TigerBarb("Swimmy"));
+}
+
+public void populateAchievementsList(){
+  achievementsList.add(new ScallopShell());
+  achievementsList.add(new ConchShell());
+  achievementsList.add(new Bubbler());
+  achievementsList.add(new Substrate());
+  achievementsList.add(new Vacuum());
 }
 
 public void determineBounds(){
@@ -97,11 +163,50 @@ public void determineBounds(){
 public void drawTank(){
   noStroke();
   pushMatrix();
-  translate((.5*fieldX), (.8*fieldY), -1.5*fieldZ);
-  translate(0, (.5*fieldY), -1);
-  fill(color(200, 180, 100));
-  box(2*fieldX, fieldY, 1); //table
-  translate(0, (-.8*fieldY), 1);
+  translate(.5*fieldX, .5*fieldY, -.5*fieldZ);
+  fill(120, 110, 100);
+  beginShape();
+  vertex(-fieldX, fieldY, 0);
+  vertex(-fieldX, .5*fieldY, 0);
+  vertex(fieldX, .5*fieldY, 0);
+  vertex(fieldX, fieldY, 0);
+  endShape(CLOSE);
+  beginShape();
+  vertex(.475*fieldX, .5*fieldY, 0);
+  vertex(.475*fieldX, .2*fieldY, 0);
+  vertex(.475*fieldX, .145*fieldY, fieldZ);
+  vertex(.475*fieldX, .5*fieldY, fieldZ);
+  endShape(CLOSE);
+  beginShape();
+  vertex(-.475*fieldX, .5*fieldY, 0);
+  vertex(-.475*fieldX, .2*fieldY, 0);
+  vertex(-.475*fieldX, .145*fieldY, fieldZ);
+  vertex(-.475*fieldX, .5*fieldY, fieldZ);
+  endShape(CLOSE);
+  fill(160, 180, 200);
+  beginShape();
+  vertex(.475*fieldX, -.5*fieldY, 0);
+  vertex(.475*fieldX, .2*fieldY, 0);
+  vertex(.475*fieldX, .145*fieldY, fieldZ);
+  vertex(.475*fieldX, -.5*fieldY, fieldZ);
+  endShape(CLOSE);
+  beginShape();
+  vertex(-.475*fieldX, -.5*fieldY, 0);
+  vertex(-.475*fieldX, .2*fieldY, 0);
+  vertex(-.475*fieldX, .145*fieldY, fieldZ);
+  vertex(-.475*fieldX, -.5*fieldY, fieldZ);
+  endShape(CLOSE);
+  translate(0, 0, -fieldZ-1);
+  beginShape();
+  vertex(-fieldX, -.5*fieldY, 0);
+  vertex(-fieldX, -fieldY, 0);
+  vertex(fieldX, -fieldY, 0);
+  vertex(fieldX, -.5*fieldY, 0);
+  endShape(CLOSE);
+  popMatrix();
+    
+  pushMatrix();
+  translate((.5*fieldX), (.5*fieldY), -1.5*fieldZ);
   fill(color(200));
   box((.95*fieldX), (fieldY), 1); //back
   fill(color(255));
@@ -110,7 +215,7 @@ public void drawTank(){
   translate((-.95*fieldX), 0, 0);
   box(1, (fieldY), (fieldZ)); //left
   translate((.475*fieldX), (.5*fieldY), 0);
-  fill(color(180));
+  fill(color(80));
   box((.95*fieldX), 1, (fieldZ)); //bottom
   fill(color(0, 0, 255, 20));
   translate(0, (-.5*fieldY) + (fieldY*.5*(1-waterLevel)), 0);
@@ -130,16 +235,35 @@ void drawAllFish(){
     f.updatePosition();
   }
 }
+
+void drawAllAchievements(){
+  hint(ENABLE_DEPTH_TEST);
+  for(int i=0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    a.drawAchievement();
+  }
+  if(previewAchievement != null && mouseY > 2*fieldY/3){
+   picker.captureViewMatrix(fieldX, fieldY);
+   picker.calculatePickPoints(mouseX,height-mouseY);
+   Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+   Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+   previewAchievement.changePosition(start, end);
+   previewAchievement.drawPreview();
+  }
+  if(clickMode == "ROTATEACHIEVEMENT" && rotateAchievement != null && mousePressed){
+   rotateAchievement.orientation+=.05;
+  }
+}
   
 public void drawAllWaste(){
   for(int i = 0; i < tank.poops.size(); i++){
     Poop p = (Poop) tank.poops.get(i);
-    drawWaste(p);
+    p.drawWaste();
     p.updatePosition();
   }
   for(int i = 0; i < tank.food.size(); i++){
     Food f = (Food) tank.food.get(i);
-    drawWaste(f);
+    f.drawWaste();
     f.updatePosition();
   }
   for(int i = 0; i < tank.deadFish.size(); i++){
@@ -148,94 +272,154 @@ public void drawAllWaste(){
     d.updatePosition();
   }
 }
-  
-public void drawWaste(Waste s){
-  noStroke();
-  pushMatrix();
-  translate(fieldX/2, fieldY/2, -fieldZ);
-  translate(s.position.x, s.position.y, s.position.z);
-  fill(s.RGBcolor.x, s.RGBcolor.y, s.RGBcolor.z);
-  sphere(s.dimensions.x);
-  popMatrix();    
-}
-
-public void drawStack(Plant plant){
-  strokeWeight(5-plant.level);
-  line(plant.path.start.x, plant.path.start.y, plant.path.start.z,
-    plant.path.end.x, plant.path.end.y, plant.path.end.z);
-  if(plant.level < 3){
-    for(int i = 0; i < plant.numBranches; i++){
-      Plant b = (Plant) plant.branches[i];
-      drawStack(b);
-    }
-  }
-}
-
-public void drawPlant(Plant plant){
-  stroke(plant.RGBcolor.x, plant.RGBcolor.y, plant.RGBcolor.z);
-  for(int j = 0; j < 3; j++){
-    pushMatrix();
-    translate(center.x, center.y, center.z);
-    translate(plant.position.x, plant.position.y, plant.position.z);
-    drawStack(plant.stack[j]);
-    popMatrix();
-  }
-}
 
 public void drawAllPlants(){
   for(int i = 0; i < tank.plants.size(); i++){
     Plant plant = (Plant) tank.plants.get(i);
-    drawPlant(plant);
+    plant.drawPlant();
   }
-  if(previewPlant != null && onBottom(mouseX, mouseY)){
+  if(previewPlant != null && mouseY > 2*fieldY/3){
     picker.captureViewMatrix(fieldX, fieldY);
     picker.calculatePickPoints(mouseX,height-mouseY);
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
     previewPlant.changePosition(start, end);
-    drawPlant(previewPlant);
+    previewPlant.drawPlant();
+  }
+  if(clickMode == "ROTATEPLANT" && rotatePlant != null && mousePressed){
+    rotatePlant.orientation+=.05;
   }
 }
 
-public void mouseReleased(){
+public void mousePressed(){
+  if(clickMode == "ROTATEPLANT"){
     int x = mouseX;
     int y = mouseY;
     picker.captureViewMatrix(fieldX, fieldY);
     picker.calculatePickPoints(x,height-y);
     Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
     Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
-    if(clickMode == "DEFAULT"){
-      // first check whether waste was clicked on; if so, remove it
-      wasteRemoved = handleWasteClick(start, end);
-      if(!wasteRemoved){
-        handleFoodClick(x, y, start, end);
+    handlePlantRotateClick(x, y, start, end);
+  }
+  if(clickMode == "ROTATEACHIEVEMENT"){
+    int x = mouseX;
+    int y = mouseY;
+    picker.captureViewMatrix(fieldX, fieldY);
+    picker.calculatePickPoints(x,height-y);
+    Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+    Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+    handleRewardRotateClick(x, y, start, end);
+  }
+  if(clickMode == "ADDACHIEVEMENT" && vacuumEnabled){
+    vacuum = true;
+  }
+}
+
+public void mouseReleased(){
+  int x = mouseX;
+  int y = mouseY;
+  picker.captureViewMatrix(fieldX, fieldY);
+  picker.calculatePickPoints(x,height-y);
+  Vector3D start = new Vector3D(picker.ptStartPos.x, fieldY-picker.ptStartPos.y, picker.ptStartPos.z);
+  Vector3D end = new Vector3D(picker.ptEndPos.x, fieldY-picker.ptEndPos.y, picker.ptEndPos.z);
+  if(clickMode == "DEFAULT" && !vacuumEnabled){
+    // first check whether waste was clicked on; if so, remove it
+    wasteRemoved = handleWasteClick(start, end);
+    if(!wasteRemoved){
+      handleFoodClick(x, y, start, end);
+    }
+  }
+  else if(clickMode == "ADDACHIEVEMENT" && vacuumEnabled){
+    vacuum = false;
+  }
+  else if(clickMode == "ADDPLANT"){
+    if(mouseY > 2*fieldY/3){
+      tank.plants.add(previewPlant);
+      $('#cancel_plant_add').click();
+    }
+    else{
+      $('#cancel_plant_add').click();
+    }
+  }
+  else if(clickMode == "ADDACHIEVEMENT"){
+    if(mouseY > 2*fieldY/3){
+      previewAchievement.used = true;
+      $('#cancel_reward_add').click();
+    }
+    else{
+      $('#cancel_reward_add').click();
+    }
+  }
+  else if(clickMode == "MOVEADDPLANT"){
+    if(mouseY > 2*fieldY/3){
+      previewPlant.encoding = previewPlant.encode();
+      tank.plants.add(previewPlant);
+      previewPlant = null;
+      clickMode = "MOVEPLANT";
+    }
+    else{
+      $('#cancel_plant_move').click();
+    }
+  }
+  else if(clickMode == "MOVEADDACHIEVEMENT"){
+    if(mouseY > 2*fieldY/3){
+      previewAchievement.used = true;
+      previewAchievement = null;
+      clickMode = "MOVEACHIEVEMENT";
+    }
+    else{
+      $('#cancel_reward_move').click();
+    }
+  }
+  else if(clickMode == "DELETEPLANT"){
+    if(!handlePlantDeleteClick(x, y, start, end)){
+      $('#cancel_plant_delete').click();
+      clickMode = "DEFAULT";
+    }
+    else{
+      if(!hasPlants()){
+        $('#cancel_plant_delete').click();
       }
     }
-    else if(clickMode == "PLANT"){
-      if(onBottom(x, y)){
-        previewPlant.encoding = previewPlant.encode();
-        tank.plants.add(previewPlant);
-        $('#cancel_plant_add').click();
-      }
-      else{
-        $('#cancel_plant_add').click();
-      }
+  }
+  else if(clickMode == "MOVEPLANT"){
+    if(handlePlantMoveClick(x, y, start, end)){
+       clickMode = "MOVEADDPLANT";
     }
-    else if(clickMode == "DELETE"){
-      if(handlePlantDeleteClick(x, y)){
-         $('#cancel_plant_delete').click();
-      }
+    else{
+      clickMode = "DEFAULT";
+      $('#cancel_plant_move').click();
     }
-    else if(clickMode == "MOVE"){
-      if(handlePlantMoveClick(x, y)){
-         clickMode = "PLANT";
-         $('#cancel_plant_move').click();
-      }
+  }
+  else if(clickMode == "MOVEACHIEVEMENT"){
+    if(handleRewardMoveClick(x, y, start, end)){
+       clickMode = "MOVEADDACHIEVEMENT";
     }
-    //if(mouseButton == RIGHT){
-    //  console.log("skipping ahead 1 hour");
-    //  tank.skipAhead(60);
-    //}
+    else{
+      clickMode = "DEFAULT";
+      $('#cancel_reward_move').click();
+    }
+  }
+  else if(clickMode == "ROTATEPLANT"){
+    if(!handlePlantRotateClick(x, y, start, end)){
+      clickMode = "DEFAULT";
+      $('#cancel_plant_rotate').click();
+    }
+    rotatePlant = null;
+  }
+  else if(clickMode == "ROTATEACHIEVEMENT"){
+    if(!handleRewardRotateClick(x, y, start, end)){
+      clickMode = "DEFAULT";
+      $('#cancel_reward_rotate').click();
+    }
+    rotateAchievement = null;
+  }
+  if(debugMode && mouseButton == RIGHT){
+    console.log("skipping ahead 1 hour");
+    tank.timeScale = .12;
+    tank.skipAhead(60);
+    tank.timeScale = .01;
+  }
 }
 
 /**************************************************
@@ -245,54 +429,119 @@ public void mouseReleased(){
 public void populateSpeciesStats(){
   for(int i = 0; i < speciesList.size(); i++){
     Fish f = (Fish) speciesList.get(i);
-    species_stats[f.species] = {
-      "image url": f.sprite,
-      "Species:": f.species,
-      "Ease of care:": f.ease + "/5",
-      "Ammonia levels tolerated:": "0-" + f.ammonia + ' ppm',
-      "Nitrite levels tolerated:": "0-" + f.nitrite + ' ppm',
-      "Nitrate levels tolerated:": "0-" + f.nitrate + ' ppm',
-      "pH levels tolerated:": f.minPH + "-" + f.maxPH,
-      "Temperatures tolerated:": f.minTemp + "-" + f.maxTemp + ' °C',
-      "Hardness levels tolerated:": f.minHard + "-" + f.maxHard + ' dH'
-    };
+    if(playMode == "casual_mode"){
+      species_stats[f.species] = {
+        "image url": f.sprite,
+        "Species:": f.species,
+        "Ease of care:": f.ease + "/5",
+        "Ammonia levels tolerated:": "Disabled by casual mode",
+        "Nitrite levels tolerated:": "Disabled by casual mode",
+        "Nitrate levels tolerated:": "Disabled by casual mode",
+        "pH levels tolerated:": "Disabled by casual mode",
+        "Temperatures tolerated:": "Disabled by casual mode",
+        "Hardness levels tolerated:": "Disabled by casual mode"
+      };
+    }
+    else{
+      species_stats[f.species] = {
+        "image url": f.sprite,
+        "Species:": f.species,
+        "Ease of care:": f.ease + "/5",
+        "Ammonia levels tolerated:": "0-" + f.ammonia + ' ppm',
+        "Nitrite levels tolerated:": "0-" + f.nitrite + ' ppm',
+        "Nitrate levels tolerated:": "0-" + f.nitrate + ' ppm',
+        "pH levels tolerated:": f.minPH + "-" + f.maxPH,
+        "Temperatures tolerated:": f.minTemp + "-" + f.maxTemp + ' °C',
+        "Hardness levels tolerated:": f.minHard + "-" + f.maxHard + ' dH'
+      };
+    }
   }
 }
 
 public void updateTankStats(){
-  tank_stats.pH = tank.pH.toFixed(2);
-  tank_stats.temperature = tank.temp.toFixed(1) + ' °C';
-  tank_stats.hardness = tank.hardness.toFixed(2) + ' dH';
-  tank_stats.ammonia = tank.ammonia.toFixed(2) + ' ppm';
-  tank_stats.nitrite = tank.nitrite.toFixed(2) + ' ppm';
-  tank_stats.nitrate = tank.nitrate.toFixed(2) + ' ppm';
-  tank_stats["O₂ "] = tank.o2.toFixed(1) + ' ppm';
-  tank_stats["CO₂ "] = tank.co2.toFixed(1) + ' ppm';
-  tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(2) + 'M bacteria';
-  tank_stats.nitrobacter = tank.nitrobacter.toFixed(2) + 'M bacteria';
-  tank_stats.food = tank.food.size() + ' noms';
-  tank_stats.waste = tank.waste + ' poops';
+  if(playMode == "casual_mode"){
+    tank_stats.pH = "Disabled by casual mode.";
+    tank_stats.temperature = "Disabled by casual mode.";
+    tank_stats.hardness = "Disabled by casual mode.";
+    tank_stats.ammonia = "Disabled by casual mode.";
+    tank_stats.nitrite = "Disabled by casual mode.";
+    tank_stats.nitrate = "Disabled by casual mode.";
+    tank_stats.O2 = "Disabled by casual mode.";
+    tank_stats.CO2 = "Disabled by casual mode.";
+    tank_stats.nitrosomonas = "Disabled by casual mode.";
+    tank_stats.nitrobacter = "Disabled by casual mode.";
+    tank_stats.food = tank.food.size() + ' noms';
+    tank_stats.waste = tank.waste + ' poops';
+  }
+  else{
+    tank_stats.pH = tank.pH.toFixed(2);
+    tank_stats.temperature = tank.temp.toFixed(1) + ' °C';
+    tank_stats.hardness = tank.hardness.toFixed(2) + ' dH';
+    tank_stats.ammonia = tank.ammonia.toFixed(2) + ' ppm';
+    tank_stats.nitrite = tank.nitrite.toFixed(2) + ' ppm';
+    tank_stats.nitrate = tank.nitrate.toFixed(2) + ' ppm';
+    tank_stats.O2 = tank.o2.toFixed(1) + ' ppm';
+    tank_stats.CO2 = tank.co2.toFixed(1) + ' ppm';
+    tank_stats.nitrosomonas = tank.nitrosomonas.toFixed(2) + 'M bacteria';
+    tank_stats.nitrobacter = tank.nitrobacter.toFixed(2) + 'M bacteria';
+    tank_stats.food = tank.food.size() + ' noms';
+    tank_stats.waste = tank.waste + ' poops';
+  }
 }
 
 public void updateFishStats(){
   fish_stats = {};
   for(int i = 0; i < tank.fish.size(); i++){
     Fish f = (Fish) (tank.fish.get(i));
-    fish_stats[f.name] = {
-      "Name:": f.name,
-      "Ammonia levels tolerated:": "0-" + f.ammonia.toFixed(1) + ' ppm',
-      "Species:": f.species,
-      "Nitrite levels tolerated:": "0-" + f.nitrite.toFixed(1) + ' ppm',
-      "image url": f.sprite,
-      "Nitrate levels tolerated:": "0-" + f.nitrate.toFixed(1) + ' ppm',
-      "Status:": f.status,
-      "pH levels tolerated:": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
-      "fullness": f.fullness,
-      "Temperatures tolerated:": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
-      "health": f.health,
-      "Hardness levels tolerated:": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
-      "max health": f.maxHealth,
-      "max fullness": f.maxFullness
+    if(playMode == "casual_mode"){
+      fish_stats[f.name] = {
+        "Name": f.name,
+        "Ammonia": "Disabled by casual mode",
+        "Species": f.species,
+        "Nitrite": "Disabled by casual mode",
+        "image_url": f.sprite,
+        "Nitrate": "Disabled by casual mode",
+        "Status": f.status,
+        "pH": "Disabled by casual mode",
+        "fullness": f.fullness,
+        "Temperatures": "Disabled by casual mode",
+        "health": f.health,
+        "Hardness": "Disabled by casual mode",
+        "max_health": f.maxHealth,
+        "max_fullness": f.maxFullness
+      };
+    }
+    else{
+      fish_stats[f.name] = {
+        "Name": f.name,
+        "Ammonia": "0-" + f.ammonia.toFixed(1) + ' ppm',
+        "Species": f.species,
+        "Nitrite": "0-" + f.nitrite.toFixed(1) + ' ppm',
+        "image_url": f.sprite,
+        "Nitrate": "0-" + f.nitrate.toFixed(1) + ' ppm',
+        "Status": f.status,
+        "pH": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
+        "fullness": f.fullness,
+        "Temperatures": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
+        "health": f.health,
+        "Hardness": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
+        "max_health": f.maxHealth,
+        "max_fullness": f.maxFullness
+      };
+    }
+  }
+}
+
+public void updateAchievementsStats(){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    achievements_stats[a.rewardName] = {
+      "image url": a.rewardSprite,
+      "reward": a.rewardName,
+      "description": a.rewardDescription,
+      "condition": a.condition,
+      "earned": a.earned,
+      "used": a.used
     };
   }
 }
@@ -304,12 +553,7 @@ public void waterChange(float percent){
 /**************************************************
  * HELPERS *
  **************************************************/
-
-public Vector3D backgroundColor(){
-  int time = tank.time;
-  return new Vector3D( ((160.0/1020.0)*(720-abs(720-time) + 300)),  ((180.0/1020.0)*(720-abs(720-time) + 300)),  ((200.0/1020.0)*(720-abs(720-time) + 300)));
-}
-
+ 
 public int spotlightColor(){
   int time = tank.time;
   return  ((200.0/1320.0)*(720-abs(720-time) + 600));
@@ -319,6 +563,33 @@ public Fish addFishToTank(String speciesName, String nickname){
   Fish toAdd = null;
   if(speciesName == "Guppy"){
     toAdd = new Guppy(nickname);
+  }
+  else if(speciesName == "Neon Tetra"){
+    toAdd = new NeonTetra(nickname);
+  }
+  else if(speciesName == "Cherry Barb"){
+    toAdd = new CherryBarb(nickname);
+  }
+  else if(speciesName == "White Cloud Mountain Minnow"){
+    toAdd = new WhiteCloudMountainMinnow(nickname);
+  }
+  else if(speciesName == "Cherry Shrimp"){
+    toAdd = new CherryShrimp(nickname);
+  }
+  else if(speciesName == "Mystery Snail"){
+    toAdd = new MysterySnail(nickname);
+  }
+  else if(speciesName == "Cory Catfish"){
+    toAdd = new CoryCatfish(nickname);
+  }
+  else if(speciesName == "Platy"){
+    toAdd = new Platy(nickname);
+  }
+  else if(speciesName == "Danio"){
+    toAdd = new Danio(nickname);
+  }
+  else if(speciesName == "Tiger Barb"){
+    toAdd = new TigerBarb(nickname);
   }
   if(toAdd != null){
     tank.addFish(toAdd);
@@ -382,16 +653,33 @@ public Waste removeWaste(Vector3D start, Vector3D end){
   float z = MIN_FLOAT;
   for(int i = 0; i < tank.poops.size(); i++){
     Poop p = (Poop) tank.poops.get(i);
-    if(raySphereIntersect(start, normal, p.absolutePosition, p.dimensions.x*2)){
+    compare = new Vector3D(p.absolutePosition.x, p.absolutePosition.y, p.absolutePosition.z);
+    if(hasSubstrate()){
+      compare.y -= 16;
+    }
+    if(raySphereIntersect(start, normal, compare, p.dimensions.x*2)){
       if(p.absolutePosition.z > z){
         z = p.absolutePosition.z;
         closest = p;
       } 
     }
   }
-  for(int i = 0; i < tank.food.size(); i++){
-    Food f = (Food) tank.food.get(i);
-    if(raySphereIntersect(start, normal, f.absolutePosition, f.dimensions.x*2)){
+  for(int i = 0; i < tank.sinkingFood.size(); i++){
+    SinkingFood f = (SinkingFood) tank.sinkingFood.get(i);
+    compare = new Vector3D(f.absolutePosition.x, f.absolutePosition.y, f.absolutePosition.z);
+    if(hasSubstrate()){
+      compare.y -= 16;
+    }
+    if(raySphereIntersect(start, normal, compare, f.dimensions.x*2)){
+      if(f.absolutePosition.z > z){
+        z = f.absolutePosition.z;
+        closest = f;
+      }
+    }
+  }
+  for(int i = 0; i < tank.floatingFood.size(); i++){
+    FloatingFood f = (FloatingFood) tank.floatingFood.get(i);
+    if(rayTriangleIntersect(start, normal, f)){
       if(f.absolutePosition.z > z){
         z = f.absolutePosition.z;
         closest = f;
@@ -415,6 +703,38 @@ public boolean raySphereIntersect(Vector3D rayOrigin, Vector3D rayNormal, Vector
   return determinant >= 0;
 }
 
+public boolean rayTriangleIntersect(Vector3D rayOrigin, Vector3D rayNormal, FloatingFood f){
+  Vector3D v0 = (Vector3D) f.points.get(0).addVector(f.absolutePosition);
+  Vector3D v1 = (Vector3D) f.points.get(1).addVector(f.absolutePosition);
+  Vector3D v2 = (Vector3D) f.points.get(2).addVector(f.absolutePosition);
+  Vector3D e1 = v1.addVector(v0.multiplyScalar(-1));
+  Vector3D e2 = v2.addVector(v0.multiplyScalar(-1));
+  Vector3D h = rayNormal.crossProduct(e2);
+  float a = e1.dotProduct(h);
+
+  if (a > -0.00001 && a < 0.00001)
+    return(false);
+
+  float f = 1/a;
+  Vector3D s = rayOrigin.addVector(v0.multiplyScalar(-1));
+  float u = f * s.dotProduct(h);
+  
+  if (u < -0.2 || u > 1.2)
+    return(false);
+
+  Vector3D q = s.crossProduct(e1);
+  float v = f * rayNormal.dotProduct(q);
+
+  if (v < -0.2 || u + v > 1.2)
+    return(false);
+  t = f * e2.dotProduct(q);
+
+  if (t > -.2) // ray intersection
+    return(true);
+  else // this means that there is a line intersection but not a ray intersection
+     return (false);
+}
+
 public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNormal){
   float width = abs((cos(d.sprite.orientation.y)*d.dimensions.x) + abs(sin(d.sprite.orientation.y)*d.dimensions.z));
   float height = d.dimensions.y;
@@ -425,13 +745,41 @@ public boolean clickedDeadFish(DeadFish d, Vector3D rayOrigin, Vector3D rayNorma
 }
 
 public void createPlantPreview(){
-  clickMode = "PLANT";
-  previewPlant = new Plant();
+  clickMode = "ADDPLANT";
+  float type = random(0, 4);
+  if(type < 1){
+    previewPlant = new SpindlePlant();
+  }
+  else if(type < 2){
+    previewPlant = new LeafPlant();
+  }
+  else if(type < 3){
+    previewPlant = new SkeletalPlant();
+  }
+  else{
+    previewPlant = new MossPlant();
+  }
+}
+
+public void createAchievementPreview(String type){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    if(type == a.rewardName){
+      clickMode = "ADDACHIEVEMENT";
+      if(type == "Substrate"){
+        a.initialize();
+      }
+      previewAchievement = a;
+    }
+  }
 }
 
 public void cancelPlant(){
   clickMode = "DEFAULT";
   previewPlant = null;
+  rotatePlant = null;
+  previewAchievement = null;
+  rotateAchievement = null;
 }
 
 public boolean handleWasteClick(Vector3D start, Vector3D end){
@@ -451,7 +799,12 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     float z = new Vector3D(-1.5*fieldZ+30, -1.5*fieldZ + percent*fieldZ, -.5*fieldZ-30).centermost();
     float factor = (z-start.z)/normal.z;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-    tank.addFood(new Food(absolutePosition));
+    if(floatingFood){
+      tank.addFood(new FloatingFood(absolutePosition));
+    }
+    else{
+      tank.addFood(new SinkingFood(absolutePosition));
+    }
   }
   // clicked side of tank - place food
   else if((side = onSide(xCoord, yCoord)) != "No"){
@@ -461,7 +814,12 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     else x = .975*fieldX-30;
     float factor = (x-start.x)/normal.x;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-    tank.addFood(new Food(absolutePosition));
+    if(floatingFood){
+      tank.addFood(new FloatingFood(absolutePosition));
+    }
+    else{
+      tank.addFood(new SinkingFood(absolutePosition));
+    }
   }
   // clicked bottom of tank - place food
   else if(onBottom(xCoord, yCoord)){
@@ -469,43 +827,118 @@ public void handleFoodClick(int xCoord, int yCoord, Vector3D start, Vector3D end
     float y = fieldY;
     float factor = (y-start.y)/normal.y;
     Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
-    tank.addFood(new Food(absolutePosition));
+    if(floatingFood){
+      tank.addFood(new FloatingFood(absolutePosition));
+    }
+    else{
+      tank.addFood(new SinkingFood(absolutePosition));
+    }
   }
 }
 
-public boolean handlePlantDeleteClick(int x, int y){
- clickedColor = get(x, fieldY-y);
- Vector3D clickedRGB = new Vector3D(red(clickedColor), green(clickedColor), blue(clickedColor));
- for(int i = 0; i < tank.plants.size(); i++){
-   Plant p = (Plant) tank.plants.get(i);
-   if(p.RGBcolor.isEqual(clickedRGB)){
-     tank.plants.remove(p);
-     return true;
-   }
- }
- return false;
+public boolean handlePlantDeleteClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    if(absolutePosition.distance(p.absolutePosition) < 40){
+      tank.plants.remove(p);
+      return true;
+    }
+  }
+  return false;
 }
 
-public boolean handlePlantMoveClick(int x, int y){
- clickedColor = get(x, fieldY-y);
- Vector3D clickedRGB = new Vector3D(red(clickedColor), green(clickedColor), blue(clickedColor));
- for(int i = 0; i < tank.plants.size(); i++){
-   Plant p = (Plant) tank.plants.get(i);
-   if(p.RGBcolor.isEqual(clickedRGB)){
-     previewPlant = p;
-     tank.plants.remove(p);
-     return true;
-   }
- }
- return false;
+public boolean handlePlantMoveClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    if(absolutePosition.distance(p.absolutePosition) < 40){
+      previewPlant = p;
+      tank.plants.remove(p);
+      return true;
+    }
+  }
+  return false;
 }
 
-public void deleteMode(){
-  clickMode = "DELETE";
+public boolean handleRewardMoveClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    if(a.rewardName == "Substrate" || a.rewardName == "Vacuum"){
+      continue;
+    }
+    Vector3D movePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
+    if(absolutePosition.distance(movePos) < 40){
+      previewAchievement = a;
+      a.used = false;
+      return true;
+    }
+  }
+  return false;
 }
 
-public void moveMode(){
-  clickMode = "MOVE";
+public boolean handlePlantRotateClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.plants.size(); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    if(absolutePosition.distance(p.absolutePosition) < 40){
+      rotatePlant = p;
+      return true;
+    }
+  }
+  return false;
+}
+
+public boolean handleRewardRotateClick(int x, int y, Vector3D start, Vector3D end){
+  Vector3D normal = end.addVector(start.multiplyScalar(-1)).normalize();
+  float y = fieldY;
+  if(hasSubstrate()){
+    y -= 16;
+  }
+  float factor = (y-start.y)/normal.y;
+  Vector3D absolutePosition = start.addVector(normal.multiplyScalar(factor));
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    if(a.rewardName == "Substrate" || a.rewardName == "Vacuum"){
+      continue;
+    }
+    Vector3D rotatePos = new Vector3D(a.absolutePosition.x, a.absolutePosition.y, a.absolutePosition.z+a.dimensions.x/2+20);
+    if(absolutePosition.distance(rotatePos) < 40){
+      rotateAchievement = a;
+      return true;
+    }
+  }
+  return false;
+}
+
+public String setClickMode(String to){
+  clickMode = to;
+  return clickMode;
 }
 
 public boolean haveFishWithName(String name){
@@ -522,6 +955,16 @@ public boolean hasPlants(){
   return tank.plants.size() > 0;
 }
 
+public boolean hasRewards(){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = tank.achievements.get(i);
+    if(a.used){
+      return true;
+    }
+  }
+  return false;
+}
+
 public ArrayList cookieInfo(){
   cookieInfo = new ArrayList();
   String tankStringPrefix = "t=";
@@ -536,17 +979,15 @@ public ArrayList cookieInfo(){
   tankString += tank.co2.toFixed(2) + "+";
   tankString += tank.nitrosomonas.toFixed(2) + "+";
   tankString += tank.nitrobacter.toFixed(2) + "+";
-  tankString += min(tank.food.size(), 99) + "+";
+  tankString += min(tank.sinkingFood.size(), 99) + "+";
+  tankString += min(tank.floatingFood.size(), 99) + "+";
   tankString += min(tank.poops.size(), 99) + "+";
-  var date = new Date();
-  tankString += date.getFullYear()-2000 + "+";
-  tankString += date.getMonth() + "+";
-  tankString += date.getDate() + "+";
-  tankString += date.getHours() + "+";
-  tankString += date.getMinutes();
+  var date = new Date().getTime();
+  tankString += date + "+";
+  tankString += tank.createdAt;
   tankString = LZString.compressToUTF16(tankString) + ";";
   cookieInfo.add(tankStringPrefix + tankString);
-  for(int i = 0; i < min(tank.fish.size(), 15); i++){
+  for(int i = 0; i < min(tank.fish.size(), maxFish); i++){
    Fish f = (Fish) tank.fish.get(i);
    String fishStringPrefix = "f" + i + "=";
    String fishString = "";
@@ -559,39 +1000,189 @@ public ArrayList cookieInfo(){
    fishString += f.minHard.toFixed(2) + "+";
    fishString += f.maxHard.toFixed(2) + "+";
    fishString += f.minPH.toFixed(2) + "+";
-   fishString += f.maxPH.toFixed(2);
+   fishString += f.maxPH.toFixed(2) + "+";
+   fishString += f.aliveSince + "+";
+   fishString += f.happySince;
    fishString = LZString.compressToUTF16(fishString) + ";";
    cookieInfo.add(fishStringPrefix + fishString);
   }
-  for(int i = min(tank.fish.size(), 15); i < 15; i++){
+  for(int i = min(tank.fish.size(), maxFish); i < maxFish; i++){
     cookieInfo.add("f" + i + "=;");
   }
-  for(int i = 0; i < min(tank.deadFish.size(), 15); i++){
+  for(int i = 0; i < min(tank.deadFish.size(), maxFish); i++){
    DeadFish f = (DeadFish) tank.deadFish.get(i);
    String fishStringPrefix = "d" + i + "=";
    String fishString = f.sprite.species;
    fishString = LZString.compressToUTF16(fishString) + ";";
    cookieInfo.add(fishStringPrefix + fishString);
   }
-  for(int i = min(tank.deadFish.size(), 15); i < 15; i++){
+  for(int i = min(tank.deadFish.size(), maxFish); i < maxFish; i++){
     cookieInfo.add("d" + i + "=;");
   }
-  for(int i = 0; i < min(tank.plants.size(), 5); i++){
+  for(int i = 0; i < min(tank.plants.size(), maxPlants); i++){
     Plant p = (Plant) tank.plants.get(i);
     String plantStringPrefix = "p" + i + "=";
     String plantString = p.encode();
     cookieInfo.add(plantStringPrefix + plantString + ";");
   }
-  for(int i = min(tank.plants.size(), 5); i < 5; i++){
+  for(int i = min(tank.plants.size(), maxPlants); i < maxPlants; i++){
     cookieInfo.add("p" + i + "=;");
+  }
+  for(int i = 0; i < achievementsList.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    String achievementStringPrefix = "a" + i + "=";
+    String achievementString = "";
+    if(!a.earned){
+      achievementString += "f+f";
+    }
+    else{
+      achievementString += "t+";
+      if(!a.used){
+        achievementString += "f";
+      }
+      else{
+        achievementString += "t+" + a.position.x + "+" + a.position.y + "+" + a.position.z + "+" + a.orientation + "";
+      }
+    }
+    cookieInfo.add(achievementStringPrefix + LZString.compressToUTF16(achievementString) + ";");
+  }
+  return cookieInfo;
+}
+
+public HashMap localStorageInfo(){
+  cookieInfo = new HashMap();
+  String tankStringPrefix = "t";
+  String tankString = "";
+  tankString += tank.pH.toFixed(2) + "+";
+  tankString += tank.temp.toFixed(2) + "+";
+  tankString += tank.hardness.toFixed(2) + "+";
+  tankString += tank.ammonia.toFixed(2) + "+";
+  tankString += tank.nitrite.toFixed(2) + "+";
+  tankString += tank.nitrate.toFixed(2) + "+";
+  tankString += tank.o2.toFixed(2) + "+";
+  tankString += tank.co2.toFixed(2) + "+";
+  tankString += tank.nitrosomonas.toFixed(2) + "+";
+  tankString += tank.nitrobacter.toFixed(2) + "+";
+  tankString += min(tank.sinkingFood.size(), 99) + "+";
+  tankString += min(tank.floatingFood.size(), 99) + "+";
+  tankString += min(tank.poops.size(), 99) + "+";
+  var date = new Date().getTime();
+  tankString += date + "+";
+  tankString += tank.createdAt + "+";
+  tankString += playMode;
+  tankString = LZString.compressToUTF16(tankString);
+  cookieInfo.put(tankStringPrefix, tankString);
+  for(int i = 0; i < min(tank.fish.size(), maxFish); i++){
+   Fish f = (Fish) tank.fish.get(i);
+   String fishStringPrefix = "f" + i;
+   String fishString = "";
+   fishString += f.species + "+";
+   fishString += f.name + "+";
+   fishString += f.health + "+";
+   fishString += f.fullness + "+";
+   fishString += f.minTemp.toFixed(2) + "+";
+   fishString += f.maxTemp.toFixed(2) + "+";
+   fishString += f.minHard.toFixed(2) + "+";
+   fishString += f.maxHard.toFixed(2) + "+";
+   fishString += f.minPH.toFixed(2) + "+";
+   fishString += f.maxPH.toFixed(2) + "+";
+   fishString += f.aliveSince + "+";
+   fishString += f.happySince;
+   fishString = LZString.compressToUTF16(fishString);
+   cookieInfo.put(fishStringPrefix, fishString);
+  }
+  for(int i = min(tank.fish.size(), maxFish); i < maxFish; i++){
+    cookieInfo.put("f" + i, "");
+  }
+  for(int i = 0; i < min(tank.deadFish.size(), maxFish); i++){
+   DeadFish f = (DeadFish) tank.deadFish.get(i);
+   String fishStringPrefix = "d" + i;
+   String fishString = f.sprite.species;
+   fishString = LZString.compressToUTF16(fishString);
+   cookieInfo.put(fishStringPrefix, fishString);
+  }
+  for(int i = min(tank.deadFish.size(), maxFish); i < maxFish; i++){
+    cookieInfo.put("d" + i, "");
+  }
+  for(int i = 0; i < min(tank.plants.size(), maxPlants); i++){
+    Plant p = (Plant) tank.plants.get(i);
+    String plantStringPrefix = "p" + i;
+    String plantString = p.encode();
+    cookieInfo.put(plantStringPrefix, plantString);
+  }
+  for(int i = min(tank.plants.size(), maxPlants); i < maxPlants; i++){
+    cookieInfo.put("p" + i, "");
+  }
+  for(int i = 0; i < achievementsList.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    String achievementStringPrefix = "a" + i;
+    String achievementString = "";
+    if(!a.earned){
+      achievementString += "f+f";
+    }
+    else{
+      achievementString += "t+";
+      if(!a.used){
+        achievementString += "f";
+      }
+      else if(a.rewardName != "Substrate" && a.rewardName != "Vacuum"){
+        achievementString += "t+" + a.position.x + "+" + a.position.z + "+" + a.orientation + "";
+      }
+      else{
+        achievementString += "t+" + a.RGBcolor.x + "+" + a.RGBcolor.y + "+" + a.RGBcolor.z + "";
+      }
+    }
+    cookieInfo.put(achievementStringPrefix, LZString.compressToUTF16(achievementString));
   }
   return cookieInfo;
 }
 
 public boolean hasMaxFish(){
-  return tank.fish.size() >= 15;
+  return tank.fish.size() >= maxFish;
 }
 
 public boolean hasMaxPlants(){
-  return tank.plants.size() >= 5;
+  return tank.plants.size() >= maxPlants;
+}
+
+public boolean setFloatingFood(boolean floating){
+  floatingFood = floating;
+  return floatingFood;
+}
+
+public String getClickMode(){
+  return clickMode;
+}
+
+public boolean hasSubstrate(){
+  return tank.achievements.get(3).used || (previewAchievement != null && previewAchievement.rewardName == "Substrate");
+}
+
+public void deleteAchievement(String name){
+  for(int i = 0; i < tank.achievements.size(); i++){
+    Achievement a = (Achievement) tank.achievements.get(i);
+    if(a.rewardName == name){
+      a.used = false;
+    }
+  }
+}
+
+public String setMode(String mode){
+  playMode = mode;
+  if(mode == "fast_mode"){
+    tank.timeScale = 1;
+  }
+  else{
+    tank.timeScale = .01;
+  }
+  return playMode;
+}
+
+public void enableDebugMode(){
+  debugMode = true;
+}
+
+public boolean toggleVacuum(boolean val){
+  vacuumEnabled = val;
+  return vacuumEnabled;
 }

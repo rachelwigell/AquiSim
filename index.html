@@ -4,6 +4,48 @@
 	<link rel="stylesheet" href="libraries/foundation-5.5.2/css/normalize.css">
 	<script src="libraries/processing.js"></script>
 	<script src="libraries/jquery-1.11.3.min.js"></script>
+	<script src="libraries/foundation-5.5.2/js/vendor/modernizr.js"></script>
+	<style>
+		.switch-on {
+			position: absolute;
+			left: -95%;
+			top: 25%;
+			color: white;
+			font-weight: bold;
+			font-size: 12px;
+		}
+		.switch-off {
+			position: absolute;
+			left: -28%;
+			top: 25%;
+			color: white;
+			font-weight: bold;
+			font-size: 12px;
+		}
+		.switch.large label {
+			width: 80%;
+		}
+		.switch label {
+			background: #2BA6CB;
+		}
+		.switch.large label:after {
+			height: 80%;
+			left: 2.5%;
+			top: 10%;
+			width: 50%;
+		}
+		.switch.large input:checked + label:after {
+    		left: 47.5%;
+    	}
+    	#water_change_label {
+    		color: white;
+    		font-size: 10px;
+    		font-weight: bold;
+    		left: 20%;
+    		top: 10%;
+    		position: absolute;
+    	}
+	</style>
 	<title>AquiSim</title>
 </head>
 <body>
@@ -27,18 +69,63 @@
 	</script>
 
 	<center>
-		<h2>Welcome to AquiSim!</h2>
+		<!-- <div class="small-4 columns">
+			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+			<!-- Top left -->
+			<!-- <ins class="adsbygoogle"
+			     style="display:inline-block;width:320px;height:100px"
+			     data-ad-client="ca-pub-4926371143211898"
+			     data-ad-slot="3506569566"></ins>
+			<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+			</script>
+		</div>
+		<div class="small-4 columns"> -->
+			<h2><b>Welcome to AquiSim!</b></h2>
+		<!-- </div>
+		<div class="small-4 columns">
+			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+			<!-- Top Right -->
+			<!-- <ins class="adsbygoogle"
+			     style="display:inline-block;width:320px;height:100px"
+			     data-ad-client="ca-pub-4926371143211898"
+			     data-ad-slot="7936769161"></ins>
+			<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+			</script>
+		</div> -->
 		<h4>The only aquarium game that simulates the complex system dynamics occurring inside every fish tank</h4>
 		<canvas id="processing" data-processing-sources="
 		main/Selection_in_P3D_OPENGL_A3D_Class.pde
 		main/LineClass.pde
 		main/PlantClass.pde
+		main/LeafPlantClass.pde
+		main/SpindlePlantClass.pde
+		main/SkeletalPlantClass.pde
+		main/MossPlantClass.pde
 		main/DeadFishClass.pde
 		main/PoopClass.pde
 		main/FoodClass.pde
+		main/SinkingFoodClass.pde
+		main/FloatingFoodClass.pde
 		main/WasteClass.pde
 		main/FishClass.pde
 		main/GuppyClass.pde
+		main/NeonTetraClass.pde
+		main/CherryBarbClass.pde
+		main/WhiteCloudMountainMinnowClass.pde
+		main/CherryShrimpClass.pde
+		main/MysterySnailClass.pde
+		main/CoryCatfishClass.pde
+		main/PlatyClass.pde
+		main/DanioClass.pde
+		main/TigerBarbClass.pde
+		main/AchievementClass.pde
+		main/ScallopShellClass.pde
+		main/ConchShellClass.pde
+		main/BubblerClass.pde
+		main/SubstrateClass.pde
+		main/VacuumClass.pde
 		main/Vector3DClass.pde
 		main/TankClass.pde
 		main/main.pde
@@ -46,44 +133,166 @@
 
 	<ul class="accordion" data-accordion>
   		<li class="accordion-navigation">
-    		<a href="#tank_health_menu">Tank Health</a>
+    		<a href="#tank_health_menu"><b>Tank Health</b></a>
     		<div id="tank_health_menu" class="content inactive">
-				<div class="small-6 columns">
-					<table id = "tank_stats_display"></table>
+				<div class="small-5 columns">
+					<table id = "tank_stats_display">
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Acidity of the water. Falls when ammonia goes up.">pH:
+							</span>
+						</th><td id="pH_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produced by plants.">O₂ :
+							</span>
+						</th><td id="O2_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Changes according to the time of day.">temperature:
+							</span>
+						</th><td id="temperature_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produced by fish and plants.">CO₂ :
+							</span>
+						</th><td id="CO2_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Raised by shells and gravel.">hardness:
+							</span>
+						</th><td id="hardness_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Convert ammonia into nitrite.">nitrosomonas:
+							</span>
+						</th><td id="nitrosomonas_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Toxic to fish. Produced by rotting food and waste.">ammonia:
+							</span>
+						</th><td id="ammonia_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Convert nitrite into nitrate.">nitrobacter:
+							</span>
+						</th><td id="nitrobacter_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Toxic to fish.">nitrite:
+							</span>
+						</th><td id="nitrite_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produces ammonia when allowed to sit in tank.">food:
+							</span>
+						</th><td id="food_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Mildly toxic to fish. Remove with water changes.">nitrate:
+							</span>
+						</th><td id="nitrate_val"></td>
+						<th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Produces ammonia when allowed to sit in tank.">waste:
+							</span>
+						</th><td id="waste_val"></td></tr>
+					</table>
 				</div>
 				<div class="small-3 columns" id="water_change">
-						<div class="range-slider round" id="water_change_percentage" align="left" data-slider>
-							  <span class="range-slider-handle" role="slider" tabindex="0"></span>
+						<div class="range-slider round" id="water_change_percentage" align="left" data-slider=50>
+							  <span class="range-slider-handle" role="slider" tabindex="0">
+							  	<!-- <p id="water_change_label">50%<p> -->
+							  </span>
 							  <span class="range-slider-active-segment"></span>
 							  <input type="hidden">
 						</div>
+					<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Changing the water can help neutralize it, but be careful of over-changing since this will also get rid of some of the helpful bacteria that live in the water.">
+						<button class="button round" id="perform_water_change">Change Water</button><br>
+					</span><br>
+					<form>
+						<b>Play Mode</b><br>
+						<div class="small-4 columns" style="padding-left:0; padding-right:0">
+							<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Turn off water chemistry simulation. Just feed your fish to keep them alive.">
+						 		<input type="radio" name="play_mode" value="casual_mode" id="casual_mode"> Casual 
+							</span>
+						</div>
+						<div class="small-4 columns" style="padding-left:0; padding-right:0">
+						 	<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Simulate water chemistry in real-time.">
+						 		<input type="radio"  name="play_mode" value="normal_mode" id="normal_mode"> Normal 
+							</span>
+						</div>
+						<div class="small-4 columns" style="padding-left:0; padding-right:0">
+						 	<span data-tooltip aria-haspopup="true" data-options="disable_for_touch:true" class="has-tip" title="Hard mode, but more entertaining to watch. Stats change at 100x speed.">
+						 		<input type="radio" name="play_mode" value="fast_mode" id="fast_mode"> Fast 
+							</span>
+						</div>
+					</form>
 				</div>
-				<div class="small-3 columns">
-					<button class="button round" id="perform_water_change">Change 50% of Water</button>
-				</div>
-			</div>
-		</li>
-		<div class="row"></div>
-		<li class="accordion-navigation">
-    		<a href="#fish_health_menu">Fish Health</a>
-    		<div id="fish_health_menu" class="content inactive">
 				<div class="small-4 columns">
-					<select id="fish_list" type="select"></select>
-				</div>
-				<div class="small-8 columns">
-					<table id="fish_stats_display"></table>
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- Tank Health -->
+					<ins class="adsbygoogle"
+					     style="display:inline-block;width:336px;height:280px"
+					     data-ad-client="ca-pub-4926371143211898"
+					     data-ad-slot="1890235561"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
 				</div>
 			</div>
 		</li>
 		<div class="row"></div>
 		<li class="accordion-navigation">
-    		<a href="#add_fish_menu">Add Fish</a>
-    		<div id="add_fish_menu" class="content active">
-				<div class="small-6 columns">
-					<select id="species_list" type="select"></select>
+    		<a href="#fish_health_menu"><b>Fish Health</b></a>
+    		<div id="fish_health_menu" class="content inactive">
+				<div class="small-2 columns">
+					<select id="fish_list" type="select"></select><br><br>
+					<div class="switch round large">
+						Food Type<br>
+						<input id="food_type" type="checkbox">
+						<label for="food_type">
+							<span class="switch-on">Pellet</span>
+							<span class="switch-off">Flake</span>
+						</label>
+					</div>
 				</div>
 				<div class="small-6 columns">
-					<table id="species_stats_display"></table>
+					<table id="fish_stats_display">
+						<tr><th>Name:</th><td id="fish_Name_val"></td>
+						<th>Ammonia levels tolerated:</th><td id="fish_Ammonia_val"></td></tr>
+						<tr><th>Species:</th><td id="fish_Species_val"></td>
+						<th>Nitrite levels tolerated:</th><td id="fish_Nitrite_val"></td></tr>
+						<tr><td colspan="2"><center>
+							<img id="fish_image_url_val"></center></td>
+						<th>Nitrate levels tolerated:</th><td id="fish_Nitrate_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" id="fish_Status" title="">Status:
+							</span>
+						</td><td id="fish_Status_val"></td>
+						<th>pH levels tolerated:</th><td id="fish_pH_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Your fish will die if this bar empties. When your fish's status is 'Happy,' it will slowly regain health.">Health:
+							</span>
+						</th><td>
+							<div class="progress round" style="width: 100px"><span id="fish_health_val" class="meter"></span></div></td>
+						<th>Temperatures tolerated:</th><td id="fish_Temperatures_val"></td></tr>
+						<tr><th>
+							<span data-tooltip aria-haspopup="true" class="has-tip" title="Your fish will become hungry and begin losing health if this bar empties. Feed him before that happens to keep him happy.">Fullness:
+							</span>
+						</th><td>
+							<div class="progress round" style="width: 100px"><span id="fish_fullness_val" class="meter"></span></div></td>
+						<th>Hardness levels tolerated:</th><td id="fish_Hardness_val"></td></tr>
+					</table>
+				</div>
+				<div class="small-4 columns">
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- Fish Health -->
+					<ins class="adsbygoogle"
+					     style="display:inline-block;width:336px;height:280px"
+					     data-ad-client="ca-pub-4926371143211898"
+					     data-ad-slot="1611033960"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+			</div>
+		</li>
+		<div class="row"></div>
+		<li class="accordion-navigation">
+    		<a href="#add_fish_menu"><b>Add Fish</b></a>
+    		<div id="add_fish_menu" class="content active">
+				<div class="small-4 columns">
+					<select id="species_list" type="select"></select>
+					<br><br>
 					<div class="small-6 columns">
 		        		<input type="text" placeholder="" id="nickname_entry" maxlength=20 hidden=true />
 		        	</div>
@@ -91,11 +300,26 @@
 		      			<button class="button round" id="add_fish" hidden=true></button>
 		      		</div>
 				</div>
+				<div class="small-4 columns">
+					<table id="species_stats_display"></table>
+				</div>
+				<div class="small-4 columns">
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- Add Fish -->
+					<ins class="adsbygoogle"
+					     style="display:block"
+					     data-ad-client="ca-pub-4926371143211898"
+					     data-ad-slot="3366968763"
+					     data-ad-format="auto"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
 			</div>
 		</li>
 		<div class="row"></div>
 		<li class="accordion-navigation">
-    		<a href="#manage_plants_menu">Manage Plants</a>
+    		<a href="#manage_plants_menu"><b>Plants</b></a>
     		<div id="manage_plants_menu" class="content inactive">
 				<div class="small-2 columns">
 					<button class="button round" id="add_plant">Add a Plant</button>
@@ -105,46 +329,105 @@
 					<button class="button round" id="move_plant" hidden=true>Move a Plant</button>
 				</div>
 				<div class="small-2 columns">
+					<button class="button round" id="rotate_plant" hidden=true>Rotate a Plant</button>
+				</div>
+				<div class="small-2 columns">
 					<button class="button round" id="delete_plant" hidden=true>Delete a Plant</button>
 				</div>
 				<div class="small-2 columns">
 					<button class="button round" id="cancel_plant_add" hidden=true>Cancel Add</button>
 					<button class="button round" id="cancel_plant_move" hidden=true>Cancel Move</button>
+					<button class="button round" id="cancel_plant_rotate" hidden=true>Cancel Rotate</button>
 					<button class="button round" id="cancel_plant_delete" hidden=true>Cancel Delete</button>
 				</div>
-				<div class="small-8 columns">
+				<div class="small-4 columns">
 					<p align="left" id="plant_instructions"></p>
+				</div>
+				<div class="small-4 columns">
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- Plants -->
+					<ins class="adsbygoogle"
+					     style="display:inline-block;width:336px;height:280px"
+					     data-ad-client="ca-pub-4926371143211898"
+					     data-ad-slot="4564500362"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
 				</div>
 			</div>
 		</li>
 		<div class="row"></div>
 		<li class="accordion-navigation">
-    		<a href="#help_menu">Help</a>
-    		<div id="help_menu" class="content active">
-				<div class="small-6 columns">
-					<b>What would you like to know more about?</b>
-					<select id="help_topics" type="select">
-						<option value="fish">Fish</option>
-						<option value="change">Water Change</option>
-						<option value="pH">pH</option>
-						<option value="temperature">Temperature</option>
-						<option value="hardness">Hardness</option>
-						<option value="cycle">Nitrogen Cycle</option>
-						<option value="bacteria">Bacteria</option>
-						<option value="gases">Gases</option>
-					</select>
+    		<a href="#achievement_menu"><b>Unlockables</b></a>
+    		<div id="achievement_menu" class="content active">
+				<div class="small-4 columns">
+					<select id="achievements_list" type="select"></select>
 				</div>
-				<div class="small-6 columns">
-					<p align="left" id="help_text">
-						Fish can be kept healthy by keeping water parameters such as pH and temperature within the safe range, and by ensuring that they do not get hungry. Fish's preferences depend on their species, but individuals will also adapt to your water over time. See the other items in this menu to learn how to influence the chemistry of your tank's water!
-					</p>
+				<div class="small-4 columns">
+					<table id="achievements_display"></table>
+					<div class="small-4 columns">
+						<button class="button round" id="add_reward" hidden=true></button>
+						<button class="button round" id="move_reward" hidden=true></button>
+						<button class="button round" id="cancel_reward_add" hidden=true>Cancel Add</button>
+						<button class="button round" id="cancel_reward_move" hidden=true>Cancel Move</button>
+						<button class="button round" id="cancel_reward_rotate" hidden=true>Cancel Rotate</button>
+					</div>
+					<div class="small-4 columns">
+						<button class="button round" id="rotate_reward" hidden=true></button>
+					</div>
+					<div class="small-4 columns">
+						<button class="button round" id="delete_reward" hidden=true></button>
+					</div>
+				</div>
+				<div class="small-4 columns">
+					<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+					<!-- Unlockables -->
+					<ins class="adsbygoogle"
+					     style="display:inline-block;width:336px;height:280px"
+					     data-ad-client="ca-pub-4926371143211898"
+					     data-ad-slot="6041233563"></ins>
+					<script>
+					(adsbygoogle = window.adsbygoogle || []).push({});
+					</script>
+				</div>
+			</div>
+		</li>
+		<div class="row"></div>
+		<li class="accordion-navigation">
+    		<a href="#feedback_menu"><b>Feedback</b></a>
+    		<div id="feedback_menu" class="content active">
+				<div class="small-4 columns">
+					<b>Changelog</b>
+					<table>
+						<tr><th>1/17/2015:</th><td>Added more variety to the appearance of plants!</td></tr>
+						<tr><th>12/15/2015:</th><td>Added a vacuum as an achievement!.</td></tr>
+						<tr><th>12/14/2015:</th><td>Added casual mode.</td></tr>
+						<tr><th>12/12/2015:</th><td>Added tooltips</td></tr>
+						<tr><th>12/12/2015:</th><td>Added "fast mode."</td></tr>
+					</table>	
+				</div>
+				<div class="small-4 columns">
+					<b>What's on Deck</b>
+					<table>
+						<tr><td>The ability to upgrade to a bigger tank and unlock bigger/more difficult fish species</td></tr>
+						<tr><td>Add inter-fish dynamics - bullying, predation, breeding, etc.</td></tr>
+						<tr><td>Add more fish species</td></tr>
+						<tr><td>Add more achievements</td></tr>
+						<tr><td>Troubleshoot Internet Explorer compatibility</td></tr>
+					</table>
+				</div>
+				<div class="small-4 columns">
+					<b>Send Feedback</b>
+					<p align="left">
+						Found a bug? Find the interface confusing? Have a feature you want to suggest? Please email aquisim.dev@gmail.com. AquiSim is under extremely active development currently and your feedback will be heard.
+					</p>	
 				</div>
 			</div>
 		</li>
 	</ul>
 
 	<div class="row">
-		<div class="small-3 columns">
+		<div class="small-2 columns">
 			<a href="https://twitter.com/share"
 			   class="twitter-share-button"
 			   data-url="http://rachelwigell.github.io/AquiSim/"
@@ -152,13 +435,13 @@
 			   data-hashtags="AquiSim">Tweet</a>
 			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 		</div>
-		<div class="small-3 columns">
+		<div class="small-2 columns">
 			<div class="fb-share-button"
 				 data-href="http://rachelwigell.github.io/AquiSim/"
-				 data-layout="button_count">
+				 data-layout="button">
 			</div>
 		</div>
-		<div class="small-3 columns">
+		<div class="small-2 columns">
 			<form action="https://www.paypal.com/cgi-bin/webscr"
 				  method="post"
 				  target="_blank">
@@ -180,11 +463,34 @@
 				 height="1">
 			</form>
 		</div>
-		<div class="small-3 columns">
+		<div class="small-2 columns">
 			<a target="_blank"
 			   href="https://venmo.com/?txn=pay&recipients=rachelwigell%40alum.wpi.edu&amount=5.00&note=AquiSim!%20http%3A%2F%2Frachelwigell.github.io%2FAquiSim%2F&audience=public">
 			   Donate with Venmo
 			</a>
+		</div>
+		<div class="small-4 columns">
+			<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+			<!-- Bottom Left -->
+			<ins class="adsbygoogle"
+			     style="display:inline-block;width:320px;height:100px"
+			     data-ad-client="ca-pub-4926371143211898"
+			     data-ad-slot="4704101168"></ins>
+			<script>
+			(adsbygoogle = window.adsbygoogle || []).push({});
+			</script>
+		</div>
+		<div>
+			<script>
+			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+			  ga('create', 'UA-71163706-1', 'auto');
+			  ga('send', 'pageview');
+
+			</script>
 		</div>
 	</div>
 	<div class="row">

@@ -12,13 +12,19 @@ public class Tank{
   public float nitrosomonas; //bacteria
   public float nitrobacter; //bacteria
   public int waste; //poops
+  public int sinkingFood; //noms
+  public int floatingFood; //noms
   public int time; //min
   public ArrayList fish;
   public ArrayList poops;
   public ArrayList food;
+  public ArrayList floatingFood;
+  public ArrayList sinkingFood;
   public ArrayList deadFish;
   public ArrayList plants;
   public String name;
+  public long createdAt;
+  public ArrayList achievements;
 
   public final float pi = 3.14159;
   public final float timeScale = .01; //higher = harder
@@ -40,12 +46,22 @@ public class Tank{
     this.nitrosomonas = 1;
     this.nitrobacter = 1;
     this.waste = 0;
+    this.floatingFood = 0;
+    this.sinkingFood = 0;
     this.time = getTime();
     this.fish = new ArrayList();
     this.poops = new ArrayList();
     this.food = new ArrayList();
+    this.sinkingFood = new ArrayList();
+    this.floatingFood = new ArrayList();
     this.deadFish = new ArrayList();
     this.name = "";
+    this.createdAt = new Date().getTime();
+    this.achievements = new ArrayList();
+    for(int i = 0; i < achievementsList.size(); i++){
+      Achievement a = (Achievement) achievementsList.get(i);
+      achievements.add(a);
+    }
   }
   
   public Tank(String cookieString){ 
@@ -65,49 +81,189 @@ public class Tank{
     this.nitrobacter = float(stats[9]);
     this.waste = 0;
     this.time = getTime();
-    var now = new Date();
-    var lastSave = new Date(int(stats[12])+2000, int(stats[13]), int(stats[14]), int(stats[15]), int(stats[16]), 0, 0);
-    int elapsedMinutes = int((now.getTime() - lastSave.getTime())/60000);
+    this.createdAt = stats[14];
+    playMode = stats[15];
+    if(playMode == "" || playMode == null){
+      playMode = "normal_mode";
+    }
+    $("#"+playMode).attr("checked", "checked");
     this.fish = new ArrayList();
-    for(int i = 0; i < 15; i++){
-      cookie = get_cookie("f" + i);
-      if(cookie != ""){
-        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-        if(fishStats[0] == "Guppy"){
-          this.fish.add(new Guppy(fishStats, true)); 
-        }
-      }
+    for(int i = 0; i < maxFish; i++){
+     cookie = localStorage.getItem("f" + i);
+     if(cookie != "" && cookie != null){
+       String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+       if(fishStats[0] == "Guppy"){
+         this.fish.add(new Guppy(fishStats, true)); 
+       }
+       else if(fishStats[0] == "Neon Tetra"){
+         this.fish.add(new NeonTetra(fishStats, true));
+       }
+       else if(fishStats[0] == "Cherry Barb"){
+         this.fish.add(new CherryBarb(fishStats, true));
+       }
+       else if(fishStats[0] == "White Cloud Mountain Minnow"){
+         this.fish.add(new WhiteCloudMountainMinnow(fishStats, true));
+       }
+       else if(fishStats[0] == "Cherry Shrimp"){
+         this.fish.add(new CherryShrimp(fishStats, true));
+       }
+       else if(fishStats[0] == "Mystery Snail"){
+         this.fish.add(new MysterySnail(fishStats, true));
+       }
+       else if(fishStats[0] == "Cory Catfish"){
+         this.fish.add(new CoryCatfish(fishStats, true));
+       }
+       else if(fishStats[0] == "Platy"){
+         this.fish.add(new Platy(fishStats, true));
+       }
+       else if(fishStats[0] == "Danio"){
+         this.fish.add(new Danio(fishStats, true));
+       }
+       else if(fishStats[0] == "Tiger Barb"){
+         this.fish.add(new TigerBarb(fishStats, true));
+       }
+     }
     }
     this.poops = new ArrayList();
-    for(int i = 0; i < float(stats[11]); i++){
-      this.poops.add(new Poop());
-      this.waste++;
+    for(int i = 0; i < float(stats[12]); i++){
+     this.poops.add(new Poop());
+     this.waste++;
     }
     this.food = new ArrayList();
+    this.sinkingFood = new ArrayList();
+    this.floatingFood = new ArrayList();
     for(int i = 0; i < float(stats[10]); i++){
-      this.food.add(new Food());
+      Food f = new SinkingFood();
+      this.food.add(f);
+      this.sinkingFood.add(f);
+    }
+    for(int i = 0; i < float(stats[11]); i++){
+      Food f = new FloatingFood();
+      this.food.add(f);
+      this.floatingFood.add(f);
     }
     this.deadFish = new ArrayList();
-    for(int i = 0; i < 15; i++){
-      cookie = get_cookie("d" + i);
-      if(cookie != ""){
-        String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-        if(fishStats[0] == "Guppy"){
-          this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
-          this.waste += 5;
-        }
-      }
+    for(int i = 0; i < maxFish; i++){
+     cookie = localStorage.getItem("d" + i);
+     if(cookie != "" && cookie != null){
+       String[] fishStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+       if(fishStats[0] == "Guppy"){
+         this.deadFish.add(new DeadFish(new Guppy(fishStats, false))); 
+         this.waste += 5;
+       }
+       else if(fishStats[0] == "Neon Tetra"){
+         this.deadFish.add(new DeadFish(new NeonTetra(fishStats, false))); 
+         this.waste += 4;
+       }
+       else if(fishStats[0] == "Cherry Barb"){
+         this.deadFish.add(new DeadFish(new CherryBarb(fishStats, false))); 
+         this.waste += 5;
+       }
+       else if(fishStats[0] == "White Cloud Mountain Minnow"){
+         this.deadFish.add(new DeadFish(new WhiteCloudMountainMinnow(fishStats, false))); 
+         this.waste += 4;
+       }
+       else if(fishStats[0] == "Cherry Shrimp"){
+         this.deadFish.add(new DeadFish(new CherryShrimp(fishStats, false))); 
+         this.waste += 3;
+       }
+       else if(fishStats[0] == "Mystery Snail"){
+         this.deadFish.add(new DeadFish(new MysterySnail(fishStats, false))); 
+         this.waste += 5;
+       }
+       else if(fishStats[0] == "Cory Catfish"){
+         this.deadFish.add(new DeadFish(new CoryCatfish(fishStats, false))); 
+         this.waste += 6;
+       }
+       else if(fishStats[0] == "Platy"){
+         this.deadFish.add(new DeadFish(new Platy(fishStats, false))); 
+         this.waste += 6;
+       }
+       else if(fishStats[0] == "Danio"){
+         this.deadFish.add(new DeadFish(new Danio(fishStats, false))); 
+         this.waste += 6;
+       }
+       else if(fishStats[0] == "Tiger Barb"){
+         this.deadFish.add(new DeadFish(new TigerBarb(fishStats, false))); 
+         this.waste += 5;
+       }
+     }
     }
     this.plants = new ArrayList();
-    for(int i = 0; i < 5; i++){
-      cookie = get_cookie("p" + i);
-      if(cookie != ""){
-        String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
-        this.plants.add(new Plant(plantStats[6], new Vector3D(plantStats[0], plantStats[1], plantStats[2]),
-                                  new Vector3D(plantStats[3], plantStats[4], plantStats[5]), true));
+    for(int i = 0; i < maxPlants; i++){
+     cookie = localStorage.getItem("p" + i);
+     if(cookie != "" && cookie != null){
+       String[] plantStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+       if(plantStats.length > 7){
+         String type = plantStats[7];
+         if(type == "Spindle"){
+           this.plants.add(new SpindlePlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+         }
+         else if(type == "Leaf"){
+           this.plants.add(new LeafPlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+         }
+         else if(type == "Skeletal"){
+           this.plants.add(new SkeletalPlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+         }
+         else if(type == "Moss"){
+           this.plants.add(new MossPlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+         }
+       }
+       else{
+         this.plants.add(new SpindlePlant(plantStats[6],
+                       new Vector3D(int(plantStats[0]), int(plantStats[1]), int(plantStats[2])),
+                       new Vector3D(new Vector3D(-.475*fieldX, float(plantStats[3]), .475*fieldX).centermost(),
+                       fieldY-center.y,
+                       new Vector3D(-.5*fieldZ, float(plantStats[4]), .5*fieldZ).centermost()),
+                       float(plantStats[5])));
+       }
+     }
+    }
+    this.achievements = new ArrayList();
+    for(int i = 0; i < achievementsList.size(); i++){
+      cookie = localStorage.getItem("a" + i);
+      if(cookie != "" && cookie != null){
+        String[] achievementStats = splitTokens(LZString.decompressFromUTF16(cookie), "+");
+      }
+      else{
+        String[] achievementStats = {"f", "f"};
+      }
+      if(i == 0){
+        this.achievements.add(new ScallopShell(achievementStats));
+      }
+      else if(i == 1){
+        this.achievements.add(new ConchShell(achievementStats));
+      }
+      else if(i == 2){
+       this.achievements.add(new Bubbler(achievementStats));
+      }
+      else if(i == 3){
+       this.achievements.add(new Substrate(achievementStats));
+      }
+      else if(i == 4){
+        this.achievements.add(new Vacuum(achievementStats));
       }
     }
-    this.skipAhead(elapsedMinutes);
   }
     
   public int getTime(){
@@ -129,7 +285,7 @@ public class Tank{
   }
   
   public float changePH(){
-    float pH = .0001*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
+    float pH = .002*this.pH*(14-this.pH)*(-.01*this.co2 - .1*this.ammonia)/(pow(10, abs(this.pH-7.0))*this.volume/this.hardness);
     return pH;
   }
 
@@ -140,26 +296,26 @@ public class Tank{
   }
 
   public float changeHard(){
-    float hardness = -.0008*this.co2*this.hardness/this.volume + .000002*this.surfaceArea/this.hardness; //assuming stones on bottom of tank
+    float hardness = -.0001*this.co2*this.hardness/this.volume;
     return hardness;
   }
 
   public float changeO2(){
-    float photosynthesis = (.5 + .5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2; //check this
-    float respiration = (this.cmFish+this.plants.size())*this.o2; // and this
-    float o2 = .02*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
+    float photosynthesis = (1+sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2; //check this
+    float respiration = .1*(this.cmFish+this.plants.size())*this.o2; // and this
+    float o2 = .01*(photosynthesis-respiration+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return o2;
   }
 
   public float changeCO2(){
-    float photosynthesis = (.5+.5*sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
-    float respiration = (this.cmFish+this.plants.size())*this.o2;
-    float co2 = .015*(photosynthesis-respiration+.01*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
+    float photosynthesis = (1+sin(pi/720.0*this.time-pi/2.0))*this.plants.size()*this.co2;
+    float respiration = .1*(this.cmFish+this.plants.size())*this.o2;
+    float co2 = .01*(respiration-photosynthesis+.05*this.surfaceArea)/(this.volume+5*(this.o2+this.co2)+this.temp);
     return co2;
   }
 
   public float changeAmmonia(){
-    float ammonia = (.000008*this.temp*this.pH*(this.waste + this.food.size() + .01*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
+    float ammonia = (.00001*this.temp*this.pH*(this.waste + this.food.size() + .1*this.cmFish) - .001*this.nitrosomonas*this.ammonia)/this.volume;
     return ammonia;
   }
 
@@ -169,29 +325,35 @@ public class Tank{
   }
 
   public float changeNitrate(){
-    float nitrate = (.001*this.nitrite*this.nitrobacter-.001*this.plants.size()*this.nitrate)/this.volume;
+    float nitrate = (.001*this.nitrite*this.nitrobacter-.0001*this.plants.size()*this.nitrate)/this.volume;
     return nitrate;
   }
 
   public float changeNitrosomonas(){
-    float nitrosomonas = .008*this.ammonia*this.nitrosomonas-.001*this.nitrosomonas;
+    float nitrosomonas = .05*this.ammonia*this.nitrosomonas-.0001*this.nitrosomonas;
     return nitrosomonas;
   }
 
   public float changeNitrobacter(){
-    float nitrobacter = .008*this.nitrite*this.nitrobacter-.001*this.nitrobacter;
+    float nitrobacter = .05*this.nitrite*this.nitrobacter-.0001*this.nitrobacter;
     return nitrobacter;
   }
   
   public void addFood(Food food){
     this.food.add(food);
+    food.addToAppropriateList(this);
+  }
+  
+  public void removeFood(Food f){
+    this.food.remove(f);
+    f.removeFromAppropriateList(this);
   }
 
   public int changeWaste(){
     int waste = 0;
     for(Fish f: this.fish){
-      int threshold = (int) (((float) max(f.fullness, 0)) / ((float) f.maxFullness) * f.size/2.0);
-      int rand = random(5000);
+      float threshold = (((float) max(f.fullness, 0)) / ((float) f.maxFullness) * f.size/2.0);
+      float rand = random(60/float(tank.timeScale));
       if(rand < threshold){
         waste++;
         addPoop(f);
@@ -215,43 +377,6 @@ public class Tank{
     return this;
   }
   
-  public String fishHappiness(Fish f){
-    if(f.fullness <= 0){
-      f.status = "Hungry!";
-    }
-    else if(this.ammonia > f.ammonia){
-      f.status = "Ammonia too high.";
-    }
-    else if(this.nitrite > f.nitrite){
-      f.status = "Nitrite too high.";
-    }
-    else if(this.nitrate > f.nitrate){
-      f.status = "Nitrate too high.";
-    }
-    else if(this.pH < f.minPH){
-      f.status = "pH too low.";
-    }
-    else if(this.pH > f.maxPH){
-      f.status = "pH too high.";
-    }
-    else if(this.temp < f.minTemp){
-      f.status = "Temperature too low.";
-    }
-    else if(this.temp > f.maxTemp){
-      f.status = "Temperature too high.";
-    }
-    else if(this.hardness < f.minHard){
-      f.status = "Hardness too low.";
-    }
-    else if(this.hardness > f.maxHard){
-      f.status = "Hardness too high.";
-    }
-    else{ //if none of the above, then  it's happy
-      f.status = "Happy.";
-    }
-    return f.status;
-  }
-  
   public float getParameter(String parameter){
     if(parameter == "Ammonia"){
       return this.ammonia;
@@ -273,48 +398,117 @@ public class Tank{
     }
   }
   
-  public void progress(){
-    //per fish operations
-    for(Fish f: this.fish){
-      f.changeHunger(); //update fish's hunger level 
-      this.fishHappiness(f); //update fish's happiness status
-      f.setHealth(); //update fish's health
-      f.adapt();
-      this.handleDeceased(f); //check if fish is dead and perform necessary operations if so
+  public void checkAchievementsFulfilled(){
+    for(int i = 0; i < this.achievements.size(); i++){
+      Achievement a = (Achievement) this.achievements.get(i);
+      a.checkFulfilled();
     }
-
-    //tank operations
-    float cmFish = this.changeFish();
-    float pH = new Vector3D(.01, this.pH + timeScale * this.changePH(), 13.99).centermost();
-    float temp = new Vector3D(19, this.temp + timeScale * this.changeTemp(), 25).centermost();
-    float hardness = new Vector3D(.01, this.hardness + timeScale * this.changeHard(), 99).centermost();
-    float o2 = new Vector3D(.01, this.o2 + timeScale * this.changeO2(), 99).centermost();
-    float co2 = new Vector3D(.01, this.co2 + timeScale * this.changeCO2(), 99).centermost();
-    float ammonia = new Vector3D(0, this.ammonia + timeScale * this.changeAmmonia(), 99).centermost();
-    float nitrite = new Vector3D(0, this.nitrite + timeScale * this.changeNitrite(), 99).centermost();
-    float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate(), 99).centermost();
-    float nitrosomonas = new Vector3D(1, this.nitrosomonas + timeScale * this.changeNitrosomonas(), 9999).centermost();
-    float nitrobacter = new Vector3D(1, this.nitrobacter + timeScale * this.changeNitrobacter(), 9999).centermost();
-    int waste = this.waste + this.changeWaste();
-    int time = this.getTime();
-
-    //do assignment after so that all calculations are accurate
-    this.cmFish = cmFish;
-    this.pH = pH;
-    this.temp = temp;
-    this.hardness = hardness;
-    this.o2 = o2;
-    this.co2 = co2;
-    this.ammonia = ammonia;
-    this.nitrite = nitrite;
-    this.nitrate = nitrate;
-    this.nitrosomonas = nitrosomonas;
-    this.nitrobacter = nitrobacter;
-    this.waste = waste;
-    this.time = time;
   }
   
-  public Vector3D nearestFood(Vector3D absolutePosition){
+  public void progressFish(){
+    //per fish operations
+    for(int i = 0; i < this.fish.size(); i++){
+      Fish f = (Fish) this.fish.get(i);
+      f.changeHunger(); //update fish's hunger level 
+      f.fishHappiness(); //update fish's happiness status
+      f.setHealth(); //update fish's health
+      if(playMode != "casual_mode"){
+        f.adapt();
+      }
+      this.handleDeceased(f); //check if fish is dead and perform necessary operations if so
+    }
+  }
+  
+  public void progressAchievements(){
+    //achievement operations
+    this.checkAchievementsFulfilled();
+  }
+  
+  public void progressTank(){
+    //tank operations
+    if(playMode != "casual_mode"){
+      float achievementPH = 0;
+      float achievementTemp = 0;
+      float achievementHard = 0;
+      float achievementO2 = 0;
+      float achievementCO2 = 0;
+      float achievementAmmonia = 0;
+      float achievementNitrite = 0;
+      float achievementNitrate = 0;
+      float achievementNitrosomonas = 0;
+      float achievementNitrobacter = 0;
+      for(int j = 0; j < this.achievements.size(); j++){
+        Achievement a = (Achievement) this.achievements.get(j);
+        if(a.used){
+          HashMap effects = a.tankEffects();
+          Iterator i = effects.entrySet().iterator();
+          while (i.hasNext()) {
+            Map.Entry parameter = (Map.Entry) i.next();
+            String parameterKey = (String) parameter.getKey();
+            float parameterValue = (float) effects.get(parameterKey);
+            if(parameterKey == "pH") achievementPH += parameterValue;
+            else if(parameterKey == "pH") achievementPH += parameterValue;
+            else if(parameterKey == "temperature") achievementTemp += parameterValue;
+            else if(parameterKey == "hardness") achievementHard += parameterValue;
+            else if(parameterKey == "o2") achievementO2 += parameterValue;
+            else if(parameterKey == "co2") achievementCO2 += parameterValue;
+            else if(parameterKey == "ammonia") achievementAmmonia += parameterValue;
+            else if(parameterKey == "nitrite") achievementNitrite += parameterValue;
+            else if(parameterKey == "nitrate") achievementNitrate += parameterValue;
+            else if(parameterKey == "nitrosomonas") achievementNitrosomonas += parameterValue;
+            else if(parameterKey == "nitrobacter") achievementNitrobacter += parameterValue;
+          }
+        }
+      }
+    }
+    
+    if(playMode != "casual_mode"){
+      float cmFish = this.changeFish();
+      float pH = new Vector3D(.01, this.pH + timeScale * this.changePH() + timeScale * achievementPH, 13.99).centermost();
+      float temp = new Vector3D(19, this.temp + timeScale * this.changeTemp() + timeScale * achievementTemp, 25).centermost();
+      float hardness = new Vector3D(.01, this.hardness + timeScale * this.changeHard() + timeScale * achievementHard, 99).centermost();
+      float o2 = new Vector3D(.01, this.o2 + timeScale * this.changeO2() + timeScale * achievementO2, 99).centermost();
+      float co2 = new Vector3D(.01, this.co2 + timeScale * this.changeCO2() + timeScale * achievementCO2, 99).centermost();
+      float ammonia = new Vector3D(0, this.ammonia + timeScale * this.changeAmmonia() + timeScale * achievementAmmonia, 99).centermost();
+      float nitrite = new Vector3D(0, this.nitrite + timeScale * this.changeNitrite() + timeScale * achievementNitrite, 99).centermost();
+      float nitrate = new Vector3D(0, this.nitrate + timeScale * this.changeNitrate() + timeScale * achievementNitrate, 99).centermost();
+      float nitrosomonas = new Vector3D(1, this.nitrosomonas + timeScale * this.changeNitrosomonas() + timeScale * achievementNitrosomonas, 9999).centermost();
+      float nitrobacter = new Vector3D(1, this.nitrobacter + timeScale * this.changeNitrobacter() + timeScale * achievementNitrobacter, 9999).centermost();
+      int waste = this.waste + this.changeWaste();
+      int time = this.getTime();
+
+    //do assignment after so that all calculations are accurate
+      this.cmFish = cmFish;
+      this.pH = pH;
+      this.temp = temp;
+      this.hardness = hardness;
+      this.o2 = o2;
+      this.co2 = co2;
+      this.ammonia = ammonia;
+      this.nitrite = nitrite;
+      this.nitrate = nitrate;
+      this.nitrosomonas = nitrosomonas;
+      this.nitrobacter = nitrobacter;
+      this.waste = waste;
+      this.time = time;
+    }
+    else{
+      float cmFish = this.changeFish();
+      int waste = this.waste + this.changeWaste();
+      int time = this.getTime();
+      this.cmFish = cmFish;
+      this.waste = waste;
+      this.time = time;
+    }
+  }
+  
+  public void progress(){
+    this.progressFish();
+    this.progressAchievements();
+    this.progressTank();
+  }
+  
+  public Vector3D nearFood(Vector3D absolutePosition){
     Vector3D closest = null;
     float distance = MAX_FLOAT;
     for(int i = 0; i < this.food.size(); i++){
@@ -324,32 +518,41 @@ public class Tank{
         distance = fDistance;
         closest = f.absolutePosition;
       }
+      if(distance < 50){
+        //to increase performance (e.g. if there is a lot of food in the tank)
+        //we don't necessarily have to go to the very closest food. if we've found
+        //food less than 50 units away, that's good enough.
+        break;
+      }
     }
     return closest;
   }
   
   public boolean eat(Fish fish, Food food){
-    if(fish.absolutePosition.distance(food.absolutePosition) < food.dimensions.x*8){
-      fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
+    if(fish.fullness >= fish.maxFullness){
+      return false;
+    }
+    if(fish.absolutePosition.distance(food.absolutePosition) < 40){
+      fish.fullness = min(fish.fullness+fish.ease*2200, fish.maxFullness);
       return true;
     }
     return false;
   }
   
   public void allEat(){
+    ArrayList eaten = new ArrayList();
     for(int i = 0; i < this.fish.size(); i++){
       Fish aFish = (Fish) this.fish.get(i);
-      ArrayList eaten = new ArrayList();
       for(int j = 0; j < this.food.size(); j++){
         Food aFood = (Food) this.food.get(j);
         if(this.eat(aFish, aFood)){
           eaten.add(aFood);
         }
       }
-      for(int k = 0; k < eaten.size(); k++){
-        Food aFood = (Food) eaten.get(k);
-        this.food.remove(aFood);
-      }
+    }
+    for(int k = 0; k < eaten.size(); k++){
+      Food aFood = (Food) eaten.get(k);
+      this.removeFood(aFood);
     }
   }
   
@@ -372,11 +575,11 @@ public class Tank{
     this.deadFish.add(new DeadFish(f));
   }
   
-  public boolean randomizedEating(Fish fish, Food food){
-    double percentChance = .005*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
+  public boolean randomizedEating(Fish fish){
+    double percentChance = .002*max(1-(max(fish.fullness, 0)/fish.maxFullness), 0);
     float rand = random(0, 1);
     if(rand < percentChance){
-      fish.fullness = min(fish.fullness+fish.ease*1800, fish.maxFullness);
+      fish.fullness = min(fish.fullness+fish.ease*2200, fish.maxFullness);
       return true;
     }
     return false;
@@ -387,20 +590,20 @@ public class Tank{
     for(int i = 0; i < this.fish.size(); i++){
       Fish fish = (Fish) this.fish.get(i);
       for(int j = 0; j < this.food.size(); j++){
-        Food food = (Food) this.food.get(i);
-        if(this.randomizedEating(fish, food)){
+        Food food = (Food) this.food.get(j);
+        if(this.randomizedEating(fish)){
           eaten.add(food);
         }
       }
-    }
-    for(int i = 0; i < eaten.size(); i++){
-      Food food = (Food) eaten.get(i);
-      this.food.remove(food);
+      for(int j = 0; j < eaten.size(); j++){
+        Food food = (Food) eaten.get(j);
+        this.removeFood(food);
+      }
     }
   }
   
   public void skipAhead(int minutes){
-    for(int i = 0; i < minutes*12; i++){
+    for(int i = 0; i < minutes; i++){
       this.progress();
       this.allRandomizedEat();
     }
