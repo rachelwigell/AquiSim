@@ -343,4 +343,6 @@ public abstract class Fish {
         this.velocity = this.velocity.addVector(pullToward.multiplyScalar(this.schoolingCoefficient));
         return;
       }
+    }
+  }
 }
