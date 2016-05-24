@@ -22,7 +22,7 @@ public class CherryShrimp extends Fish{
     this.activity = 3;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("cherryshrimp.obj");
+    this.model = loadShape("graphics/cherryshrimp.obj");
     this.sprite = "graphics/cherryshrimp.png";
     this.position = new Vector3D(0, fieldY/2, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);

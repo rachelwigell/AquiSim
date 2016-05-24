@@ -24,7 +24,7 @@ public class MysterySnail extends Fish{
     this.activity = 1;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("mysterysnail.obj");
+    this.model = loadShape("graphics/mysterysnail.obj");
     this.sprite = "graphics/mysterysnail.png";
     this.position = new Vector3D(0, fieldY/2, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y+fieldY/2, zero.z);

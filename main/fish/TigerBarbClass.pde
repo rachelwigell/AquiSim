@@ -22,7 +22,7 @@ public class TigerBarb extends Fish{
     this.activity = 5;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("tigerbarb.obj");
+    this.model = loadShape("graphics/tigerbarb.obj");
     this.sprite = "graphics/tigerbarb.png";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);

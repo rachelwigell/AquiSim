@@ -1,6 +1,6 @@
-public class CherryBarb extends Fish{
-  public CherryBarb(String name){
-    this.species = "Cherry Barb";
+public class Guppy extends Fish{
+  public Guppy(String name){
+    this.species = "Guppy";
     this.name = name;
     this.ease = 5;
     this.maxHealth = this.ease*24*60*12;
@@ -9,40 +9,40 @@ public class CherryBarb extends Fish{
     this.size = 5;
     this.maxFullness = this.ease*this.size*24*60*3;
     this.fullness = this.maxFullness/2;
-    this.minPH = 5.5;
-    this.maxPH = 8;
-    this.minTemp = 22;
-    this.maxTemp = 28;
-    this.minHard = 5;
-    this.maxHard = 25;
+    this.minPH = 7;
+    this.maxPH = 8.5;
+    this.minTemp = 20;
+    this.maxTemp = 29;
+    this.minHard = 8;
+    this.maxHard = 20;
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;
     this.scaleVal = 8;
-    this.activity = 4;
+    this.activity = 5;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("cherrybarb.obj");
-    this.sprite = "graphics/cherrybarb.png";
+    this.model = loadShape("graphics/guppy.obj");
+    this.sprite = "graphics/guppy.PNG";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.dimensions = new Vector3D(10.5*this.scaleVal, 5*this.scaleVal, 1.35*this.scaleVal);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.5);
+    this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scaleVal);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
-    this.region = -.1;
+    this.region = -.3;
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
-    this.schoolingCoefficient = .8;
+    this.schoolingCoefficient = .6;
   }
   
   
   //constructor for load
-  public CherryBarb(String[] stats, boolean alive){
-    this.species = "Cherry Barb";
+  public Guppy(String[] stats, boolean alive){
+    this.species = "Guppy";
     this.ease = 5;
     this.maxHealth = this.ease*24*60*12;
     this.status = "Happy.";
@@ -64,13 +64,13 @@ public class CherryBarb extends Fish{
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;
-    this.model = loadShape("cherrybarb.obj");
+    this.model = loadShape("guppy.obj");
     this.scaleVal = 8;
     this.activity = 5;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.sprite = "graphics/cherrybarb.png";
-    this.dimensions = new Vector3D(10.5*this.scaleVal, 5*this.scaleVal, 1.35*this.scaleVal);
+    this.sprite = "graphics/guppy.PNG";
+    this.dimensions = new Vector3D(12*this.scaleVal, 4.6*this.scaleVal, 1.4*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
     if(alive){
@@ -84,10 +84,10 @@ public class CherryBarb extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.5);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
-    this.region = -.1;
-    this.schoolingCoefficient = .8;
+    this.region = -.3;
+    this.schoolingCoefficient = .6;
   }
 }

@@ -37,6 +37,11 @@ public abstract class Fish {
   public long happySince;
   public float schoolingCoefficient;
 
+  /*
+  assign a 1-3 value to each parameter of the water chemistry indicating how dangerous
+  (3 being most dangerous) it is when that parameter gets out of range
+  this ends up affecting how much fish health is subtracted when the water is unhealthy
+  */
   public void setDangerRatings() {
     this.dangerRatings = new HashMap();
     this.dangerRatings.put("Ammonia", 3);
@@ -47,6 +52,9 @@ public abstract class Fish {
     this.dangerRatings.put("Temperature", 1);
   }
   
+  /*
+  glorified getter method to return the limits of
+  */
   public double getParameter(String parameter, boolean high){
     if(parameter == "Ammonia"){
       return this.ammonia;
@@ -163,16 +171,16 @@ public abstract class Fish {
       this.status = "Nitrite too high.";
       this.happySince = 0;
     }
-    else if(tank.nitrate > this.nitrate && playMode != "casual_mode"){
-      this.status = "Nitrate too high.";
-      this.happySince = 0;
-    }
     else if(tank.pH < this.minPH && playMode != "casual_mode"){
       this.status = "pH too low.";
       this.happySince = 0;
     }
     else if(tank.pH > this.maxPH && playMode != "casual_mode"){
       this.status = "pH too high.";
+      this.happySince = 0;
+    }
+    else if(tank.nitrate > this.nitrate && playMode != "casual_mode"){
+      this.status = "Nitrate too high.";
       this.happySince = 0;
     }
     else if(tank.temp < this.minTemp && playMode != "casual_mode"){

@@ -1,36 +1,36 @@
-public class Danio extends Fish{
-  public Danio(String name){
-    this.species = "Danio";
+public class CherryBarb extends Fish{
+  public CherryBarb(String name){
+    this.species = "Cherry Barb";
     this.name = name;
     this.ease = 5;
     this.maxHealth = this.ease*24*60*12;
     this.health = this.maxHealth;
     this.status = "Happy.";
-    this.size = 6;
+    this.size = 5;
     this.maxFullness = this.ease*this.size*24*60*3;
     this.fullness = this.maxFullness/2;
-    this.minPH = 6;
+    this.minPH = 5.5;
     this.maxPH = 8;
-    this.minTemp = 18;
+    this.minTemp = 22;
     this.maxTemp = 28;
     this.minHard = 5;
-    this.maxHard = 19;
+    this.maxHard = 25;
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;
-    this.scaleVal = 12;
+    this.scaleVal = 8;
     this.activity = 4;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.model = loadShape("danio.obj");
-    this.sprite = "graphics/danio.PNG";
+    this.model = loadShape("graphics/cherrybarb.obj");
+    this.sprite = "graphics/cherrybarb.png";
     this.position = new Vector3D(0, 0, 0);
     this.absolutePosition = new Vector3D(zero.x, zero.y, zero.z);
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.dimensions = new Vector3D(7.5*this.scaleVal, 2.6*this.scaleVal, 1.2*this.scaleVal);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
+    this.dimensions = new Vector3D(10.5*this.scaleVal, 5*this.scaleVal, 1.35*this.scaleVal);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.5);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
     this.region = -.1;
@@ -41,8 +41,8 @@ public class Danio extends Fish{
   
   
   //constructor for load
-  public Danio(String[] stats, boolean alive){
-    this.species = "Danio";
+  public CherryBarb(String[] stats, boolean alive){
+    this.species = "Cherry Barb";
     this.ease = 5;
     this.maxHealth = this.ease*24*60*12;
     this.status = "Happy.";
@@ -64,13 +64,13 @@ public class Danio extends Fish{
     this.ammonia = .1;
     this.nitrite = .25;
     this.nitrate = 50;
-    this.model = loadShape("danio.obj");
-    this.scaleVal = 12;
+    this.model = loadShape("cherrybarb.obj");
+    this.scaleVal = 8;
     this.activity = 5;
     this.swimming = true;
     this.rotate = new Vector3D(0, PI, 0);
-    this.sprite = "graphics/danio.PNG";
-    this.dimensions = new Vector3D(7.5*this.scaleVal, 2.6*this.scaleVal, 1.2*this.scaleVal);
+    this.sprite = "graphics/cherrybarb.png";
+    this.dimensions = new Vector3D(10.5*this.scaleVal, 5*this.scaleVal, 1.35*this.scaleVal);
     this.position = new Vector3D(0, 0, 0);
     this.position.x = random((-.475*fieldX+this.dimensions.x/2.0), (.475*fieldX-this.dimensions.x/2.0));
     if(alive){
@@ -84,7 +84,7 @@ public class Danio extends Fish{
     this.velocity = new Vector3D(0, 0, 0);
     this.acceleration = new Vector3D(0, 0, 0);
     this.orientation = new Vector3D(0, 0, 0);
-    this.eyePosition = new Vector3D(1/3.0, 0, 1/3.0);
+    this.eyePosition = new Vector3D(1/3.0, 0, 1/2.5);
     this.offset = new Vector3D(0, 0, 0);
     this.setDangerRatings();
     this.region = -.1;

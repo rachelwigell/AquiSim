@@ -2,7 +2,7 @@ public class Bubbler extends Achievement{
   ArrayList bubbles;
   
   public Bubbler(){
-    this.rewardModel = loadShape("bubbler.obj");
+    this.rewardModel = loadShape("graphics/bubbler.obj");
     this.rewardSprite = "graphics/bubbler.png";
     this.rewardDescription = "A tube that runs bubbles through your tank!";
     this.condition = "cycling your tank (getting both populations of bacteria up above 500M)";
