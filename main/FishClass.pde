@@ -321,18 +321,16 @@ public abstract class Fish {
       if(f.species != this.species){
         continue;
       }
-      float distance = this.position.squareDistance(f.position);
-      //don't school with yourself
-      if(distance < .001){
-        //break here - only follow a fish that comes before you in the list of fish
-        //this is to allow the first fish in the list to be the "leader"
-        //we need a leader who swims normally, unaffected by the schooling algorithm
-        //otherwise, the fish just form a cluster that doesn't move
+      //don't school with yourself (nicknames are unique, so name comparison is a safe and efficient way to compare fish)
+      else if(f.name == this.name){
+        //if you are the first fish of your species in this list, then you are the "leader" of your school
+        //you will not be pulled towards any other fish but will continue to swim normally.
+        //we keep one leader fish unaffected by the schooling algorithm because otherwise fish tend to
+        //cluster around a centroid and don't move properly
         break;
       }
-      //now we've found the first fish in the list that isn't yourself
       else{
-        //we're going to move towards his position
+        //move towards the position of the leader fish
         toward = f.position;
         break;
       }
@@ -340,7 +338,7 @@ public abstract class Fish {
     if(toward != null){
       //BUT, we don't want to move toward the leader fish's exact position.
       //instead we pull toward a point that's near him, offset by some pseudorandom amount
-      //we base this amount on the fish's name so that is is consistent
+      //we base this offset on the fish's name so that it is consistent
       //so one fish will consistently tend to be above the leader, another behind, etc
       //this helps prevent the fish from just piling up on top the leader
       int offset = int(name.toCharArray())[0];
@@ -348,7 +346,7 @@ public abstract class Fish {
       //convert to a vector pointing from the current position to the desired position and normalize
       toward = toward.addVector(this.position.multiplyScalar(-1)).normalize();
       //schoolingCoefficient is the "strength" of the pull, different for each species
-      //also dependent upon the distance from the leader - when far away, move faster
+      //(since some real fish species school more tightly than others)
       this.velocity = this.velocity.addVector(toward.multiplyScalar(this.schoolingCoefficient));
     }
   }
