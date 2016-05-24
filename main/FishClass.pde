@@ -312,42 +312,35 @@ public abstract class Fish {
     popMatrix();
   }
   
-  // pull toward the fish of your species that comes first in the list
+  /*
+  Schooling algorithm. Establish a "leader" fish (the first fish of this species occurring in the tank.fish list).
+  The leader fish swims normally, but all other fish of its species will be drawn towards it. This is achieved by
+  adding a vector towards the leader fish's position to other fish's velocities.
+  Effect: No effect if this fish is the leader fish. Otherwise, make a change to this fish's velocity.
+  */
   public void pullTowardsSchool(){
-    Vector3D toward = null;
+    //iterate to find the leader fish
     for(int i = 0; i < tank.fish.size(); i++){
       Fish f = (Fish) tank.fish.get(i);
-      //only school with your own species
-      if(f.species != this.species){
-        continue;
+      if(f.name == this.name){
+        //if leader fish is this fish (determined by fish's nicknames - nicknames are unique,
+        //so name comparison is a safe and efficient way to determine equality), no effect.
+        return;
       }
-      //don't school with yourself (nicknames are unique, so name comparison is a safe and efficient way to compare fish)
-      else if(f.name == this.name){
-        //if you are the first fish of your species in this list, then you are the "leader" of your school
-        //you will not be pulled towards any other fish but will continue to swim normally.
-        //we keep one leader fish unaffected by the schooling algorithm because otherwise fish tend to
-        //cluster around a centroid and don't move properly
-        break;
+      else if(f.species == this.species){
+        Vector3D pullToward = f.position;
+        //BUT, we don't want to move toward the leader fish's exact position.
+        //instead we pull toward a point that's near him, offset by some pseudorandom amount
+        //we base this offset on the fish's name so that it is consistent
+        //so one fish will consistently tend to be above the leader, another behind, etc
+        //this helps prevent the fish from just piling up on top the leader
+        int offset = int(name.toCharArray())[0];
+        pullToward = pullToward.addVector(new Vector3D(offset, offset, offset));
+        //convert to a vector pointing from the current position to the desired position and normalize
+        pullToward = pullToward.addVector(this.position.multiplyScalar(-1)).normalize();
+        //schoolingCoefficient is the "strength" of the pull, different for each species
+        //(since some real fish species school more tightly than others)
+        this.velocity = this.velocity.addVector(pullToward.multiplyScalar(this.schoolingCoefficient));
+        return;
       }
-      else{
-        //move towards the position of the leader fish
-        toward = f.position;
-        break;
-      }
-    }
-    if(toward != null){
-      //BUT, we don't want to move toward the leader fish's exact position.
-      //instead we pull toward a point that's near him, offset by some pseudorandom amount
-      //we base this offset on the fish's name so that it is consistent
-      //so one fish will consistently tend to be above the leader, another behind, etc
-      //this helps prevent the fish from just piling up on top the leader
-      int offset = int(name.toCharArray())[0];
-      toward = toward.addVector(new Vector3D(offset, offset, offset));
-      //convert to a vector pointing from the current position to the desired position and normalize
-      toward = toward.addVector(this.position.multiplyScalar(-1)).normalize();
-      //schoolingCoefficient is the "strength" of the pull, different for each species
-      //(since some real fish species school more tightly than others)
-      this.velocity = this.velocity.addVector(toward.multiplyScalar(this.schoolingCoefficient));
-    }
-  }
 }
