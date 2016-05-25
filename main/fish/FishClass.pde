@@ -132,9 +132,9 @@ public abstract class Fish {
     String fishParam = this.problemDirectionFromStatus() + " " + param;
     float tankParam = tank.getParameter(param);
     if(param == "pH" || param == "Hardness" || param == "Temperature"){
-      float dist = tankParam - this.parameterTolerances.get(fishParam);
-      plusEqualsHashMap(this.parameterTolerances, "min " + param, adaptCoeff*dist);
-      plusEqualsHashMap(this.parameterTolerances, "max " + param, adaptCoeff*dist);
+      float difference = tankParam - this.parameterTolerances.get(fishParam);
+      plusEqualsHashMap(this.parameterTolerances, "min " + param, adaptCoeff*difference);
+      plusEqualsHashMap(this.parameterTolerances, "max " + param, adaptCoeff*difference);
     }
   }
 
@@ -160,10 +160,12 @@ public abstract class Fish {
         this.happySince = 0;
         return this.status;
       }
-      else if(tank.getParameter(dangerKey) < this.parameterTolerances.get("min " + dangerKey) && playMode != "casual_mode"){
-        ths.status = dangerKey + " too low.";
-        this.happySince = 0;
-        return this.status;
+      else if(this.parameterTolerances.get("min " + dangerKey) != null){ // min ammonia, nitrite, nitrate are null
+        if(tank.getParameter(dangerKey) < this.parameterTolerances.get("min " + dangerKey) && playMode != "casual_mode"){
+          this.status = dangerKey + " too low.";
+          this.happySince = 0;
+          return this.status;
+        }
       }
     }
    //if it hasn't returned by now, then  it's happy
@@ -191,20 +193,20 @@ public abstract class Fish {
     int activityCoefficient = 20;
     int maxActivity = 100;
     // some logic here to allow a fish to actually stop swimming, based on how "active" this species is
-    if(swimming){
+    if(this.swimming){
       if(random(0, activityCoefficient*this.activity) < 1){
-        swimming = false;
+        this.swimming = false;
       }
     }
     // resume swimming
     else{
       if(random(0, maxActivity-activityCoefficient*this.activity) < 1){
-        swimming = true;
+        this.swimming = true;
       }
     }
     float maxAcceleration = .8;
     float maxJerk = .2;
-    if(swimming){
+    if(this.swimming){
       // give this fish a new acceleration bound by a max and min
       this.acceleration.x = new Vector3D(-maxAcceleration, this.acceleration.x+random(-maxJerk, maxJerk), maxAcceleration).centermost();
       this.acceleration.y = new Vector3D(-maxAcceleration, this.acceleration.y+random(-maxJerk, maxJerk), maxAcceleration).centermost();
@@ -246,8 +248,10 @@ public abstract class Fish {
     int buffer = 1;
     float activityCoefficient = .2;
     this.velocity.x = new Vector3D(-buffer-activityCoefficient*this.activity, this.velocity.x + this.acceleration.x, buffer+activityCoefficient*this.activity).centermost();
-    //but let them hit the floor, in case they're going towards food that's there.
+    
+    //but let them hit the floor or ceiling, in case they're going towards food that's there.
     this.velocity.y = new Vector3D(-buffer-activityCoefficient*this.activity, this.velocity.y + this.acceleration.y, buffer+activityCoefficient*this.activity).centermost();
+    
     // if you hit the front or back wall, turn around by reversing accleration
     if(this.position.z == (-tankZBound*fieldZ+this.dimensions.x/2.0)){
      this.acceleration.z = 1;
@@ -256,6 +260,7 @@ public abstract class Fish {
      this.acceleration.z = -1;
     }
     this.velocity.z = new Vector3D(-buffer-activityCoefficient*this.activity, this.velocity.z + this.acceleration.z, buffer+activityCoefficient*this.activity).centermost();
+    
     pullTowardsSchool();
     this.velocity = this.velocity.addVector(this.hungerContribution());
     this.updateOrientationRelativeToVelocity();
