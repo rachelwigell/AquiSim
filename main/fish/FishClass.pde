@@ -69,11 +69,11 @@ public abstract class Fish {
   */
   public double setHealth() {
     int timeScaleConstant = 100;
-    int hungerDangerRating = 2;
     if (this.status == "Happy.") {
       this.health = min(this.maxHealth, this.health+(tank.timeScale*timeScaleConstant));
     }
     else if (this.status == "Hungry!") {
+      int hungerDangerRating = 2;
       this.health = max(0, this.health-(tank.timeScale*timeScaleConstant*hungerDangerRating));
     }
     else if(playMode != "casual_mode"){
@@ -82,14 +82,14 @@ public abstract class Fish {
      float dist = 0;
      dist = abs(tank.getParameter(problemElement) - this.parameterTolerances.get(parameter));
      float reduction = max(1, dist*this.dangerRatings.get(problemElement));
-     this.health = max(0, this.health-(tank.timeScale*100*reduction));
+     this.health = max(0, this.health-(tank.timeScale*timeScaleConstant*reduction));
     }
     return this.health;
   }
 
   /*
   Helper function to determine which parameter is off (e.g. "pH")
-  from a fish's status string (e.g. pH too high)
+  from a fish's status string (e.g. "pH too high")
   */
   public String problemElementFromStatus(){
      Iterator i = this.dangerRatings.entrySet().iterator();
