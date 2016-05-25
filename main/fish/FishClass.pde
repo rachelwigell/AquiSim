@@ -8,15 +8,7 @@ public abstract class Fish {
   public float health;
   public int ease;
   public float size;
-  public float minPH;
-  public float maxPH;
-  public float minTemp;
-  public float maxTemp;
-  public float minHard;
-  public float maxHard;
-  public float ammonia;
-  public float nitrite;
-  public float nitrate;
+  public HashMap parameterTolerances;
   public PShape model;
   public String sprite;
   public int scaleVal;
@@ -38,6 +30,24 @@ public abstract class Fish {
   public float schoolingCoefficient;
 
   /*
+  Store the fish's tolerance to various water parameters such as pH in a hashmap.
+  This gets initialized with unique values for each different type of species.
+  */
+  public void initializeTolerances(float ammonia, float nitrite, float nitrate, float minPH, float maxPH,
+    float minTemp, float maxTemp, float minHard, float maxHard){
+    this.parameterTolerances = new HashMap();
+    this.parameterTolerances.put("max Ammonia", ammonia);
+    this.parameterTolerances.put("max Nitrite", nitrite);
+    this.parameterTolerances.put("max Nitrate", nitrate);
+    this.parameterTolerances.put("min pH", minPH);
+    this.parameterTolerances.put("min Hardness", minHard);
+    this.parameterTolerances.put("min Temperature", minTemp);
+    this.parameterTolerances.put("max pH", maxPH);
+    this.parameterTolerances.put("max Hardness", maxHard);
+    this.parameterTolerances.put("max Temperature", maxTemp);
+  }
+
+  /*
   assign a 1-3 value to each parameter of the water chemistry indicating how dangerous
   (3 being most dangerous) it is when that parameter gets out of range
   this ends up affecting how much fish health is subtracted when the water is unhealthy
@@ -50,105 +60,81 @@ public abstract class Fish {
     this.dangerRatings.put("pH", 2);
     this.dangerRatings.put("Hardness", 1);
     this.dangerRatings.put("Temperature", 1);
-  }
-  
-  /*
-  glorified getter method to return the limits of
-  */
-  public double getParameter(String parameter, boolean high){
-    if(parameter == "Ammonia"){
-      return this.ammonia;
-    }
-    if(parameter == "Nitrite"){
-      return this.nitrite;
-    }
-    if(parameter == "Nitrate"){
-      return this.nitrate;
-    }
-    if(parameter == "pH"){
-      if(high){
-        return this.maxPH;
-      }
-      else{
-        return this.minPH;
-      }
-    }
-    if(parameter == "Temperature"){
-      if(high){
-        return this.maxTemp;
-      }
-      else{
-        return this.minTemp;
-      }
-    }
-    if(parameter == "Hardness"){
-      if(high){
-        return this.maxHard;
-      }
-      else{
-        return this.minHard;
-      }
-    }
+    this.dangerRatings.put("Hunger", 2);
   }
 
+  /*
+  Update the fish's health based on its status. Add health if it's happy,
+  remove health if there's some kind of problem. Health reduction is proportionate
+  to how bad that problem is.
+  */
   public double setHealth() {
+    int timeScaleConstant = 100;
     if (this.status == "Happy.") {
-      this.health = min(this.maxHealth, this.health+(tank.timeScale*100*1));
+      this.health = min(this.maxHealth, this.health+(tank.timeScale*timeScaleConstant));
     }
     else if (this.status == "Hungry!") {
-      this.health = max(0, this.health-(tank.timeScale*100*2));
+      this.health = max(0, this.health-(tank.timeScale*timeScaleConstant*this.dangerRatings.get("Hunger")));
     }
     else if(playMode != "casual_mode"){
-     String problemElement = "";
-     Iterator i = this.dangerRatings.entrySet().iterator();
-     while (i.hasNext()) {
-      Map.Entry danger = (Map.Entry) i.next();
-      String dangerKey = (String) danger.getKey();
-      if (this.status.contains(dangerKey)) {
-        problemElement = dangerKey;
-        break;
-      }
-     }
-     boolean problemDirection = status.contains("high");
+     String problemElement = this.problemElementFromStatus();
+     String parameter = this.problemDirectionFromStatus() + " " + problemElement;
      float dist = 0;
-     dist = abs(tank.getParameter(problemElement) - this.getParameter(problemElement, problemDirection));
+     dist = abs(tank.getParameter(problemElement) - this.parameterTolerances.get(parameter));
      float reduction = max(1, dist*this.dangerRatings.get(problemElement));
      this.health = max(0, this.health-(tank.timeScale*100*reduction));
     }
     return this.health;
   }
+
+  /*
+  Helper function to determine which parameter is off (e.g. "pH")
+  from a fish's status string (e.g. pH too high)
+  */
+  public String problemElementFromStatus(){
+     Iterator i = this.dangerRatings.entrySet().iterator();
+     while (i.hasNext()) {
+      Map.Entry danger = (Map.Entry) i.next();
+      String dangerKey = (String) danger.getKey();
+      if (this.status.contains(dangerKey)) {
+        return dangerKey;
+      }
+     }
+     return null;
+   }
+
+   /*
+   Helper function to determine the direction of the problem
+   (e.g. too high or too low) from a fish's status string (e.g. pH too high)
+   */
+   public String problemDirectionFromStatus(){
+    if(this.status.contains('too high')) return "max";
+    else return "min";
+   }
+
+   /*
+   Creates the equivalent of "+=" for an appropriate hashmap
+   */
+   public void plusEqualsHashMap(HashMap mapping, String aKey, float add){
+    float value = (float) mapping.get(aKey);
+    mapping.put(aKey, value+add);
+   }
   
+  /*
+  Fish slowly adapt to tank parameters (e.g. a fish that prefers low pH slowly starts to
+  accept higher pHs if it's forced to live in a high pH tank for a long time).
+  That logic is handled here.
+  */
   public void adapt(){
-    float adaptCoeff = .01*tank.timeScale;
-    if (this.status == "pH too high."){
-       float dist = tank.pH - this.maxPH;
-       this.minPH += adaptCoeff*dist;
-       this.maxPH += adaptCoeff*dist;
-    }
-    else if (this.status == "pH too low."){
-       float dist = this.minPH - tank.pH;
-       this.minPH -= adaptCoeff*dist;
-       this.maxPH -= adaptCoeff*dist;
-    }
-    else if (this.status == "Temperature too high."){
-       float dist = tank.temp - this.maxTemp;
-       this.minTemp += adaptCoeff*dist;
-       this.maxTemp += adaptCoeff*dist;
-    }
-    else if (this.status == "Temperature too low."){
-       float dist = this.minTemp - tank.temp;
-       this.minTemp -= adaptCoeff*dist;
-       this.maxTemp -= adaptCoeff*dist;
-    }
-    else if (this.status == "Hardness too high."){
-       float dist = tank.hardness - this.maxHard;
-       this.minHard += adaptCoeff*dist;
-       this.maxHard += adaptCoeff*dist;
-    }
-    else if (this.status == "Hardness too low."){
-       float dist = this.minHard - tank.hardness;
-       this.minHard -= adaptCoeff*dist;
-       this.maxHard -= adaptCoeff*dist;
+    float adaptationConstant = .01;
+    float adaptCoeff = adaptationConstant*tank.timeScale;
+    String param = this.problemElementFromStatus();
+    String fishParam = this.problemDirectionFromStatus() + " " + param;
+    float tankParam = tank.getParameter(param);
+    if(param == "pH" || param == "Hardness" || param == "Temperature"){
+      float dist = tankParam - this.parameterTolerances.get(fishParam);
+      plusEqualsHashMap(this.parameterTolerances, "min " + param, adaptCoeff*dist);
+      plusEqualsHashMap(this.parameterTolerances, "max " + param, adaptCoeff*dist);
     }
   }
 
@@ -163,39 +149,39 @@ public abstract class Fish {
       this.status = "Hungry!";
       this.happySince = 0;
     }
-    else if(tank.ammonia > this.ammonia && playMode != "casual_mode"){
+    else if(tank.ammonia > this.parameterTolerances.get("max Ammonia") && playMode != "casual_mode"){
       this.status = "Ammonia too high.";
       this.happySince = 0;
     }
-    else if(tank.nitrite > this.nitrite && playMode != "casual_mode"){
+    else if(tank.nitrite > this.parameterTolerances.get("max Nitrite") && playMode != "casual_mode"){
       this.status = "Nitrite too high.";
       this.happySince = 0;
     }
-    else if(tank.pH < this.minPH && playMode != "casual_mode"){
+    else if(tank.pH < this.parameterTolerances.get("min pH") && playMode != "casual_mode"){
       this.status = "pH too low.";
       this.happySince = 0;
     }
-    else if(tank.pH > this.maxPH && playMode != "casual_mode"){
+    else if(tank.pH > this.parameterTolerances.get("max pH") && playMode != "casual_mode"){
       this.status = "pH too high.";
       this.happySince = 0;
     }
-    else if(tank.nitrate > this.nitrate && playMode != "casual_mode"){
+    else if(tank.nitrate > this.parameterTolerances.get("max Nitrate") && playMode != "casual_mode"){
       this.status = "Nitrate too high.";
       this.happySince = 0;
     }
-    else if(tank.temp < this.minTemp && playMode != "casual_mode"){
+    else if(tank.temp < this.parameterTolerances.get("min Temperature") && playMode != "casual_mode"){
       this.status = "Temperature too low.";
       this.happySince = 0;
     }
-    else if(tank.temp > this.maxTemp && playMode != "casual_mode"){
+    else if(tank.temp > this.parameterTolerances.get("max Temperature") && playMode != "casual_mode"){
       this.status = "Temperature too high.";
       this.happySince = 0;
     }
-    else if(tank.hardness < this.minHard && playMode != "casual_mode"){
+    else if(tank.hardness < this.parameterTolerances.get("min Hardness") && playMode != "casual_mode"){
       this.status = "Hardness too low.";
       this.happySince = 0;
     }
-    else if(tank.hardness > this.maxHard && playMode != "casual_mode"){
+    else if(tank.hardness > this.parameterTolerances.get("max Hardness") && playMode != "casual_mode"){
       this.status = "Hardness too high.";
       this.happySince = 0;
     }

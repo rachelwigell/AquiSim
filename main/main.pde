@@ -447,12 +447,12 @@ public void populateSpeciesStats(){
         "image url": f.sprite,
         "Species:": f.species,
         "Ease of care:": f.ease + "/5",
-        "Ammonia levels tolerated:": "0-" + f.ammonia + ' ppm',
-        "Nitrite levels tolerated:": "0-" + f.nitrite + ' ppm',
-        "Nitrate levels tolerated:": "0-" + f.nitrate + ' ppm',
-        "pH levels tolerated:": f.minPH + "-" + f.maxPH,
-        "Temperatures tolerated:": f.minTemp + "-" + f.maxTemp + ' °C',
-        "Hardness levels tolerated:": f.minHard + "-" + f.maxHard + ' dH'
+        "Ammonia levels tolerated:": "0-" + f.parameterTolerances.get("max Ammonia") + ' ppm',
+        "Nitrite levels tolerated:": "0-" + f.parameterTolerances.get("max Nitrite") + ' ppm',
+        "Nitrate levels tolerated:": "0-" + f.parameterTolerances.get("max Nitrate") + ' ppm',
+        "pH levels tolerated:": f.parameterTolerances.get("min pH") + "-" + f.parameterTolerances.get("max pH"),
+        "Temperatures tolerated:": f.parameterTolerances.get("min Temperature") + "-" + f.parameterTolerances.get("max Temperature") + ' °C',
+        "Hardness levels tolerated:": f.parameterTolerances.get("min Hardness") + "-" + f.parameterTolerances.get("max Hardness") + ' dH'
       };
     }
   }
@@ -514,17 +514,17 @@ public void updateFishStats(){
     else{
       fish_stats[f.name] = {
         "Name": f.name,
-        "Ammonia": "0-" + f.ammonia.toFixed(1) + ' ppm',
+        "Ammonia": "0-" + f.parameterTolerances.get("max Ammonia").toFixed(1) + ' ppm',
         "Species": f.species,
-        "Nitrite": "0-" + f.nitrite.toFixed(1) + ' ppm',
+        "Nitrite": "0-" + f.parameterTolerances.get("max Nitrite").toFixed(1) + ' ppm',
         "image_url": f.sprite,
-        "Nitrate": "0-" + f.nitrate.toFixed(1) + ' ppm',
+        "Nitrate": "0-" + f.parameterTolerances.get("max Nitrate").toFixed(1) + ' ppm',
         "Status": f.status,
-        "pH": f.minPH.toFixed(1) + "-" + f.maxPH.toFixed(1),
+        "pH": f.parameterTolerances.get("min pH").toFixed(1) + "-" + f.parameterTolerances.get("max pH").toFixed(1),
         "fullness": f.fullness,
-        "Temperatures": f.minTemp.toFixed(1) + "-" + f.maxTemp.toFixed(1) + ' °C',
+        "Temperatures": f.parameterTolerances.get("min Temperature").toFixed(1) + "-" + f.parameterTolerances.get("max Temperature").toFixed(1) + ' °C',
         "health": f.health,
-        "Hardness": f.minHard.toFixed(1) + "-" + f.maxHard.toFixed(1) + ' dH',
+        "Hardness": f.parameterTolerances.get("min Hardness").toFixed(1) + "-" + f.parameterTolerances.get("max Hardness").toFixed(1) + ' dH',
         "max_health": f.maxHealth,
         "max_fullness": f.maxFullness
       };
@@ -995,12 +995,12 @@ public ArrayList cookieInfo(){
    fishString += f.name + "+";
    fishString += f.health + "+";
    fishString += f.fullness + "+";
-   fishString += f.minTemp.toFixed(2) + "+";
-   fishString += f.maxTemp.toFixed(2) + "+";
-   fishString += f.minHard.toFixed(2) + "+";
-   fishString += f.maxHard.toFixed(2) + "+";
-   fishString += f.minPH.toFixed(2) + "+";
-   fishString += f.maxPH.toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("min Temperature").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("max Temperature").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("min Hardness").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("max Hardness").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("min pH").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("max pH").toFixed(2) + "+";
    fishString += f.aliveSince + "+";
    fishString += f.happySince;
    fishString = LZString.compressToUTF16(fishString) + ";";
@@ -1080,12 +1080,12 @@ public HashMap localStorageInfo(){
    fishString += f.name + "+";
    fishString += f.health + "+";
    fishString += f.fullness + "+";
-   fishString += f.minTemp.toFixed(2) + "+";
-   fishString += f.maxTemp.toFixed(2) + "+";
-   fishString += f.minHard.toFixed(2) + "+";
-   fishString += f.maxHard.toFixed(2) + "+";
-   fishString += f.minPH.toFixed(2) + "+";
-   fishString += f.maxPH.toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("min Temperature").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("max Temperature").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("min Hardness").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("max Hardness").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("min pH").toFixed(2) + "+";
+   fishString += f.parameterTolerances.get("max pH").toFixed(2) + "+";
    fishString += f.aliveSince + "+";
    fishString += f.happySince;
    fishString = LZString.compressToUTF16(fishString);

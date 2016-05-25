@@ -15,7 +15,7 @@ public class ScallopShell extends Achievement{
   }
   
   public ScallopShell(String[] stats){
-    this.rewardModel = loadShape("scallopshell.obj");
+    this.rewardModel = loadShape("graphics/scallopshell.obj");
     this.rewardSprite = "graphics/scallopshell.png";
     this.rewardDescription = "A pretty scallop shell for your tank!";
     this.condition = "keeping a fish alive for one week";

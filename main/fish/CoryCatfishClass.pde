@@ -9,15 +9,6 @@ public class CoryCatfish extends Fish{
     this.size = 6;
     this.maxFullness = this.ease*this.size*24*60*3;
     this.fullness = this.maxFullness/2;
-    this.minPH = 6;
-    this.maxPH = 8;
-    this.minTemp = 21;
-    this.maxTemp = 27;
-    this.minHard = 5;
-    this.maxHard = 18;
-    this.ammonia = .1;
-    this.nitrite = .25;
-    this.nitrate = 50;
     this.scaleVal = 10;
     this.activity = 3;
     this.swimming = true;
@@ -37,6 +28,7 @@ public class CoryCatfish extends Fish{
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
     this.schoolingCoefficient = .6;
+    initializeTolerances(0.1, 0.25, 50, 6, 8, 21, 27, 5, 18);
   }
   
   
@@ -52,19 +44,11 @@ public class CoryCatfish extends Fish{
       this.name = stats[1];
       this.health = min(float(stats[2]), this.maxHealth);
       this.fullness = min(float(stats[3]), this.maxFullness);
-      this.minTemp = float(stats[4]);
-      this.maxTemp = float(stats[5]);
-      this.minHard = float(stats[6]);
-      this.maxHard = float(stats[7]);
-      this.minPH = float(stats[8]);
-      this.maxPH = float(stats[9]);
+      initializeTolerances(0.1, 0.25, 50, float(stats[8]), float(stats[9]), float(stats[4]), float(stats[5]), float(stats[6]), float(stats[7]));
       this.aliveSince = stats[10];
       this.happySince = stats[11];
     }
-    this.ammonia = .1;
-    this.nitrite = .25;
-    this.nitrate = 50;
-    this.model = loadShape("corycatfish.obj");
+    this.model = loadShape("graphics/corycatfish.obj");
     this.scaleVal = 10;
     this.activity = 3;
     this.swimming = true;

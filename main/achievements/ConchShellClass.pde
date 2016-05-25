@@ -15,7 +15,7 @@ public class ConchShell extends Achievement{
   }
   
   public ConchShell(String[] stats){
-    this.rewardModel = loadShape("conchshell.obj");
+    this.rewardModel = loadShape("graphics/conchshell.obj");
     this.rewardSprite = "graphics/conchshell.png";
     this.rewardDescription = "A conch shell!";
     this.condition = "keeping a fish happy for one week";

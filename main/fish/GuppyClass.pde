@@ -9,15 +9,6 @@ public class Guppy extends Fish{
     this.size = 5;
     this.maxFullness = this.ease*this.size*24*60*3;
     this.fullness = this.maxFullness/2;
-    this.minPH = 7;
-    this.maxPH = 8.5;
-    this.minTemp = 20;
-    this.maxTemp = 29;
-    this.minHard = 8;
-    this.maxHard = 20;
-    this.ammonia = .1;
-    this.nitrite = .25;
-    this.nitrate = 50;
     this.scaleVal = 8;
     this.activity = 5;
     this.swimming = true;
@@ -37,6 +28,7 @@ public class Guppy extends Fish{
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
     this.schoolingCoefficient = .6;
+    initializeTolerances(0.1, 0.25, 50, 7, 8.5, 20, 29, 8, 20);
   }
   
   
@@ -52,19 +44,11 @@ public class Guppy extends Fish{
       this.name = stats[1];
       this.health = min(float(stats[2]), this.maxHealth);
       this.fullness = min(float(stats[3]), this.maxFullness);
-      this.minTemp = float(stats[4]);
-      this.maxTemp = float(stats[5]);
-      this.minHard = float(stats[6]);
-      this.maxHard = float(stats[7]);
-      this.minPH = float(stats[8]);
-      this.maxPH = float(stats[9]);
+      initializeTolerances(0.1, 0.25, 50, float(stats[8]), float(stats[9]), float(stats[4]), float(stats[5]), float(stats[6]), float(stats[7]));
       this.aliveSince = stats[10];
       this.happySince = stats[11];
     }
-    this.ammonia = .1;
-    this.nitrite = .25;
-    this.nitrate = 50;
-    this.model = loadShape("guppy.obj");
+    this.model = loadShape("graphics/guppy.obj");
     this.scaleVal = 8;
     this.activity = 5;
     this.swimming = true;

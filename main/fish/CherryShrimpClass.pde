@@ -9,15 +9,6 @@ public class CherryShrimp extends Fish{
     this.size = 3;
     this.maxFullness = this.ease*this.size*24*60*3;
     this.fullness = this.maxFullness/2;
-    this.minPH = 7;
-    this.maxPH = 8;
-    this.minTemp = 15;
-    this.maxTemp = 28;
-    this.minHard = 3;
-    this.maxHard = 15;
-    this.ammonia = .1;
-    this.nitrite = .25;
-    this.nitrate = 25;
     this.scaleVal = 25;
     this.activity = 3;
     this.swimming = true;
@@ -37,6 +28,7 @@ public class CherryShrimp extends Fish{
     this.aliveSince = new Date().getTime();
     this.happySince = new Date().getTime();
     this.schoolingCoefficient = .5;
+    initializeTolerances(0.1, 0.25, 25, 7, 8, 15, 28, 3, 15);
   }
   
   
@@ -52,19 +44,11 @@ public class CherryShrimp extends Fish{
       this.name = stats[1];
       this.health = min(float(stats[2]), this.maxHealth);
       this.fullness = min(float(stats[3]), this.maxFullness);
-      this.minTemp = float(stats[4]);
-      this.maxTemp = float(stats[5]);
-      this.minHard = float(stats[6]);
-      this.maxHard = float(stats[7]);
-      this.minPH = float(stats[8]);
-      this.maxPH = float(stats[9]);
+      initializeTolerances(0.1, 0.25, 25, float(stats[8]), float(stats[9]), float(stats[4]), float(stats[5]), float(stats[6]), float(stats[7]));
       this.aliveSince = stats[10];
       this.happySince = stats[11];
     }
-    this.ammonia = .1;
-    this.nitrite = .25;
-    this.nitrate = 25;
-    this.model = loadShape("cherryshrimp.obj");
+    this.model = loadShape("graphics/cherryshrimp.obj");
     this.scaleVal = 25;
     this.activity = 3;
     this.swimming = true;
