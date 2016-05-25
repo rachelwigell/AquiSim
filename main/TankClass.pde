@@ -410,7 +410,7 @@ public class Tank{
     for(int i = 0; i < this.fish.size(); i++){
       Fish f = (Fish) this.fish.get(i);
       f.changeHunger(); //update fish's hunger level 
-      f.fishHappiness(); //update fish's happiness status
+      f.setFishHappiness(); //update fish's happiness status
       f.setHealth(); //update fish's health
       if(playMode != "casual_mode"){
         f.adapt();
